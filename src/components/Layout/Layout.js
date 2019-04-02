@@ -1,16 +1,16 @@
 import React from 'react';
 
 import Aux from '../../hoc/Aux';
-import LabelBottomNavigation from './../../containers/LabelBottomNavigation/LabelBottomNavigation';
+import BottomNavigation from './../../components/BottomNavigation/BottomNavigation';
 import classes from './Layout.css';
 
 const layout = (props) => (
     <Aux>
-        <div>Backbutton, search area</div>
+        <div><button>Backbutton</button></div>
         <main className={classes.Content}>
             {props.children}
         </main>
-        <LabelBottomNavigation />
+        <BottomNavigation />
     </Aux>
 );
 
