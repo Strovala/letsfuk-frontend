@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import humps from 'humps';
 import Aux from '../../hoc/Aux';
 import Chat from './Chat/Chat';
 import axios from 'axios';
@@ -7,16 +6,13 @@ import axios from 'axios';
 class ChatList extends Component {
     state = {
         chatList: null,
-        sessionId: "f45d6095-4410-4411-a521-5262b8fe6980"
     };
 
     componentDidMount() {
-        axios.get('http://localhost:8888/messages', { headers: { "session-id": this.state.sessionId } })
+        console.log(this.props);
+        axios.get('/messages', {headers: {"session-id": this.props.user.sessionId}})
             .then(response => {
-                console.log(response.data);
-                let chatList = {...response.data};
-                chatList = humps.camelizeKeys(chatList);
-                this.setState({chatList: chatList});
+                this.setState({chatList: response.data});
             })
             .catch(error => {
                 console.log(error);
@@ -25,12 +21,14 @@ class ChatList extends Component {
 
     render() {
         if (this.state.chatList) {
+            console.log(this.props.context);
             let lastMessage = null;
             if (this.state.chatList.stationChat.messages.length > 0) {
                 lastMessage = this.state.chatList.stationChat.messages[this.state.chatList.stationChat.messages.length - 1]
             }
             let stationChat = (
                 <Chat
+                    {...this.props}
                     key={"Station"}
                     userId="Station"
                     lastMessage={lastMessage}
@@ -38,6 +36,7 @@ class ChatList extends Component {
             );
             let privateChats = this.state.chatList.privateChats.map((privateChat) => {
                 return <Chat
+                    {...this.props}
                     key={privateChat.receiverId}
                     userId={privateChat.receiverId}
                     lastMessage={privateChat.messages[privateChat.messages.length - 1]}

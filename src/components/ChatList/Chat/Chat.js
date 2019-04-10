@@ -3,36 +3,28 @@ import React, { Component } from 'react';
 import Aux from '../../../hoc/Aux';
 import classes from './Chat.css';
 import axios from "axios";
-import humps from "humps";
 
 class Chat extends Component {
     state = {
         sender: null,
-        user: null,
-        sessionId: "f45d6095-4410-4411-a521-5262b8fe6980"
+        user: null
     };
 
     componentDidMount() {
-        axios.get('http://localhost:8888/users/' + this.props.lastMessage.senderId, { headers: { "session-id": this.state.sessionId } })
+        axios.get('/users/' + this.props.lastMessage.senderId, { headers: { "session-id": this.props.user.sessionId } })
             .then(response => {
-                console.log(response.data);
-                let sender = {...response.data};
-                sender = humps.camelizeKeys(sender);
-                this.setState({sender: sender});
+                this.setState({sender: response.data});
             })
             .catch(error => {
                 console.log(error);
             });
         if (this.props.userId === "Station") {
-            this.setState({user: {username: "Station"}})
+            this.setState({user: {username: "Station"}});
             return;
         }
-        axios.get('http://localhost:8888/users/' + this.props.userId, { headers: { "session-id": this.state.sessionId } })
+        axios.get('/users/' + this.props.userId, { headers: { "session-id": this.props.user.sessionId } })
             .then(response => {
-                console.log(response.data);
-                let user = {...response.data};
-                user = humps.camelizeKeys(user);
-                this.setState({user: user});
+                this.setState({user: response.data});
             })
             .catch(error => {
                 console.log(error);
