@@ -9,7 +9,6 @@ class ChatList extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props);
         axios.get('/messages', {headers: {"session-id": this.props.user.sessionId}})
             .then(response => {
                 this.setState({chatList: response.data});

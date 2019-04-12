@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Aux from '../../../hoc/Aux';
-import classes from './Chat.css';
 import axios from "axios";
 
 class Chat extends Component {
@@ -41,10 +40,6 @@ class Chat extends Component {
             return (
                 <Aux>
                     <p>{this.state.user.username}</p>
-                    <span
-                        className={classes.avatar}
-                        style={{backgroundColor: '#777'}}
-                    />
                     {lastMessageText}
                 </Aux>
             );

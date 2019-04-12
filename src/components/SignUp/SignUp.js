@@ -15,7 +15,6 @@ class SignUp extends Component {
         axios.post('/users', data)
             .then(response => {
                 console.log(response.data);
-                console.log(Screens);
                 this.props.changeScreen(Screens.LOGIN)
             })
             .catch(error => {

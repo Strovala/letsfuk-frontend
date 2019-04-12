@@ -8,14 +8,6 @@ const Screens = {
     CHAT: 'chat'
 };
 
-const ScreenContext = React.createContext({
-    currentScreen: Screens.SIGNUP
-});
-
-const UserContext = React.createContext({
-    currentUser: null
-});
-
 class App extends Component {
     state = {
         currentScreen: Screens.SIGNUP,
@@ -36,17 +28,15 @@ class App extends Component {
 
     render() {
         return (
-            <UserContext.Provider value={this.state.currentUser}>
-                <ScreenContext.Provider value={this.state.currentScreen}>
-                    <Layout
-                        changeScreen={(screen) => (this.changeScreen(screen))}
-                        changeUser={(user) => (this.changeUser(user))}
-                    />
-                </ScreenContext.Provider>
-            </UserContext.Provider>
+            <Layout
+                screen={this.state.currentScreen}
+                user={this.state.currentUser}
+                changeScreen={(screen) => (this.changeScreen(screen))}
+                changeUser={(user) => (this.changeUser(user))}
+            />
         );
     }
 }
 
 export default App;
-export { ScreenContext, UserContext, Screens };
+export { Screens };

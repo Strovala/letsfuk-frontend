@@ -1,0 +1,79 @@
+import React, { Component } from 'react';
+import Message from "./Message/Message";
+import axios from "axios";
+import Aux from './../../hoc/Aux';
+
+class Chat extends Component {
+    state = {
+        messages: null,
+        text: ""
+    };
+
+    getMessages() {
+        axios.get('/messages/' + this.props.receiver.userId + '?limit=5&offset=0', {headers: {"session-id": this.props.user.sessionId}})
+            .then(response => {
+                let messages = response.data.messages.reverse();
+                this.setState({messages: messages});
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    componentDidMount() {
+        this.getMessages();
+    }
+
+    handleText(event) {
+        this.setState({
+            text: event.target.value
+        });
+    }
+
+    sendMessage(event) {
+        let now = new Date().toISOString().replace('T', ' ').replace('Z', '');
+        let data = {
+            "sent_at": now,
+            "text": this.state.text
+        };
+        if (this.props.receiver.username !== 'Station') {
+            data['user_id'] = this.props.receiver.userId;
+        }
+        axios.post('/messages', data, {headers: {"session-id": this.props.user.sessionId}})
+            .then(response => {
+                this.getMessages();
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    render() {
+        if (this.state.messages) {
+            let messages = this.state.messages.map((message) => {
+                return (
+                    <Message
+                        {...this.props}
+                        key={message.messageId}
+                        receiverId={message.receiverId}
+                        senderId={message.senderId}
+                        text={message.text}
+                        sentAt={message.sentAt}
+                    />
+                );
+            });
+            return (
+                <Aux>
+                    <div>
+                        {messages}
+                    </div>
+                    <input type="text" value={this.state.text} onChange={(event) => this.handleText(event)} />
+                    <button onClick={(event) => this.sendMessage(event)}>Send</button>
+                </Aux>
+            );
+        }
+        return <h1>Loading...</h1>;
+    }
+}
+
+export default Chat;

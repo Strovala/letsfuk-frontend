@@ -9,9 +9,7 @@ const bottomNavigation = (props) => (
         <button>Chat list</button>
         <button>Group Chat</button>
         <button>Settings</button>
-        {console.log('propss' + props.user)}
         <button onClick={(event) => {
-            console.log("props " + props.user);
             axios.post('/auth/logout', {}, {headers: {"session-id": props.user.sessionId}})
                 .then(response => {
                     console.log(response.data);
