@@ -2,18 +2,27 @@ import React, { Component } from 'react';
 import Message from "./Message/Message";
 import axios from "axios";
 import Aux from './../../hoc/Aux';
+import {Constants} from "../../App";
 
 class Chat extends Component {
     state = {
         messages: null,
-        text: ""
+        text: "",
+        offset: 0,
+        limit: Constants.LIMIT
     };
 
+
     getMessages() {
-        axios.get('/messages/' + this.props.receiver.userId + '?limit=5&offset=0', {headers: {"session-id": this.props.user.sessionId}})
+        axios.get(
+            `/messages/${this.props.receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
+            {headers: {"session-id": this.props.user.sessionId}}
+        )
             .then(response => {
                 let messages = response.data.messages.reverse();
-                this.setState({messages: messages});
+                this.setState({
+                    messages: messages
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -21,7 +30,9 @@ class Chat extends Component {
     }
 
     componentDidMount() {
-        this.getMessages();
+        this.setState({
+            messages: this.props.messages.reverse()
+        });
     }
 
     handleText(event) {
@@ -36,9 +47,10 @@ class Chat extends Component {
             "sent_at": now,
             "text": this.state.text
         };
-        if (this.props.receiver.username !== 'Station') {
+        if (!this.props.isStation) {
             data['user_id'] = this.props.receiver.userId;
         }
+        this.setState({text: ""});
         axios.post('/messages', data, {headers: {"session-id": this.props.user.sessionId}})
             .then(response => {
                 this.getMessages();

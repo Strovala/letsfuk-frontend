@@ -7,17 +7,21 @@ import LoginLayout from "./LoginLayout/LoginLayout";
 import ChatLayout from "./ChatLayout/ChatLayout";
 
 const layout = (props) => {
-    let { screen } = props;
+    let { screen, additionalProps } = props;
     let specificScreen = null;
+    let newProps = {...props};
+    if (additionalProps) {
+        Object.assign(newProps, additionalProps);
+    }
     console.log(screen);
     if (screen === Screens.CHATLIST) {
-        specificScreen = <ChatListLayout {...props} />
+        specificScreen = <ChatListLayout {...newProps} />
     } else if (screen === Screens.SIGNUP) {
-        specificScreen = <SignupLayout {...props} />
+        specificScreen = <SignupLayout {...newProps} />
     } else if (screen === Screens.LOGIN) {
-        specificScreen = <LoginLayout {...props} />
+        specificScreen = <LoginLayout {...newProps} />
     } else if (screen === Screens.CHAT) {
-        specificScreen = <ChatLayout {...props} />
+        specificScreen = <ChatLayout {...newProps} />
     }
     return specificScreen;
 };

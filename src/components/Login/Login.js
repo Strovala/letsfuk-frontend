@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Aux from '../../hoc/Aux';
-import { Screens } from './../../App';
 import axios from 'axios';
+import {Screens} from "../../App";
 
 class Login extends Component {
     state = {
@@ -19,7 +19,7 @@ class Login extends Component {
             .then(response => {
                 console.log(response.data);
                 this.props.changeUser(response.data);
-                this.props.changeScreen(Screens.CHATLIST)
+                this.props.changeScreen(Screens.CHATLIST);
             })
             .catch(error => {
                 console.log(error);

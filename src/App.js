@@ -8,16 +8,25 @@ const Screens = {
     CHAT: 'chat'
 };
 
+const Constants = {
+    LIMIT: 20
+};
+
 class App extends Component {
     state = {
-        currentScreen: Screens.SIGNUP,
-        currentUser: null
+        currentScreen: Screens.LOGIN,
+        currentUser: null,
+        additionalProps: null
     };
 
-    changeScreen(value) {
-        this.setState({
+    changeScreen(value, additionalProps) {
+        let newState = {
             currentScreen: value
-        })
+        };
+        if (additionalProps) {
+            newState.additionalProps = additionalProps;
+        }
+        this.setState(newState);
     }
 
     changeUser(value) {
@@ -31,12 +40,13 @@ class App extends Component {
             <Layout
                 screen={this.state.currentScreen}
                 user={this.state.currentUser}
-                changeScreen={(screen) => (this.changeScreen(screen))}
+                changeScreen={(screen, additionalProps) => (this.changeScreen(screen, additionalProps))}
                 changeUser={(user) => (this.changeUser(user))}
+                additionalProps={this.state.additionalProps}
             />
         );
     }
 }
 
 export default App;
-export { Screens };
+export { Screens, Constants };

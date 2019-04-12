@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Aux from '../../hoc/Aux';
-import Chat from './Chat/Chat';
+import ChatPreview from './ChatPreview/ChatPreview';
+import Aux from './../../hoc/Aux';
 import axios from 'axios';
 
 class ChatList extends Component {
@@ -15,31 +15,31 @@ class ChatList extends Component {
             })
             .catch(error => {
                 console.log(error);
-            })
+            });
     }
 
     render() {
         if (this.state.chatList) {
-            console.log(this.props.context);
-            let lastMessage = null;
-            if (this.state.chatList.stationChat.messages.length > 0) {
-                lastMessage = this.state.chatList.stationChat.messages[this.state.chatList.stationChat.messages.length - 1]
-            }
+            let stationMessages = this.state.chatList.stationChat.messages;
             let stationChat = (
-                <Chat
+                <ChatPreview
                     {...this.props}
-                    key={"Station"}
-                    userId="Station"
-                    lastMessage={lastMessage}
+                    key={this.state.chatList.stationChat.receiverId}
+                    receiverId={this.state.chatList.stationChat.receiverId}
+                    messages={stationMessages}
+                    isStation={true}
                 />
             );
             let privateChats = this.state.chatList.privateChats.map((privateChat) => {
-                return <Chat
-                    {...this.props}
-                    key={privateChat.receiverId}
-                    userId={privateChat.receiverId}
-                    lastMessage={privateChat.messages[privateChat.messages.length - 1]}
-                />
+                return (
+                    <ChatPreview
+                        {...this.props}
+                        key={privateChat.receiverId}
+                        receiverId={privateChat.receiverId}
+                        messages={privateChat.messages}
+                        isStation={false}
+                    />
+                );
             });
             privateChats = [stationChat, ...privateChats];
             return (
