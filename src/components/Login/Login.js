@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Aux from '../../hoc/Aux';
 import axios from 'axios';
-import {Screens} from "../../App";
+import {Screens, cookies} from "../../App";
 
 class Login extends Component {
     state = {
@@ -17,7 +17,8 @@ class Login extends Component {
         };
         axios.post('/auth/login', data)
             .then(response => {
-                console.log(response.data);
+                cookies.set('session-id', response.data.sessionId);
+                cookies.set('user-id', response.data.user.userId);
                 this.props.changeUser(response.data);
                 this.props.changeScreen(Screens.CHATLIST);
             })

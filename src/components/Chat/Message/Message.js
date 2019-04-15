@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import {cookies} from "../../../App";
 
 class Message extends Component {
     state = {
@@ -7,7 +8,11 @@ class Message extends Component {
     };
 
     componentDidMount() {
-        axios.get(`/users/${this.props.senderId}`, { headers: { "session-id": this.props.user.sessionId } })
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        axios.get(`/users/${this.props.senderId}`, { headers: { "session-id": sessionId } })
             .then(response => {
                 this.setState({sender: response.data});
             })
@@ -18,7 +23,7 @@ class Message extends Component {
 
     render() {
         if (!this.state.sender) {
-            return <h1>Loading ...</h1>
+            return null;
         }
         let text = this.props.text + " at " + this.props.sentAt;
         if (this.state.sender.userId === this.props.user.user.userId) {

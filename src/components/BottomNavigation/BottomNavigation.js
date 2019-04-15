@@ -2,7 +2,7 @@ import React from 'react';
 
 import Aux from './../../hoc/Aux'
 import axios from "axios";
-import {Screens} from "../../App";
+import {cookies, Screens} from "../../App";
 
 const bottomNavigation = (props) => (
     <Aux>
@@ -14,9 +14,14 @@ const bottomNavigation = (props) => (
         }}>Group Chat</button>
         <button>Settings</button>
         <button onClick={(event) => {
-            axios.post('/auth/logout', {}, {headers: {"session-id": props.user.sessionId}})
+            let sessionId = cookies.get('session-id');
+            if (!sessionId) {
+                sessionId = this.props.user.sessionId;
+            }
+            axios.post('/auth/logout', {}, {headers: {"session-id": sessionId}})
                 .then(response => {
-                    console.log(response.data);
+                    cookies.remove('user-id');
+                    cookies.remove('session-id');
                     props.changeUser(null);
                     props.changeScreen(Screens.LOGIN);
                 })

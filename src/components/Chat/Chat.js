@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Message from "./Message/Message";
 import axios from "axios";
 import Aux from './../../hoc/Aux';
-import {Constants} from "../../App";
+import {Constants, cookies} from "../../App";
 
 class Chat extends Component {
     state = {
@@ -14,9 +14,13 @@ class Chat extends Component {
 
 
     getMessages() {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
         axios.get(
             `/messages/${this.props.receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
-            {headers: {"session-id": this.props.user.sessionId}}
+            {headers: {"session-id": sessionId}}
         )
             .then(response => {
                 let messages = response.data.messages.reverse();
@@ -42,16 +46,18 @@ class Chat extends Component {
     }
 
     sendMessage(event) {
-        let now = new Date().toISOString().replace('T', ' ').replace('Z', '');
         let data = {
-            "sent_at": now,
             "text": this.state.text
         };
         if (!this.props.isStation) {
             data['user_id'] = this.props.receiver.userId;
         }
         this.setState({text: ""});
-        axios.post('/messages', data, {headers: {"session-id": this.props.user.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        axios.post('/messages', data, {headers: {"session-id": sessionId}})
             .then(response => {
                 this.getMessages();
             })

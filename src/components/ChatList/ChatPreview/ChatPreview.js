@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Aux from '../../../hoc/Aux';
 import axios from "axios";
-import {Screens} from "../../../App";
+import {cookies, Screens} from "../../../App";
 
 class ChatPreview extends Component {
     state = {
@@ -12,7 +12,11 @@ class ChatPreview extends Component {
     };
 
     componentDidMount() {
-        axios.get('/users/' + this.state.lastMessage.senderId, { headers: { "session-id": this.props.user.sessionId } })
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        axios.get('/users/' + this.state.lastMessage.senderId, { headers: { "session-id": sessionId } })
             .then(response => {
                 this.setState({lastMessageSender: response.data});
             })
@@ -22,7 +26,7 @@ class ChatPreview extends Component {
         if (this.props.isStation) {
             return;
         }
-        axios.get('/users/' + this.props.receiverId, { headers: { "session-id": this.props.user.sessionId } })
+        axios.get('/users/' + this.props.receiverId, { headers: { "session-id": sessionId } })
             .then(response => {
                 this.setState({receiver: response.data});
             })
@@ -42,7 +46,7 @@ class ChatPreview extends Component {
             !(!this.props.isStation && this.state.lastMessageSender && this.state.receiver) &&
             !(this.props.isStation && this.state.lastMessageSender)
         )
-            return <p>Loading ...</p>;
+            return null;
         let lastMessageText = null;
         if (this.state.lastMessage) {
             lastMessageText =

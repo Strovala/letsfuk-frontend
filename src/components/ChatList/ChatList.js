@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ChatPreview from './ChatPreview/ChatPreview';
 import Aux from './../../hoc/Aux';
 import axios from 'axios';
+import {cookies} from "../../App";
 
 class ChatList extends Component {
     state = {
@@ -9,7 +10,11 @@ class ChatList extends Component {
     };
 
     componentDidMount() {
-        axios.get('/messages', {headers: {"session-id": this.props.user.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        axios.get('/messages', {headers: {"session-id": sessionId}})
             .then(response => {
                 this.setState({chatList: response.data});
             })

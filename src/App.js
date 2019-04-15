@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Cookies from 'universal-cookie';
 import Layout from './components/Layout/Layout';
 
 const Screens = {
@@ -11,6 +12,8 @@ const Screens = {
 const Constants = {
     LIMIT: 20
 };
+
+const cookies = new Cookies();
 
 class App extends Component {
     state = {
@@ -49,4 +52,4 @@ class App extends Component {
 }
 
 export default App;
-export { Screens, Constants };
+export { Screens, Constants, cookies };
