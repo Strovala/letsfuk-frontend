@@ -16,7 +16,7 @@ class LoginLayout extends Component {
                         this.props.changeUser(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
+                        console.log(error.response.data);
                     });
                 this.props.changeScreen(Screens.CHATLIST);
             }

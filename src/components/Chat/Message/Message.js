@@ -17,7 +17,7 @@ class Message extends Component {
                 this.setState({sender: response.data});
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             });
     }
 

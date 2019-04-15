@@ -29,7 +29,7 @@ class Chat extends Component {
                 });
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             })
     }
 
@@ -62,7 +62,7 @@ class Chat extends Component {
                 this.getMessages();
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             })
     }
 

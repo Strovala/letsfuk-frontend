@@ -13,7 +13,7 @@ axios.interceptors.request.use(request => {
     console.log(request);
     return request;
 }, error => {
-    console.log(error);
+    console.log(error.response.data);
     return Promise.reject(error);
 });
 
@@ -23,7 +23,7 @@ axios.interceptors.response.use(response => {
     response.data = humps.camelizeKeys(responseData);
     return response;
 }, error => {
-    console.log(error);
+    console.log(error.response.data);
     return Promise.reject(error);
 });
 

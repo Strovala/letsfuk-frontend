@@ -13,15 +13,21 @@ const layout = (props) => {
     if (additionalProps) {
         Object.assign(newProps, additionalProps);
     }
-    console.log(screen);
-    if (screen === Screens.CHATLIST) {
-        specificScreen = <ChatListLayout {...newProps} />
-    } else if (screen === Screens.SIGNUP) {
-        specificScreen = <SignupLayout {...newProps} />
-    } else if (screen === Screens.LOGIN) {
-        specificScreen = <LoginLayout {...newProps} />
-    } else if (screen === Screens.CHAT) {
-        specificScreen = <ChatLayout {...newProps} />
+    switch (screen) {
+        case (Screens.CHATLIST):
+            specificScreen = <ChatListLayout {...newProps} />
+            break;
+        case (Screens.SIGNUP):
+            specificScreen = <SignupLayout {...newProps} />
+            break;
+        case (Screens.LOGIN):
+            specificScreen = <LoginLayout {...newProps} />
+            break;
+        case (Screens.CHAT):
+            specificScreen = <ChatLayout {...newProps} />
+            break;
+        default:
+            break;
     }
     return specificScreen;
 };

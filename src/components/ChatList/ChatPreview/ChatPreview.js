@@ -21,7 +21,7 @@ class ChatPreview extends Component {
                 this.setState({lastMessageSender: response.data});
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             });
         if (this.props.isStation) {
             return;
@@ -31,7 +31,7 @@ class ChatPreview extends Component {
                 this.setState({receiver: response.data});
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             })
     }
 

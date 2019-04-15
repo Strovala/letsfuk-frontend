@@ -23,7 +23,7 @@ class Login extends Component {
                 this.props.changeScreen(Screens.CHATLIST);
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data);
             })
     }
 
