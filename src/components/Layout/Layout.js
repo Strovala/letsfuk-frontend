@@ -15,16 +15,16 @@ const layout = (props) => {
     }
     switch (screen) {
         case (Screens.CHATLIST):
-            specificScreen = <ChatListLayout {...newProps} />
+            specificScreen = <ChatListLayout {...newProps} />;
             break;
         case (Screens.SIGNUP):
-            specificScreen = <SignupLayout {...newProps} />
+            specificScreen = <SignupLayout {...newProps} />;
             break;
         case (Screens.LOGIN):
-            specificScreen = <LoginLayout {...newProps} />
+            specificScreen = <LoginLayout {...newProps} />;
             break;
         case (Screens.CHAT):
-            specificScreen = <ChatLayout {...newProps} />
+            specificScreen = <ChatLayout {...newProps} />;
             break;
         default:
             break;
