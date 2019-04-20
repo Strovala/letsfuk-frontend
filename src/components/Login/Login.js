@@ -13,18 +13,27 @@ class Login extends Component {
         let data = {
             username: this.state.credentials,
             email: this.state.credentials,
-            password: this.state.password
+            password: this.state.password,
+            lat: "",
+            lon: ""
         };
-        axios.post('/auth/login', data)
-            .then(response => {
-                cookies.set('session-id', response.data.sessionId);
-                cookies.set('user-id', response.data.user.userId);
-                this.props.changeUser(response.data);
-                this.props.changeScreen(Screens.CHATLIST);
-            })
-            .catch(error => {
-                console.log(error.response.data);
-            })
+        const loginUser = () => {
+            axios.post('/auth/login', data)
+                .then(response => {
+                    cookies.set('session-id', response.data.sessionId);
+                    cookies.set('user-id', response.data.user.userId);
+                    this.props.changeUser(response.data);
+                    this.props.changeScreen(Screens.CHATLIST);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        };
+        navigator.geolocation.getCurrentPosition(function(location) {
+            data.lat = location.coords.latitude;
+            data.lon = location.coords.longitude;
+            loginUser();
+        })
     }
 
     changeCredentials(event) {
