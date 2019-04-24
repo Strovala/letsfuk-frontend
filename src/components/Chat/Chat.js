@@ -13,29 +13,7 @@ class Chat extends Component {
     };
 
 
-    getMessages() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
-        let receiverId = this.props.receiverId;
-        if (!receiverId) {
-            axios.get(`users/${this.props.user.user.userId}/station`, {headers: {"session-id": sessionId}})
-                .then(response => {
-                    receiverId = response.data.stationId;
-                    axios.get(
-                        `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
-                        {headers: {"session-id": sessionId}}
-                    )
-                        .then(response => {
-                            let messages = response.data.messages.reverse();
-                            this.setState({
-                                messages: messages
-                            });
-                        })
-                });
-            return;
-        }
+    getMessagesFromBackend(receiverId, sessionId) {
         axios.get(
             `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
             {headers: {"session-id": sessionId}}
@@ -46,6 +24,23 @@ class Chat extends Component {
                     messages: messages
                 });
             })
+    }
+
+    getMessages() {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        let receiverId = this.props.receiverId;
+        if (!receiverId) {
+            axios.get(`users/${this.props.user.user.userId}/station`, {headers: {"session-id": sessionId}})
+                .then(response => {
+                    receiverId = response.data.stationId;
+                    this.getMessagesFromBackend(receiverId, sessionId);
+                });
+            return;
+        }
+        this.getMessagesFromBackend(receiverId, sessionId);
     }
 
     componentDidMount() {
