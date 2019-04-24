@@ -18,8 +18,26 @@ class Chat extends Component {
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
+        let receiverId = this.props.receiverId;
+        if (!receiverId) {
+            axios.get(`users/${this.props.user.user.userId}/station`, {headers: {"session-id": sessionId}})
+                .then(response => {
+                    receiverId = response.data.stationId;
+                    axios.get(
+                        `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
+                        {headers: {"session-id": sessionId}}
+                    )
+                        .then(response => {
+                            let messages = response.data.messages.reverse();
+                            this.setState({
+                                messages: messages
+                            });
+                        })
+                });
+            return;
+        }
         axios.get(
-            `/messages/${this.props.receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
+            `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
             {headers: {"session-id": sessionId}}
         )
             .then(response => {
@@ -28,15 +46,16 @@ class Chat extends Component {
                     messages: messages
                 });
             })
-            .catch(error => {
-                console.log(error.response.data);
-            })
     }
 
     componentDidMount() {
-        this.setState({
-            messages: this.props.messages.reverse()
-        });
+        if (this.props.messages) {
+            this.setState({
+                messages: this.props.messages.reverse()
+            });
+            return;
+        }
+        this.getMessages();
     }
 
     handleText(event) {
