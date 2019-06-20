@@ -12,7 +12,6 @@ class Chat extends Component {
         limit: Constants.LIMIT
     };
 
-
     getMessagesFromBackend(receiverId, sessionId) {
         axios.get(
             `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
@@ -31,9 +30,10 @@ class Chat extends Component {
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
-        let receiverId = this.props.receiverId;
-        if (!receiverId) {
-            axios.get(`users/${this.props.user.user.userId}/station`, {headers: {"session-id": sessionId}})
+        let receiverId = this.props.receiver.userId;
+        if (this.props.isStation) {
+            let userId = this.props.getUserId();
+            axios.get(`users/${userId}/station`, {headers: {"session-id": sessionId}})
                 .then(response => {
                     receiverId = response.data.stationId;
                     this.getMessagesFromBackend(receiverId, sessionId);
@@ -44,12 +44,10 @@ class Chat extends Component {
     }
 
     componentDidMount() {
-        if (this.props.messages) {
-            this.setState({
-                messages: this.props.messages.reverse()
-            });
-            return;
-        }
+        let that = this;
+        this.props.webSocket.bind('message', function (data) {
+            that.getMessages();
+        });
         this.getMessages();
     }
 

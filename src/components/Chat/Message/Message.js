@@ -26,7 +26,8 @@ class Message extends Component {
             return null;
         }
         let text = this.props.text + " at " + this.props.sentAt;
-        if (this.state.sender.userId === this.props.user.user.userId) {
+        let userId = this.props.getUserId();
+        if (this.state.sender.userId === userId) {
             text = `${text} :${this.state.sender.username}`;
         } else {
             text = `${this.state.sender.username}: ${text}`;

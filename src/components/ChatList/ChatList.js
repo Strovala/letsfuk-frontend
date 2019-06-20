@@ -19,8 +19,18 @@ class ChatList extends Component {
                 this.setState({chatList: response.data});
             })
             .catch(error => {
-                console.log(error.response.data);
+                console.log(error);
             });
+
+        let that = this;
+        this.props.webSocket.bind('message', function (data) {
+            let isStation = data.isStation;
+            let chatList = {...that.state.chatList};
+            if (isStation) {
+                // chatList.stationChat.unreadMessagesCount = 0;
+                // Here is the part to show unreadMessages
+            }
+        });
     }
 
     render() {

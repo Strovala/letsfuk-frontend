@@ -20,9 +20,11 @@ class Login extends Component {
         const loginUser = () => {
             axios.post('/auth/login', data)
                 .then(response => {
+                    let webSocket = this.props.initWebSocket(response.data.user.userId);
                     cookies.set('session-id', response.data.sessionId);
                     cookies.set('user-id', response.data.user.userId);
                     this.props.changeUser(response.data);
+                    this.props.changeWebSocket(webSocket);
                     this.props.changeScreen(Screens.CHATLIST);
                 })
                 .catch(error => {
@@ -33,7 +35,7 @@ class Login extends Component {
             data.lat = location.coords.latitude;
             data.lon = location.coords.longitude;
             loginUser();
-        })
+        });
     }
 
     changeCredentials(event) {

@@ -10,7 +10,8 @@ const bottomNavigation = (props) => (
             props.changeScreen(Screens.CHATLIST);
         }}>Chat list</button>
         <button onClick={(event) => {
-            props.changeScreen(Screens.CHAT, {...props});
+            props.changeIsStation(true);
+            props.changeScreen(Screens.CHAT);
         }}>Group Chat</button>
         <button>Settings</button>
         <button onClick={(event) => {

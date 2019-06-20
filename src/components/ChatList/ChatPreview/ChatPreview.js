@@ -32,13 +32,13 @@ class ChatPreview extends Component {
             })
             .catch(error => {
                 console.log(error.response.data);
-            })
+            });
     }
 
     enterChat(event) {
-        let additionalProps = {...this.props};
-        additionalProps.receiver = this.state.receiver;
-        this.props.changeScreen(Screens.CHAT, additionalProps);
+        this.props.changeReceiver(this.state.receiver);
+        this.props.changeIsStation(false);
+        this.props.changeScreen(Screens.CHAT);
     }
 
     render() {
