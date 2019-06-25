@@ -21,15 +21,17 @@ class ChatList extends Component {
             .catch(error => {
                 console.log(error);
             });
-
         let that = this;
         this.props.webSocket.bind('message', function (data) {
-            let isStation = data.isStation;
-            let chatList = {...that.state.chatList};
-            if (isStation) {
-                // chatList.stationChat.unreadMessagesCount = 0;
-                // Here is the part to show unreadMessages
-            }
+            alert("message received");
+            console.log(data);
+            axios.get('/messages', {headers: {"session-id": sessionId}})
+                .then(response => {
+                    that.setState({chatList: response.data});
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         });
     }
 
@@ -42,6 +44,8 @@ class ChatList extends Component {
                     key={this.state.chatList.stationChat.receiverId}
                     receiverId={this.state.chatList.stationChat.receiverId}
                     messages={stationMessages}
+                    lastMessage={stationMessages[0]}
+                    unreadCount={this.state.chatList.stationChat.unread}
                     isStation={true}
                 />
             );
@@ -52,6 +56,8 @@ class ChatList extends Component {
                         key={privateChat.receiverId}
                         receiverId={privateChat.receiverId}
                         messages={privateChat.messages}
+                        lastMessage={privateChat.messages[0]}
+                        unreadCount={privateChat.unread}
                         isStation={false}
                     />
                 );

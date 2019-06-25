@@ -31,10 +31,16 @@ class Login extends Component {
                     console.log(error);
                 })
         };
-        navigator.geolocation.getCurrentPosition(function(location) {
+        navigator.geolocation.getCurrentPosition((location) => {
             data.lat = location.coords.latitude;
             data.lon = location.coords.longitude;
             loginUser();
+        }, (err) => {
+            console.log(err);
+        }, {
+            maximumAge:60000,
+            timeout:5000,
+            enableHighAccuracy:true
         });
     }
 

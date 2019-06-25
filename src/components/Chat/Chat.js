@@ -6,6 +6,7 @@ import {Constants, cookies} from "../../App";
 
 class Chat extends Component {
     state = {
+        id: null,
         messages: null,
         text: "",
         offset: 0,
@@ -25,28 +26,56 @@ class Chat extends Component {
             })
     }
 
+    resetUnreadMessages() {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        let stationId, senderId;
+        if (this.props.isStation) {
+            stationId = this.state.id;
+        } else {
+            senderId = this.state.id;
+        }
+        let data = {
+            station_id: stationId,
+            sender_id: senderId,
+            count: 0,
+        };
+        axios.put('/messages/unread/reset', data, {headers: {"session-id": sessionId}})
+            .then(response => {
+
+            });
+    }
+
     getMessages() {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
-        let receiverId = this.props.receiver.userId;
+        let receiverId;
         if (this.props.isStation) {
             let userId = this.props.getUserId();
             axios.get(`users/${userId}/station`, {headers: {"session-id": sessionId}})
                 .then(response => {
                     receiverId = response.data.stationId;
+                    this.setState({id: receiverId});
                     this.getMessagesFromBackend(receiverId, sessionId);
+                    this.resetUnreadMessages();
                 });
             return;
         }
+        receiverId = this.props.receiver.userId;
+        this.setState({id: receiverId});
         this.getMessagesFromBackend(receiverId, sessionId);
+        this.resetUnreadMessages();
     }
 
     componentDidMount() {
         let that = this;
         this.props.webSocket.bind('message', function (data) {
             that.getMessages();
+            that.resetUnreadMessages();
         });
         this.getMessages();
     }

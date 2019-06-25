@@ -7,8 +7,7 @@ import {cookies, Screens} from "../../../App";
 class ChatPreview extends Component {
     state = {
         lastMessageSender: null,
-        receiver: null,
-        lastMessage: this.props.messages[0]
+        receiver: null
     };
 
     componentDidMount() {
@@ -16,7 +15,7 @@ class ChatPreview extends Component {
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
-        axios.get('/users/' + this.state.lastMessage.senderId, { headers: { "session-id": sessionId } })
+        axios.get('/users/' + this.props.lastMessage.senderId, { headers: { "session-id": sessionId } })
             .then(response => {
                 this.setState({lastMessageSender: response.data});
             })
@@ -37,7 +36,7 @@ class ChatPreview extends Component {
 
     enterChat(event) {
         this.props.changeReceiver(this.state.receiver);
-        this.props.changeIsStation(false);
+        this.props.changeIsStation(this.props.isStation);
         this.props.changeScreen(Screens.CHAT);
     }
 
@@ -48,14 +47,16 @@ class ChatPreview extends Component {
         )
             return null;
         let lastMessageText = null;
-        if (this.state.lastMessage) {
+        if (this.props.lastMessage) {
             lastMessageText =
-                <p>{this.state.lastMessageSender.username}: {this.state.lastMessage.text}</p>
+                <p>{this.state.lastMessageSender.username}: {this.props.lastMessage.text}</p>
         }
         let username = "Station";
         if (!this.props.isStation) {
-            username = <p>{this.state.receiver.username}</p>;
+            username = this.state.receiver.username;
         }
+        if (this.props.unreadCount)
+            username += " " + this.props.unreadCount;
         return (
             <Aux>
                 <div onClick={(event) => this.enterChat()}>
