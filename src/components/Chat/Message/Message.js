@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {cookies} from "../../../App";
+import {cookies, Screens} from "../../../App";
+import Avatar from "../Message/Avatar"
 
 class Message extends Component {
     state = {
@@ -21,22 +22,33 @@ class Message extends Component {
             });
     }
 
+    avatarClicked(event) {
+        console.log(event);
+        this.props.changeReceiver(this.state.sender);
+        this.props.changeIsStation(false);
+        this.props.changeScreen(Screens.CHAT);
+    }
+
     render() {
         if (!this.state.sender) {
             return null;
         }
         let text = this.props.text + " at " + this.props.sentAt;
         let userId = this.props.getUserId();
-        if (this.state.sender.userId === userId) {
-            text = `${text} :${this.state.sender.username}`;
-        } else {
-            text = `${this.state.sender.username}: ${text}`;
-        }
-        return (
+        let avatar = <Avatar avatarClicked={() => this.avatarClicked(this.state.sender)} value={this.state.sender.username}/>;
+        let message = (
             <div>
-                {text}
+                {avatar}: {text}
             </div>
         );
+        if (this.state.sender.userId === userId) {
+            message = (
+                <div>
+                    {text} :{avatar}
+                </div>
+            );
+        }
+        return message;
     }
 }
 

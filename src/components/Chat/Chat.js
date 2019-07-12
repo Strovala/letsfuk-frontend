@@ -42,7 +42,7 @@ class Chat extends Component {
             sender_id: senderId,
             count: 0,
         };
-        axios.put('/messages/unread/reset', data, {headers: {"session-id": sessionId}})
+        axios.put('/messages/unreads/reset', data, {headers: {"session-id": sessionId}})
             .then(response => {
 
             });
