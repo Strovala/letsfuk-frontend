@@ -26,9 +26,6 @@ const bottomNavigation = (props) => (
                     props.changeUser(null);
                     props.changeScreen(Screens.LOGIN);
                 })
-                .catch(error => {
-                    console.log(error.response.data);
-                })
         }}>Logout</button>
     </Aux>
 );

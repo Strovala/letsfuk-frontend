@@ -28,9 +28,6 @@ class ChatList extends Component {
             .then(response => {
                 this.setState({chatList: response.data});
             })
-            .catch(error => {
-                console.log(error);
-            });
     }
 
     componentDidMount() {

@@ -108,9 +108,6 @@ class Chat extends Component {
             sessionId = this.props.user.sessionId;
         }
         axios.post('/messages', data, {headers: {"session-id": sessionId}})
-            .catch(error => {
-                console.log(error.response.data);
-            })
     }
 
     render() {

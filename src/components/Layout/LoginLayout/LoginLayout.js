@@ -15,9 +15,6 @@ class LoginLayout extends Component {
                     .then(response => {
                         this.props.changeUser(response.data);
                     })
-                    .catch(error => {
-                        console.log(error.response.data);
-                    });
                 let webSocket = this.props.initWebSocket(userId);
                 this.props.changeWebSocket(webSocket);
                 this.props.changeScreen(Screens.CHATLIST);

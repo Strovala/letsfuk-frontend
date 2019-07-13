@@ -27,12 +27,6 @@ class Login extends Component {
                     this.props.changeWebSocket(webSocket);
                     this.props.changeScreen(Screens.CHATLIST);
                 })
-                .catch(error => {
-                    console.log(error.response.data);
-                    this.setState({
-                        credentials: error.response.data.text
-                    });
-                })
         };
         navigator.geolocation.getCurrentPosition((location) => {
             data.lat = location.coords.latitude;
@@ -40,9 +34,6 @@ class Login extends Component {
             loginUser();
         }, (err) => {
             console.log(err);
-            this.setState({
-                credentials: err.message
-            });
         }, {
             maximumAge:60000,
             timeout:5000,

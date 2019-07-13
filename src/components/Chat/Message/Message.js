@@ -17,9 +17,6 @@ class Message extends Component {
             .then(response => {
                 this.setState({sender: response.data});
             })
-            .catch(error => {
-                console.log(error.response.data);
-            });
     }
 
     avatarClicked(event) {

@@ -17,10 +17,6 @@ class SignUp extends Component {
                 console.log(response.data);
                 this.props.changeScreen(Screens.LOGIN)
             })
-            .catch(error => {
-                alert(error);
-                console.log(error.response);
-            })
     }
 
     changeUsername(event) {

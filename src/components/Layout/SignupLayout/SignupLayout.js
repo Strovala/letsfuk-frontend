@@ -15,9 +15,6 @@ class SignupLayout extends Component {
                     .then(response => {
                         this.props.changeUser(response.data);
                     })
-                    .catch(error => {
-                        console.log(error.response.data);
-                    });
                 this.props.changeScreen(Screens.CHATLIST);
             }
         }

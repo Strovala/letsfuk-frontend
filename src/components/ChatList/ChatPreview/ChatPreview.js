@@ -18,9 +18,6 @@ class ChatPreview extends Component {
         axios.get('/users/' + this.props.lastMessage.senderId, { headers: { "session-id": sessionId } })
             .then(response => {
                 this.setState({lastMessageSender: response.data});
-            })
-            .catch(error => {
-                console.log(error.response.data);
             });
         if (this.props.isStation) {
             return;
@@ -29,9 +26,6 @@ class ChatPreview extends Component {
             .then(response => {
                 this.setState({receiver: response.data});
             })
-            .catch(error => {
-                console.log(error.response.data);
-            });
     }
 
     enterChat(event) {
