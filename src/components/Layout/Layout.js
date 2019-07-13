@@ -5,23 +5,29 @@ import ChatListLayout from "./ChatListLayout/ChatListLayout";
 import SignupLayout from "./SignupLayout/SignupLayout";
 import LoginLayout from "./LoginLayout/LoginLayout";
 import ChatLayout from "./ChatLayout/ChatLayout";
+import WithBackbutton from "../../hoc/WithBackbutton";
 
 const layout = (props) => {
     let { screen } = props;
     let specificScreen = null;
-    let newProps = {...props};
     switch (screen) {
         case (Screens.CHATLIST):
-            specificScreen = <ChatListLayout {...newProps} />;
+            specificScreen = (
+                <ChatListLayout {...props} />
+            );
             break;
         case (Screens.SIGNUP):
-            specificScreen = <SignupLayout {...newProps} />;
+            specificScreen = <SignupLayout {...props} />;
             break;
         case (Screens.LOGIN):
-            specificScreen = <LoginLayout {...newProps} />;
+            specificScreen = <LoginLayout {...props} />;
             break;
         case (Screens.CHAT):
-            specificScreen = <ChatLayout {...newProps} />;
+            specificScreen = (
+                <WithBackbutton backbuttonClicked={() => props.changeScreen(Screens.CHATLIST)}>
+                    <ChatLayout {...props} />
+                </WithBackbutton>
+            );
             break;
         default:
             break;

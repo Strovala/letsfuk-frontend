@@ -10,7 +10,6 @@ const chatLayout = (props) => {
     let key = `${props.isStation};${receiver}`;
     return (
         <Aux>
-            <div><button>Backbutton</button></div>
             <div>
                 <Chat key={key} {...props} />
             </div>

@@ -5,7 +5,6 @@ import ChatList from "../../ChatList/ChatList";
 
 const chatListLayout = (props) => (
     <Aux>
-        <div><button>Backbutton</button></div>
         <div>
             <ChatList {...props} />
         </div>
