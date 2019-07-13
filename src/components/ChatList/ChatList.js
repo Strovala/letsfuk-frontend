@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import ChatPreview from './ChatPreview/ChatPreview';
+import StationChat from './StationChat'
 import Aux from './../../hoc/Aux';
 import axios from 'axios';
 import {cookies} from "../../App";
+import PrivateChats from "./PrivateChats";
 
 class ChatList extends Component {
     state = {
@@ -37,35 +38,16 @@ class ChatList extends Component {
 
     render() {
         if (this.state.chatList) {
-            let stationMessages = this.state.chatList.stationChat.messages;
-            let stationChat = (
-                <ChatPreview
-                    {...this.props}
-                    key={this.state.chatList.stationChat.receiverId}
-                    receiverId={this.state.chatList.stationChat.receiverId}
-                    messages={stationMessages}
-                    lastMessage={stationMessages[0]}
-                    unreadCount={this.state.chatList.stationChat.unread}
-                    isStation={true}
-                />
-            );
-            let privateChats = this.state.chatList.privateChats.map((privateChat) => {
-                return (
-                    <ChatPreview
-                        {...this.props}
-                        key={privateChat.receiverId}
-                        receiverId={privateChat.receiverId}
-                        messages={privateChat.messages}
-                        lastMessage={privateChat.messages[0]}
-                        unreadCount={privateChat.unread}
-                        isStation={false}
-                    />
-                );
-            });
-            privateChats = [stationChat, ...privateChats];
             return (
                 <Aux>
-                    {privateChats}
+                    <StationChat
+                        {...this.props}
+                        chatList={this.state.chatList}
+                    />
+                    <PrivateChats
+                        {...this.props}
+                        chatList={this.state.chatList}
+                    />
                 </Aux>
             );
         }

@@ -22,19 +22,15 @@ class App extends Component {
     state = {
         currentScreen: Screens.LOGIN,
         currentUser: null,
-        additionalProps: null,
         currentReceiver: null,
         webSocket: null,
         isStation: false
     };
 
-    changeScreen(value, additionalProps) {
+    changeScreen(value) {
         let newState = {
             currentScreen: value
         };
-        if (additionalProps) {
-            newState.additionalProps = additionalProps;
-        }
         this.setState(newState);
     }
 
@@ -98,9 +94,8 @@ class App extends Component {
             <Layout
                 screen={this.state.currentScreen}
                 user={this.state.currentUser}
-                changeScreen={(screen, additionalProps) => (this.changeScreen(screen, additionalProps))}
+                changeScreen={(screen) => (this.changeScreen(screen))}
                 changeUser={(user) => (this.changeUser(user))}
-                additionalProps={this.state.additionalProps}
                 webSocketAddress={webSocketAddress}
                 initWebSocket={(userId) => (this.initWebSocket(userId))}
                 getUserId={() => this.getUserId()}

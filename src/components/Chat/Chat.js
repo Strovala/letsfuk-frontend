@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Message from "./Message/Message";
 import axios from "axios";
 import Aux from './../../hoc/Aux';
 import {Constants, cookies} from "../../App";
+import Messages from "./Messages";
 
 class Chat extends Component {
     state = {
@@ -109,23 +109,9 @@ class Chat extends Component {
 
     render() {
         if (this.state.messages) {
-            let messages = this.state.messages.map((message) => {
-                return (
-                    <Message
-                        {...this.props}
-                        key={message.messageId}
-                        receiverId={message.receiverId}
-                        senderId={message.senderId}
-                        text={message.text}
-                        sentAt={message.sentAt}
-                    />
-                );
-            });
             return (
                 <Aux>
-                    <div>
-                        {messages}
-                    </div>
+                    <Messages {...this.props} messages={this.state.messages}/>
                     <input type="text" value={this.state.text} onChange={(event) => this.handleText(event)} />
                     <button onClick={(event) => this.sendMessage(event)}>Send</button>
                 </Aux>

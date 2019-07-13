@@ -7,12 +7,9 @@ import LoginLayout from "./LoginLayout/LoginLayout";
 import ChatLayout from "./ChatLayout/ChatLayout";
 
 const layout = (props) => {
-    let { screen, additionalProps } = props;
+    let { screen } = props;
     let specificScreen = null;
     let newProps = {...props};
-    if (additionalProps) {
-        Object.assign(newProps, additionalProps);
-    }
     switch (screen) {
         case (Screens.CHATLIST):
             specificScreen = <ChatListLayout {...newProps} />;
