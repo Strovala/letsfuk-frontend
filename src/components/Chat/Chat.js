@@ -35,16 +35,10 @@ class Chat extends Component {
             })
     }
 
-    resetUnreadMessages() {
+    resetUnreadMessages(stationId, senderId) {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
-        }
-        let stationId, senderId;
-        if (this.props.isStation) {
-            stationId = this.state.id;
-        } else {
-            senderId = this.state.id;
         }
         let data = {
             station_id: stationId,
@@ -70,14 +64,14 @@ class Chat extends Component {
                     receiverId = response.data.stationId;
                     this.setState({id: receiverId});
                     this.getMessagesFromBackend(receiverId, sessionId);
-                    this.resetUnreadMessages();
+                    this.resetUnreadMessages(receiverId, undefined);
                 });
             return;
         }
         receiverId = this.props.receiver.userId;
         this.setState({id: receiverId});
         this.getMessagesFromBackend(receiverId, sessionId);
-        this.resetUnreadMessages();
+        this.resetUnreadMessages(undefined, receiverId);
     }
 
     componentDidMount() {
