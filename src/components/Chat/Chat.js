@@ -5,12 +5,21 @@ import {Constants, cookies} from "../../App";
 import Messages from "./Messages";
 
 class Chat extends Component {
-    state = {
-        id: null,
-        messages: null,
-        text: "",
-        offset: 0,
-        limit: Constants.LIMIT
+    constructor(props) {
+        super(props);
+        this.state = {
+            id: null,
+            messages: null,
+            text: "",
+            offset: 0,
+            limit: Constants.LIMIT
+        };
+        let that = this;
+        this.props.webSocket.bind('message', function (data) {
+            if (!that._ismounted)
+                return;
+            that.getMessages();
+        });
     };
 
     getMessagesFromBackend(receiverId, sessionId) {
@@ -72,12 +81,12 @@ class Chat extends Component {
     }
 
     componentDidMount() {
-        let that = this;
-        this.props.webSocket.bind('message', function (data) {
-            that.getMessages();
-            that.resetUnreadMessages();
-        });
+        this._ismounted = true;
         this.getMessages();
+    }
+
+    componentWillUnmount() {
+        this._ismounted = false;
     }
 
     handleText(event) {
@@ -99,9 +108,6 @@ class Chat extends Component {
             sessionId = this.props.user.sessionId;
         }
         axios.post('/messages', data, {headers: {"session-id": sessionId}})
-            .then(response => {
-                this.getMessages();
-            })
             .catch(error => {
                 console.log(error.response.data);
             })

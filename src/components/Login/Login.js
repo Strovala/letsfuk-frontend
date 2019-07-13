@@ -28,7 +28,10 @@ class Login extends Component {
                     this.props.changeScreen(Screens.CHATLIST);
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error.response.data);
+                    this.setState({
+                        credentials: error.response.data.text
+                    });
                 })
         };
         navigator.geolocation.getCurrentPosition((location) => {
@@ -37,6 +40,9 @@ class Login extends Component {
             loginUser();
         }, (err) => {
             console.log(err);
+            this.setState({
+                credentials: err.message
+            });
         }, {
             maximumAge:60000,
             timeout:5000,

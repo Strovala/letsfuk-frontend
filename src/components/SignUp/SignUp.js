@@ -18,7 +18,8 @@ class SignUp extends Component {
                 this.props.changeScreen(Screens.LOGIN)
             })
             .catch(error => {
-                console.log(error.response.data);
+                alert(error);
+                console.log(error.response);
             })
     }
 

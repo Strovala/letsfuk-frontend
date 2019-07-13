@@ -6,11 +6,20 @@ import {cookies} from "../../App";
 import PrivateChats from "./PrivateChats";
 
 class ChatList extends Component {
-    state = {
-        chatList: null,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            chatList: null,
+        };
+        let that = this;
+        this.props.webSocket.bind('message', function (data) {
+            if (!that._ismounted)
+                return;
+            that.getMessages();
+        });
+    }
 
-    componentDidMount() {
+    getMessages() {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
@@ -22,18 +31,15 @@ class ChatList extends Component {
             .catch(error => {
                 console.log(error);
             });
-        let that = this;
-        this.props.webSocket.bind('message', function (data) {
-            alert("message received");
-            console.log(data);
-            axios.get('/messages', {headers: {"session-id": sessionId}})
-                .then(response => {
-                    that.setState({chatList: response.data});
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        });
+    }
+
+    componentDidMount() {
+        this._ismounted = true;
+        this.getMessages();
+    }
+
+    componentWillUnmount() {
+        this._ismounted = false;
     }
 
     render() {
