@@ -22,6 +22,26 @@ class Chat extends Component {
         });
     };
 
+    getMoreMessagesFromBackend() {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = this.props.user.sessionId;
+        }
+        let oldState = {...this.state};
+        let limit = oldState.limit + Constants.LIMIT;
+        axios.get(
+            `/messages/${this.state.id}?limit=${limit}&offset=${this.state.offset}`,
+            {headers: {"session-id": sessionId}}
+        )
+            .then(response => {
+                let messages = response.data.messages.reverse();
+                this.setState({
+                    limit: limit,
+                    messages: messages
+                });
+            })
+    }
+
     getMessagesFromBackend(receiverId, sessionId) {
         axios.get(
             `/messages/${receiverId}?limit=${this.state.limit}&offset=${this.state.offset}`,
@@ -108,6 +128,7 @@ class Chat extends Component {
         if (this.state.messages) {
             return (
                 <Aux>
+                    <button onClick={() => this.getMoreMessagesFromBackend()}>Scroll</button>
                     <Messages {...this.props} messages={this.state.messages}/>
                     <input type="text" value={this.state.text} onChange={(event) => this.handleText(event)} />
                     <button onClick={(event) => this.sendMessage(event)}>Send</button>
