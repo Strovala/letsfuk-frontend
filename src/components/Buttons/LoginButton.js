@@ -21,7 +21,7 @@ const loginButton = props => (
                 response: response => {
                     const userId = response.data.user.userId;
                     cookies.set('session-id', response.data.sessionId);
-                    cookies.set('user-id', userId.userId);
+                    cookies.set('user-id', userId);
                     props.changeUser(response.data);
                     const webSocket = initWebSocket(userId);
                     props.changeWebSocket(webSocket);

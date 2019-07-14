@@ -16,7 +16,10 @@ class ChatList extends Component {
         }
         API.getChats({
             sessionId: sessionId,
-            response: response => this.props.setChats(response.data)
+            response: response => {
+                this.props.setChats(response.data);
+                this.props.changeStationChat(response.data.stationChat);
+            }
         });
     }
 
@@ -58,7 +61,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setChats: (chats) => dispatch({type: ActionTypes.CHATS_CHANGE, chats: chats})
+        setChats: (chats) => dispatch({type: ActionTypes.CHATS_CHANGE, chats: chats}),
+        changeStationChat: (stationChat) => dispatch({type: ActionTypes.STATION_CHAT_CHANGE, stationChat: stationChat})
     }
 };
 

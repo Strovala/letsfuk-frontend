@@ -1,65 +1,38 @@
-import React, { Component } from 'react';
+import React  from 'react';
 
-import Aux from '../../../hoc/Aux';
-import axios from "axios";
-import {Screens, cookies} from "../../../globals/constants";
+import {ActionTypes, Screens} from "../../../globals/constants";
+import connect from "react-redux/es/connect/connect";
 
-class ChatPreview extends Component {
-    state = {
-        lastMessageSender: null,
-        receiver: null
-    };
-
-    componentDidMount() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
-        axios.get('/users/' + this.props.lastMessage.senderId, { headers: { "session-id": sessionId } })
-            .then(response => {
-                this.setState({lastMessageSender: response.data});
-            });
-        if (this.props.isStation) {
-            return;
-        }
-        axios.get('/users/' + this.props.receiverId, { headers: { "session-id": sessionId } })
-            .then(response => {
-                this.setState({receiver: response.data});
-            })
+const chatPreview = (props) => {
+    let lastMessageText = null;
+    let lastMessage = props.chat.messages[props.chat.messages.length-1];
+    if (lastMessage) {
+        lastMessageText = `${lastMessage.sender.username}: ${lastMessage.text}`
     }
+    let username = props.chat.receiver.username;
+    if (props.chat.unread)
+        username = `${username} ${props.chat.unread}`;
+    return (
+        <div onClick={() => {
+            props.changeActiveChat(props.chat);
+            props.changeScreen(Screens.CHAT)
+        }}>
+            <div>
+                {username}
+            </div>
+            <div>
+                {lastMessageText}
+            </div>
+        </div>
+    );
+};
 
-    enterChat(event) {
-        this.props.changeReceiver(this.state.receiver);
-        this.props.changeIsStation(this.props.isStation);
-        this.props.changeScreen(Screens.CHAT);
+const mapDispatchToProps = dispatch => {
+    return {
+        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
+        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
     }
+};
 
-    render() {
-        if (
-            !(!this.props.isStation && this.state.lastMessageSender && this.state.receiver) &&
-            !(this.props.isStation && this.state.lastMessageSender)
-        )
-            return null;
-        let lastMessageText = null;
-        if (this.props.lastMessage) {
-            lastMessageText =
-                <p>{this.state.lastMessageSender.username}: {this.props.lastMessage.text}</p>
-        }
-        let username = "Station";
-        if (!this.props.isStation) {
-            username = this.state.receiver.username;
-        }
-        if (this.props.unreadCount)
-            username += " " + this.props.unreadCount;
-        return (
-            <Aux>
-                <div onClick={(event) => this.enterChat()}>
-                    {username}
-                    {lastMessageText}
-                </div>
-            </Aux>
-        );
-    }
-}
-
-export default ChatPreview;
+export default connect(null, mapDispatchToProps)(chatPreview);

@@ -1,10 +1,19 @@
 import React from "react";
-import Aux from '../../../hoc/Aux'
+import {ActionTypes, Screens} from "../../../globals/constants";
+import connect from "react-redux/es/connect/connect";
 
 const avatar = (props) => (
-    <Aux>
-        <output onClick={(event) => props.avatarClicked(event)}>{props.value}</output>
-    </Aux>
+    <output onClick={() => {
+        props.changeReceiver(props.sender);
+        props.changeScreen(Screens.CHAT);
+    }}>{props.sender.username}</output>
 );
 
-export default avatar;
+const mapDispatchToProps = dispatch => {
+    return {
+        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
+    }
+};
+
+export default connect(null, mapDispatchToProps)(avatar);

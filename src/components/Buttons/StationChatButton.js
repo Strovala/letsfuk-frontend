@@ -5,14 +5,24 @@ import {connect} from "react-redux";
 
 const stationChatButton = props => (
     <Aux>
-        <button onClick={() => props.changeScreen(Screens.CHAT)}>Station Chat</button>
+        <button onClick={() => {
+            props.changeActiveChat(props.stationChat);
+            props.changeScreen(Screens.CHAT)
+        }}>Station Chat</button>
     </Aux>
 );
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen})
+        stationChat: state.stationChat
     }
 };
 
-export default connect(null, mapDispatchToProps)(stationChatButton);
+const mapDispatchToProps = dispatch => {
+    return {
+        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(stationChatButton);

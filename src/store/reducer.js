@@ -1,4 +1,4 @@
-import {ActionTypes, Screens} from "../globals/constants";
+import {ActionTypes, Constants, Screens} from "../globals/constants";
 
 
 const initialState = {
@@ -11,6 +11,10 @@ const initialState = {
     username: "",
     email: "",
     password: "",
+    limit: Constants.LIMIT,
+    text: "",
+    stationChat: null,
+    activeChat: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -59,6 +63,26 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 password: action.password
+            };
+        case ActionTypes.TEXT_CHANGE:
+            return {
+                ...state,
+                text: action.text
+            };
+        case ActionTypes.LIMIT_CHANGE:
+            return {
+                ...state,
+                limit: action.limit
+            };
+        case ActionTypes.ACTIVE_CHAT_CHANGE:
+            return {
+                ...state,
+                activeChat: action.chat
+            };
+        case ActionTypes.STATION_CHAT_CHANGE:
+            return {
+                ...state,
+                stationChat: action.stationChat
             };
         default:
             return state;
