@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Aux from '../../../hoc/Aux';
 import axios from "axios";
-import {cookies, Screens} from "../../../App";
+import {Screens, cookies} from "../../../globals/constants";
 
 class ChatPreview extends Component {
     state = {

@@ -1,38 +1,34 @@
 import React, {Component} from 'react';
 import StationChat from './StationChat'
 import Aux from './../../hoc/Aux';
-import axios from 'axios';
-import {cookies} from "../../App";
+import {ActionTypes, cookies} from "../../globals/constants";
+import {API} from "../../globals/methods";
 import PrivateChats from "./PrivateChats";
+import connect from "react-redux/es/connect/connect";
+import Loading from "../Loading/Loading";
 
 class ChatList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            chatList: null,
-        };
-        let that = this;
-        this.props.webSocket.bind('message', function (data) {
-            if (!that._ismounted)
-                return;
-            that.getMessages();
-        });
-    }
 
-    getMessages() {
+    getChats() {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
-        axios.get('/messages', {headers: {"session-id": sessionId}})
-            .then(response => {
-                this.setState({chatList: response.data});
-            })
+        API.getChats({
+            sessionId: sessionId,
+            response: response => this.props.setChats(response.data)
+        });
     }
 
     componentDidMount() {
         this._ismounted = true;
-        this.getMessages();
+        this.getChats();
+        let that = this;
+        this.props.webSocket.bind('message', function (data) {
+            if (!that._ismounted)
+                return;
+            that.getChats();
+        });
     }
 
     componentWillUnmount() {
@@ -40,23 +36,30 @@ class ChatList extends Component {
     }
 
     render() {
-        if (this.state.chatList) {
+        if (this.props.chats) {
             return (
                 <Aux>
-                    <StationChat
-                        {...this.props}
-                        chatList={this.state.chatList}
-                    />
-                    <PrivateChats
-                        {...this.props}
-                        chatList={this.state.chatList}
-                    />
+                    <StationChat />
+                    <PrivateChats />
                 </Aux>
             );
         }
-        return <h1>Loading...</h1>
+        return <Loading />
 
     }
 }
+const mapStateToProps = state => {
+    return {
+        chats: state.chats,
+        user: state.user,
+        webSocket: state.webSocket
+    }
+};
 
-export default ChatList;
+const mapDispatchToProps = dispatch => {
+    return {
+        setChats: (chats) => dispatch({type: ActionTypes.CHATS_CHANGE, chats: chats})
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

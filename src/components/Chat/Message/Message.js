@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {cookies, Screens} from "../../../App";
+import {cookies, Screens} from '../../../globals/constants';
 import Avatar from "../Message/Avatar"
 
 class Message extends Component {

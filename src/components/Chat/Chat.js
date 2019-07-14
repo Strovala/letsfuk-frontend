@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import Aux from './../../hoc/Aux';
-import {Constants, cookies} from "../../App";
 import Messages from "./Messages";
+import {Constants, cookies} from "../../globals/constants";
+import Loading from "../Loading/Loading";
 
 class Chat extends Component {
     constructor(props) {
@@ -135,7 +136,7 @@ class Chat extends Component {
                 </Aux>
             );
         }
-        return <h1>Loading...</h1>;
+        return <Loading />
     }
 }
 

@@ -8,8 +8,9 @@ import humps from "humps";
 import {createStore} from "redux";
 import reducer from "./store/reducer";
 import {Provider} from "react-redux";
+import {apiUrl} from "./globals/constants";
 
-axios.defaults.baseURL = 'http://localhost:8888';
+axios.defaults.baseURL = apiUrl;
 
 const store = createStore(reducer);
 

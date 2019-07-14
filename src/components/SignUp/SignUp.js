@@ -1,69 +1,17 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Aux from '../../hoc/Aux';
-import { Screens } from './../../App';
-import axios from 'axios';
+import Username from "./Username";
+import Password from "../Login/Password";
+import RegisterButton from "../Buttons/RegisterButton";
+import Email from "./Email";
 
-class SignUp extends Component {
-    state = {
-        username: "",
-        email: "",
-        password: "",
-    };
+const singUp = () => (
+    <Aux>
+        <Username />
+        <Email />
+        <Password />
+        <RegisterButton />
+    </Aux>
+);
 
-    register() {
-        let data = {...this.state};
-        axios.post('/users', data)
-            .then(response => {
-                console.log(response.data);
-                this.props.changeScreen(Screens.LOGIN)
-            })
-    }
-
-    changeUsername(event) {
-        this.setState({
-            username: event.target.value
-        });
-    }
-
-    changeEmail(event) {
-        this.setState({
-            email: event.target.value
-        });
-    }
-
-    changePassword(event) {
-        this.setState({
-            password: event.target.value
-        });
-    }
-
-    render() {
-        return (
-            <Aux>
-                <div>
-                    <label>
-                        Username:
-                        <input type="text" value={this.state.usernmae} onChange={(event) => this.changeUsername(event)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Email:
-                        <input type="text" value={this.state.email} onChange={(event) => this.changeEmail(event)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Password:
-                        <input type="password" value={this.state.password} onChange={(event) => this.changePassword(event)} />
-                    </label>
-                </div>
-                <div>
-                    <button onClick={(event) => this.register(event)}>Sign Up</button>
-                </div>
-            </Aux>
-        );
-    }
-}
-
-export default SignUp;
+export default singUp;

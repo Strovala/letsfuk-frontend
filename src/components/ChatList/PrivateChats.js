@@ -1,8 +1,9 @@
 import ChatPreview from "./ChatPreview/ChatPreview";
 import React from "react";
+import {connect} from "react-redux";
 
 const privateChats = (props) => (
-    props.chatList.privateChats.map((privateChat) => {
+    props.chats.privateChats.map((privateChat) => {
         return (
             <ChatPreview
                 {...props}
@@ -17,4 +18,10 @@ const privateChats = (props) => (
     })
 );
 
-export default privateChats;
+const mapStateToProps = state => {
+    return {
+        chats: state.chats
+    }
+};
+
+export default connect(mapStateToProps())(privateChats);

@@ -1,15 +1,11 @@
-import Aux from "../../../hoc/Aux";
 import React from "react";
-import BottomNavigation from "../../BottomNavigation/BottomNavigation";
 import ChatList from "../../ChatList/ChatList";
+import WithBottomNavigation from "../../../hoc/WithBottomNavigation";
 
-const chatListLayout = (props) => (
-    <Aux>
-        <div>
-            <ChatList {...props} />
-        </div>
-        <BottomNavigation {...props} />
-    </Aux>
+const chatListLayout = () => (
+    <WithBottomNavigation>
+        <ChatList />
+    </WithBottomNavigation>
 );
 
 export default chatListLayout;

@@ -1,21 +1,15 @@
-import Aux from "../../../hoc/Aux";
 import React from "react";
 import Chat from "../../Chat/Chat";
-import BottomNavigation from "../../BottomNavigation/BottomNavigation";
+import WithUpperNavigation from "../../../hoc/WithUpperNavigation";
+import {Screens} from "../../../globals/constants";
+import WithBottomNavigation from "../../../hoc/WithBottomNavigation";
 
-const chatLayout = (props) => {
-    let receiver = props.receiver;
-    if (receiver)
-        receiver = receiver.userId;
-    let key = `${props.isStation};${receiver}`;
-    return (
-        <Aux>
-            <div>
-                <Chat key={key} {...props} />
-            </div>
-            <BottomNavigation {...props} />
-        </Aux>
-    );
-};
+const chatLayout = () => (
+    <WithUpperNavigation screen={Screens.CHAT_LIST}>
+        <WithBottomNavigation>
+            <Chat />
+        </WithBottomNavigation>
+    </WithUpperNavigation>
+);
 
-export default chatLayout;
+export default chatLayout

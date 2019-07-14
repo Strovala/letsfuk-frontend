@@ -1,38 +1,30 @@
 import React from 'react';
 
-import { Screens, ActionTypes } from './../../App';
-import ChatListLayout from "./ChatListLayout/ChatListLayout";
 import SignupLayout from "./SignupLayout/SignupLayout";
 import LoginLayout from "./LoginLayout/LoginLayout";
-import ChatLayout from "./ChatLayout/ChatLayout";
-import WithBackbutton from "../../hoc/WithBackbutton";
 import {connect} from "react-redux";
+import {Screens} from "../../globals/constants";
+import ChatLayout from "./ChatLayout/ChatLayout";
+import ChatListLayout from "./ChatListLayout/ChatListLayout";
 
 const layout = (props) => {
     let { screen } = props;
     let specificScreen = null;
-    let newProps = {...props};
-    newProps.changeScreen = props.onScreenChange;
     switch (screen) {
-        case (Screens.CHATLIST):
-            specificScreen = (
-                <ChatListLayout {...newProps}/>
-            );
+        case (Screens.LOGIN):
+            specificScreen = <LoginLayout />;
             break;
         case (Screens.SIGNUP):
-            specificScreen = <SignupLayout {...newProps} />;
+            specificScreen = <SignupLayout />;
             break;
-        case (Screens.LOGIN):
-            specificScreen = <LoginLayout {...newProps} />;
+        case (Screens.CHAT_LIST):
+            specificScreen = <ChatListLayout />;
             break;
         case (Screens.CHAT):
-            specificScreen = (
-                <WithBackbutton backbuttonClicked={() => props.onScreenChange(Screens.CHATLIST)}>
-                    <ChatLayout {...newProps} />
-                </WithBackbutton>
-            );
+            specificScreen = <ChatLayout />;
             break;
         default:
+            specificScreen = <LoginLayout />;
             break;
     }
     return specificScreen;
@@ -44,10 +36,4 @@ const mapStateToProps = state => {
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onScreenChange: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen})
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(layout);
+export default connect(mapStateToProps)(layout);
