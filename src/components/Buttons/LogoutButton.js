@@ -1,7 +1,7 @@
 import React from 'react';
 import {API} from "../../globals/methods";
 import {Screens, cookies, ActionTypes} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const logoutButton = props => (
     <button onClick={() => {
@@ -30,7 +30,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen})
+        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeWebSocket: (webSocket) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, webSocket: webSocket}),
+        changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, user: user}),
     }
 };
 

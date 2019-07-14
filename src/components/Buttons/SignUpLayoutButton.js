@@ -1,12 +1,11 @@
 import React from 'react';
-import Aux from "../../hoc/Aux";
 import {ActionTypes, Screens} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const signUpLayoutButton = props => (
-    <Aux>
+    <div>
         <button onClick={() => props.changeScreen(Screens.SIGNUP)}>Sign Up</button>
-    </Aux>
+    </div>
 );
 
 

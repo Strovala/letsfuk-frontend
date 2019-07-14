@@ -7,10 +7,10 @@ const initialState = {
     receiver: null,
     webSocket: null,
     chats: null,
-    credentials: null,
-    username: null,
-    email: null,
-    password: null,
+    credentials: "",
+    username: "",
+    email: "",
+    password: "",
 };
 
 const reducer = (state = initialState, action) => {

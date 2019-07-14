@@ -1,5 +1,5 @@
 import axios from "axios";
-import { cookies } from "./constants";
+import {cookies} from "./constants";
 
 const checkUserFromCookie = () => {
     const sessionId = cookies.get('session-id');

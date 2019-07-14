@@ -5,7 +5,7 @@ import {initWebSocket} from "../../../fancyWebSocket";
 import {checkUserFromCookie, API} from "../../../globals/methods";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import SignUpLayoutButton from "../../Buttons/SignUpLayoutButton";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 class LoginLayout extends Component {
 

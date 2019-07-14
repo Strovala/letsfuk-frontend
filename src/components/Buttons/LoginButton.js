@@ -1,15 +1,15 @@
 import React from 'react';
 import {ActionTypes, cookies, Screens} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import {API} from "../../globals/methods";
 import {initWebSocket} from "../../fancyWebSocket";
 
 const loginButton = props => (
     <button onClick={() => {
         let data = {
-            username: this.props.credentials,
-            email: this.props.credentials,
-            password: this.props.password,
+            username: props.credentials,
+            email: props.credentials,
+            password: props.password,
             lat: "",
             lon: ""
         };
@@ -22,10 +22,12 @@ const loginButton = props => (
                     const userId = response.data.user.userId;
                     cookies.set('session-id', response.data.sessionId);
                     cookies.set('user-id', userId.userId);
-                    this.props.changeUser(response.data);
+                    props.changeUser(response.data);
                     const webSocket = initWebSocket(userId);
-                    this.props.changeWebSocket(webSocket);
-                    this.props.changeScreen(Screens.CHAT_LIST);
+                    props.changeWebSocket(webSocket);
+                    props.changeScreen(Screens.CHAT_LIST);
+                    props.clearCredentials();
+                    props.clearPassword();
                 }
             });
         }, (err) => {
@@ -50,6 +52,8 @@ const mapDispatchToProps = dispatch => {
         changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
         changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, screen: user}),
         changeWebSocket: (webSocket) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, webSocket: webSocket}),
+        clearPassword: () => dispatch({type: ActionTypes.PASSWORD_CHANGE, password: ""}),
+        clearCredentials: () => dispatch({type: ActionTypes.CREDENTIALS_CHANGE, credentials: ""}),
     }
 };
 

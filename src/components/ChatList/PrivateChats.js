@@ -6,7 +6,6 @@ const privateChats = (props) => (
     props.chats.privateChats.map((privateChat) => {
         return (
             <ChatPreview
-                {...props}
                 key={privateChat.receiverId}
                 receiverId={privateChat.receiverId}
                 messages={privateChat.messages}
@@ -24,4 +23,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps())(privateChats);
+export default connect(mapStateToProps)(privateChats);

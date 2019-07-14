@@ -1,12 +1,14 @@
 import React from 'react';
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import {ActionTypes} from "../../globals/constants";
 
 const username = (props) => (
-    <label>
-        Username:
-        <input type="text" value={this.props.username} onChange={(event) => this.props.changeUsername(event.target.value)} />
-    </label>
+    <div>
+        <label>
+            Username:
+            <input type="text" value={props.username} onChange={(event) => props.changeUsername(event.target.value)} />
+        </label>
+    </div>
 );
 
 const mapStateToProps = state => {

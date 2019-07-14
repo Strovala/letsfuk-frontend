@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from "../../hoc/Aux";
 import {ActionTypes} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const backButton = props => (
     <Aux>

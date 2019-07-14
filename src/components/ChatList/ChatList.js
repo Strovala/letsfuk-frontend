@@ -4,7 +4,7 @@ import Aux from './../../hoc/Aux';
 import {ActionTypes, cookies} from "../../globals/constants";
 import {API} from "../../globals/methods";
 import PrivateChats from "./PrivateChats";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import Loading from "../Loading/Loading";
 
 class ChatList extends Component {

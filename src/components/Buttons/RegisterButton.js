@@ -1,22 +1,25 @@
 import React from 'react';
 import {ActionTypes, Screens} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import {API} from "../../globals/methods";
 
-const registerButton = () => (
+const registerButton = (props) => (
     <button onClick={() => {
         let data = {
-            username: this.props.username,
-            email: this.props.email,
-            password: this.props.password
+            username: props.username,
+            email: props.email,
+            password: props.password
         };
         API.register({
             data: data,
             response: () => {
-                this.props.changeScreen(Screens.LOGIN)
+                props.clearPassword();
+                props.clearUsername();
+                props.clearEmail();
+                props.changeScreen(Screens.LOGIN);
             }
         });
-    }}>Login</button>
+    }}>SignUp</button>
 );
 
 const mapStateToProps = state => {
@@ -29,7 +32,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen})
+        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        clearPassword: () => dispatch({type: ActionTypes.PASSWORD_CHANGE, password: ""}),
+        clearEmail: () => dispatch({type: ActionTypes.EMAIL_CHANGE, email: ""}),
+        clearUsername: () => dispatch({type: ActionTypes.USERNAME_CHANGE, username: ""}),
     }
 };
 
