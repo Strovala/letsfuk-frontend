@@ -14,7 +14,7 @@ class LoginLayout extends Component {
                 axios.get(`/users/${userId}`, { headers: { "session-id": sessionId } })
                     .then(response => {
                         this.props.changeUser(response.data);
-                    })
+                    });
                 let webSocket = this.props.initWebSocket(userId);
                 this.props.changeWebSocket(webSocket);
                 this.props.changeScreen(Screens.CHATLIST);

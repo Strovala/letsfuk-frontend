@@ -14,7 +14,7 @@ class SignupLayout extends Component {
                 axios.get(`/users/${userId}`, { headers: { "session-id": sessionId } })
                     .then(response => {
                         this.props.changeUser(response.data);
-                    })
+                    });
                 this.props.changeScreen(Screens.CHATLIST);
             }
         }

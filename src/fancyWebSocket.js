@@ -32,8 +32,8 @@ let FancyWebSocket = function(url){
         dispatch(json.event, json.data)
     };
 
-    conn.onclose = function(){dispatch('close',null)}
-    conn.onopen = function(){dispatch('open',null)}
+    conn.onclose = function(){dispatch('close',null)};
+    conn.onopen = function(){dispatch('open',null)};
 
     let dispatch = function(event_name, message){
         var chain = callbacks[event_name];

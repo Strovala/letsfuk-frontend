@@ -3,6 +3,10 @@ import Cookies from 'universal-cookie';
 import Layout from './components/Layout/Layout';
 import FancyWebSocket from "./fancyWebSocket";
 
+const ActionTypes = {
+    SCREEN_CHANGE: "SCREEN_CHANGE"
+};
+
 const Screens = {
     LOGIN: "login",
     SIGNUP: "signup",
@@ -111,4 +115,4 @@ class App extends Component {
 }
 
 export default App;
-export { Screens, Constants, cookies };
+export { Screens, ActionTypes, Constants, cookies };
