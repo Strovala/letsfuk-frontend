@@ -7,6 +7,7 @@ const stationChatButton = props => (
     <Aux>
         <button onClick={() => {
             props.changeActiveChat(props.stationChat);
+            props.changeReceiver(props.stationChat.receiver);
             props.changeScreen(Screens.CHAT)
         }}>Station Chat</button>
     </Aux>
@@ -21,7 +22,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
+        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat}),
+        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
     }
 };
 

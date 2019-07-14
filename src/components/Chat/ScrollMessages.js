@@ -29,7 +29,7 @@ const mapStateToProps = state => {
     return {
         user: state.user,
         limit: state.limit,
-        receiver: state.activeChat.receiver
+        receiver: state.receiver
     }
 };
 

@@ -15,6 +15,7 @@ const chatPreview = (props) => {
     return (
         <div onClick={() => {
             props.changeActiveChat(props.chat);
+            props.changeReceiver(props.chat.receiver);
             props.changeScreen(Screens.CHAT)
         }}>
             <div>

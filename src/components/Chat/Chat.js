@@ -65,6 +65,11 @@ class Chat extends Component {
         this._ismounted = false;
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.receiver.id !== this.props.receiver.id)
+            this.getMessages();
+    }
+
     render() {
         return (
             <div>
@@ -81,7 +86,7 @@ class Chat extends Component {
 const mapStateToProps = state => {
     return {
         chat: state.activeChat,
-        receiver: state.activeChat.receiver,
+        receiver: state.receiver,
         text: state.text,
         limit: state.limit,
         webSocket: state.webSocket,

@@ -4,10 +4,20 @@ import connect from "react-redux/es/connect/connect";
 
 const avatar = (props) => (
     <output onClick={() => {
-        props.changeReceiver(props.sender);
+        if (props.user.user.userId === props.sender.userId)
+            return;
+        const receiver = props.sender;
+        receiver.id = receiver.userId;
+        props.changeReceiver(receiver);
         props.changeScreen(Screens.CHAT);
     }}>{props.sender.username}</output>
 );
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -16,4 +26,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(avatar);
+export default connect(mapStateToProps, mapDispatchToProps)(avatar);

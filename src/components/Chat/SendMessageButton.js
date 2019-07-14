@@ -23,7 +23,7 @@ const sendMessageButton = (props) => (
 
 const mapStateToProps = state => {
     return {
-        receiver: state.activeChat.receiver,
+        receiver: state.receiver,
         user: state.user,
         text: state.text,
         limit: state.limit,

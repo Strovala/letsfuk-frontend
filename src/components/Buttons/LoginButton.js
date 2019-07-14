@@ -22,6 +22,7 @@ const loginButton = props => (
                     const userId = response.data.user.userId;
                     cookies.set('session-id', response.data.sessionId);
                     cookies.set('user-id', userId);
+                    console.log(response);
                     props.changeUser(response.data);
                     const webSocket = initWebSocket(userId);
                     props.changeWebSocket(webSocket);
@@ -50,7 +51,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, screen: user}),
+        changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, user: user}),
         changeWebSocket: (webSocket) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, webSocket: webSocket}),
         clearPassword: () => dispatch({type: ActionTypes.PASSWORD_CHANGE, password: ""}),
         clearCredentials: () => dispatch({type: ActionTypes.CREDENTIALS_CHANGE, credentials: ""}),
