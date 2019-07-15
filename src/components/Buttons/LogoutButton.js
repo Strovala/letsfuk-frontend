@@ -5,18 +5,16 @@ import {connect} from "react-redux";
 
 const logoutButton = props => (
     <button onClick={() => {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         API.logout({
-            sessionId: sessionId,
+            user: props.user,
             response: () => {
                 cookies.remove('user-id');
                 cookies.remove('session-id');
+                props.changeScreen(Screens.LOGIN);
+                // changing user needs to go after changing screen
+                // because Chat screen uses user
                 props.changeUser(null);
                 props.changeWebSocket(null);
-                props.changeScreen(Screens.LOGIN);
             }
         })
     }}>Logout</button>

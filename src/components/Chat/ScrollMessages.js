@@ -1,17 +1,13 @@
 import React from "react";
-import {ActionTypes, Constants, cookies} from "../../globals/constants";
+import {ActionTypes, Constants} from "../../globals/constants";
 import connect from "react-redux/es/connect/connect";
 import {API} from "../../globals/methods";
 
 const scrollMessages = (props) => (
     <button onClick={() => {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = props.user.sessionId;
-        }
         let limit = props.limit + Constants.LIMIT;
         API.getMessages({
-            sessionId: sessionId,
+            user: props.user,
             receiverId: props.receiver.id,
             limit: limit,
             response: response => {

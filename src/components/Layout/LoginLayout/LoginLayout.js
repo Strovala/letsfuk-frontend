@@ -2,7 +2,7 @@ import Aux from "../../../hoc/Aux";
 import React, {Component} from "react";
 import Login from "../../Login/Login";
 import {initWebSocket} from "../../../fancyWebSocket";
-import {checkUserFromCookie, API} from "../../../globals/methods";
+import {API} from "../../../globals/methods";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import SignUpLayoutButton from "../../Buttons/SignUpLayoutButton";
 import {connect} from "react-redux";
@@ -10,23 +10,14 @@ import {connect} from "react-redux";
 class LoginLayout extends Component {
 
     componentDidMount() {
-        const {sessionId, userId} = checkUserFromCookie();
-        if (!userId)
-            return;
-        API.getUser({
-            sessionId: sessionId,
-            userId: userId,
+        API.whoAmI({
             response: response => {
-                const userData = response.data;
-                this.props.changeUser({
-                    user: userData,
-                    sessionId: sessionId
-                });
+                this.props.changeUser(response.data);
+                const webSocket = initWebSocket(response.data.user.userId);
+                this.props.changeWebSocket(webSocket);
+                this.props.changeScreen(Screens.CHAT_LIST);
             },
         });
-        const webSocket = initWebSocket(userId);
-        this.props.changeWebSocket(webSocket);
-        this.props.changeScreen(Screens.CHAT_LIST);
     }
 
     render() {

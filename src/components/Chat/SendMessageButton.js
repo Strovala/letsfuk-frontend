@@ -1,5 +1,4 @@
 import React from "react";
-import {cookies} from "../../globals/constants";
 import connect from "react-redux/es/connect/connect";
 import {API} from "../../globals/methods";
 
@@ -12,12 +11,8 @@ const sendMessageButton = (props) => (
         if (!props.receiver.isStation) {
             data['user_id'] = props.receiver.userId;
         }
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = props.user.sessionId;
-        }
         API.sendMessage({
-            sessionId: sessionId,
+            user: props.user,
             data: data
         });
         props.clearText();

@@ -4,7 +4,7 @@ import connect from "react-redux/es/connect/connect";
 
 const message = (props) => {
     let text = props.message.text + " at " + props.message.sentAt;
-    let userId = props.user.userId;
+    let userId = props.user.user.userId;
     let avatar = <Avatar sender={props.message.sender}/>;
     let message = (
         <div>

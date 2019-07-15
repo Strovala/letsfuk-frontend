@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import StationChat from './StationChat'
 import Aux from './../../hoc/Aux';
-import {ActionTypes, cookies} from "../../globals/constants";
+import {ActionTypes} from "../../globals/constants";
 import {API} from "../../globals/methods";
 import PrivateChats from "./PrivateChats";
 import {connect} from "react-redux";
@@ -10,12 +10,8 @@ import Loading from "../Loading/Loading";
 class ChatList extends Component {
 
     getChats() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         API.getChats({
-            sessionId: sessionId,
+            user: this.props.user,
             response: response => {
                 this.props.setChats(response.data);
                 this.props.changeActiveStation(response.data.stationChat.receiver);

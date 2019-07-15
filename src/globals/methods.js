@@ -1,33 +1,33 @@
 import axios from "axios";
 import {cookies} from "./constants";
 
-const checkUserFromCookie = () => {
-    const sessionId = cookies.get('session-id');
-    if (sessionId) {
-        const userId = cookies.get('user-id');
-        if (userId) {
-            return {
-                sessionId: sessionId,
-                userId: userId
-            };
-        }
-    }
-    return {
-        sessionId: null,
-        userId: null
-    };
-};
-
 class API {
 
+    static whoAmI(data) {
+        const sessionId = cookies.get('session-id');
+        if (!sessionId)
+            return;
+        axios.get('/whoami', { headers: { "session-id": sessionId } })
+            .then(data.response)
+            .catch(data.error);
+    }
+
     static getUser(data) {
-        axios.get(`/users/${data.userId}`, { headers: { "session-id": data.sessionId } })
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.get(`/users/${data.userId}`, { headers: { "session-id": sessionId } })
             .then(data.response)
             .catch(data.error);
     };
 
     static logout(data) {
-        axios.post('/auth/logout', {}, {headers: {"session-id": data.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.post('/auth/logout', {}, {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
     }
@@ -45,28 +45,44 @@ class API {
     }
 
     static getChats(data) {
-        axios.get('/messages', {headers: {"session-id": data.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.get('/messages', {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
     }
 
     static getMessages(data) {
-        axios.get(`/messages/${data.receiverId}?limit=${data.limit}`, {headers: {"session-id": data.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.get(`/messages/${data.receiverId}?limit=${data.limit}`, {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
     }
 
     static sendMessage(data) {
-        axios.post('messages', data.data, {headers: {"session-id": data.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.post('messages', data.data, {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
     }
 
     static resetUnreadMessages(data) {
-        axios.put('/messages/unreads/reset', data.data, {headers: {"session-id": data.sessionId}})
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.put('/messages/unreads/reset', data.data, {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
     }
 }
 
-export { API, checkUserFromCookie };
+export { API };
