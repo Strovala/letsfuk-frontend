@@ -8,7 +8,7 @@ import ChatListLayout from "./ChatListLayout/ChatListLayout";
 
 const layout = (props) => {
     let { screen } = props;
-    let specificScreen = null;
+    let specificScreen = <LoginLayout />;
     switch (screen) {
         case (Screens.LOGIN):
             specificScreen = <LoginLayout />;
@@ -23,7 +23,6 @@ const layout = (props) => {
             specificScreen = <ChatLayout />;
             break;
         default:
-            specificScreen = <LoginLayout />;
             break;
     }
     return specificScreen;
