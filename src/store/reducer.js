@@ -1,4 +1,4 @@
-import {ActionTypes, Constants, Screens} from "../globals/constants";
+import {ActionTypes, Screens} from "../globals/constants";
 
 
 const initialState = {
@@ -7,12 +7,6 @@ const initialState = {
     receiver: null,
     webSocket: null,
     chats: null,
-    credentials: "",
-    username: "",
-    email: "",
-    password: "",
-    limit: Constants.LIMIT,
-    text: "",
     stationChat: null,
     activeChat: null
 };
@@ -44,45 +38,15 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 chats: action.chats
             };
-        case ActionTypes.CREDENTIALS_CHANGE:
-            return {
-                ...state,
-                credentials: action.credentials
-            };
-        case ActionTypes.USERNAME_CHANGE:
-            return {
-                ...state,
-                username: action.username
-            };
-        case ActionTypes.EMAIL_CHANGE:
-            return {
-                ...state,
-                email: action.email
-            };
-        case ActionTypes.PASSWORD_CHANGE:
-            return {
-                ...state,
-                password: action.password
-            };
-        case ActionTypes.TEXT_CHANGE:
-            return {
-                ...state,
-                text: action.text
-            };
-        case ActionTypes.LIMIT_CHANGE:
-            return {
-                ...state,
-                limit: action.limit
-            };
         case ActionTypes.ACTIVE_CHAT_CHANGE:
             return {
                 ...state,
                 activeChat: action.chat
             };
-        case ActionTypes.STATION_CHAT_CHANGE:
+        case ActionTypes.ACTIVE_STAION_CHANGE:
             return {
                 ...state,
-                stationChat: action.stationChat
+                activeStation: action.station
             };
         default:
             return state;

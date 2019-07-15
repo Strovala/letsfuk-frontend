@@ -6,8 +6,7 @@ import {connect} from "react-redux";
 const stationChatButton = props => (
     <Aux>
         <button onClick={() => {
-            props.changeActiveChat(props.stationChat);
-            props.changeReceiver(props.stationChat.receiver);
+            props.changeReceiver(props.activeStation);
             props.changeScreen(Screens.CHAT)
         }}>Station Chat</button>
     </Aux>
@@ -15,7 +14,7 @@ const stationChatButton = props => (
 
 const mapStateToProps = state => {
     return {
-        stationChat: state.stationChat
+        activeStation: state.activeStation
     }
 };
 

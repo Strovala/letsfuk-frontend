@@ -1,7 +1,7 @@
 import React from "react";
-import {ActionTypes, cookies} from "../../globals/constants";
-import axios from "axios";
+import {cookies} from "../../globals/constants";
 import connect from "react-redux/es/connect/connect";
+import {API} from "../../globals/methods";
 
 
 const sendMessageButton = (props) => (
@@ -16,7 +16,10 @@ const sendMessageButton = (props) => (
         if (!sessionId) {
             sessionId = props.user.sessionId;
         }
-        axios.post('/messages', data, {headers: {"session-id": sessionId}})
+        API.sendMessage({
+            sessionId: sessionId,
+            data: data
+        });
         props.clearText();
     }}>Send</button>
 );
@@ -25,15 +28,8 @@ const mapStateToProps = state => {
     return {
         receiver: state.receiver,
         user: state.user,
-        text: state.text,
         limit: state.limit,
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        clearText: () => dispatch({type: ActionTypes.TEXT_CHANGE, text: ""}),
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(sendMessageButton);
+export default connect(mapStateToProps)(sendMessageButton)

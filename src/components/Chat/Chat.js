@@ -1,30 +1,37 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import Messages from "./Messages";
-import {ActionTypes, cookies} from "../../globals/constants";
+import {ActionTypes, Constants, cookies} from "../../globals/constants";
 import connect from "react-redux/es/connect/connect";
 import SendMessageButton from "./SendMessageButton";
-import MessageText from "./MessageText";
 import ScrollMessages from "./ScrollMessages";
+import TextInput from "../Inputs/TextInput";
+import Loading from "../Loading/Loading";
+import {API} from "../../globals/methods";
 
 class Chat extends Component {
+    state = {
+        text: "",
+        limit: Constants.LIMIT
+    };
 
     getMessagesFromBackend() {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = this.props.user.sessionId;
         }
-        axios.get(
-            `/messages/${this.props.receiver.id}?limit=${this.props.limit}`,
-            {headers: {"session-id": sessionId}}
-        )
-            .then(response => {
+        API.getMessages({
+            sessionId: sessionId,
+            receiverId: this.props.receiver.id,
+            limit: this.state.limit,
+            response: response => {
                 let messages = response.data.messages;
                 this.props.changeActiveChat({
                     ...this.props.chat,
                     messages: messages
                 });
-            })
+            }
+        });
     }
 
     resetUnreadMessages(stationId, senderId) {
@@ -70,13 +77,33 @@ class Chat extends Component {
             this.getMessages();
     }
 
+    handleText(event) {
+        this.setState({
+            text: event.target.value
+        })
+    }
+
+    clearText() {
+        this.setState({
+            text: ""
+        })
+    }
+
+    handleLimit(value) {
+        this.setState({
+            limit: value
+        })
+    }
+
     render() {
+        if (!this.props.chat)
+            return <Loading />;
         return (
             <div>
-                <ScrollMessages />
+                <ScrollMessages limit={this.state.limit} changeLimit={(value) => this.handleLimit(value)}/>
                 <Messages />
-                <MessageText />
-                <SendMessageButton />
+                <TextInput value={this.state.text} changed={(event) => this.handleText(event)}/>
+                <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
             </div>
         );
     }
@@ -87,7 +114,6 @@ const mapStateToProps = state => {
     return {
         chat: state.activeChat,
         receiver: state.receiver,
-        text: state.text,
         limit: state.limit,
         webSocket: state.webSocket,
     }
@@ -96,9 +122,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeText: (text) => dispatch({type: ActionTypes.TEXT_CHANGE, text: text}),
-        changeLimit: (limit) => dispatch({type: ActionTypes.LIMIT_CHANGE, limit: limit}),
-        clearText: () => dispatch({type: ActionTypes.TEXT_CHANGE, text: ""}),
         changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
         changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
     }

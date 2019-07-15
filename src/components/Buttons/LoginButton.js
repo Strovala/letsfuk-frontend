@@ -27,8 +27,6 @@ const loginButton = props => (
                     const webSocket = initWebSocket(userId);
                     props.changeWebSocket(webSocket);
                     props.changeScreen(Screens.CHAT_LIST);
-                    props.clearCredentials();
-                    props.clearPassword();
                 }
             });
         }, (err) => {
@@ -41,21 +39,12 @@ const loginButton = props => (
     }}>Login</button>
 );
 
-const mapStateToProps = state => {
-    return {
-        credentials: state.credentials,
-        password: state.password,
-    }
-};
-
 const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
         changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, user: user}),
         changeWebSocket: (webSocket) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, webSocket: webSocket}),
-        clearPassword: () => dispatch({type: ActionTypes.PASSWORD_CHANGE, password: ""}),
-        clearCredentials: () => dispatch({type: ActionTypes.CREDENTIALS_CHANGE, credentials: ""}),
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(loginButton);
+export default connect(null, mapDispatchToProps)(loginButton);

@@ -49,6 +49,18 @@ class API {
             .then(data.response)
             .catch(data.error);
     }
+
+    static getMessages(data) {
+        axios.get(`/messages/${data.receiverId}?limit=${data.limit}`, {headers: {"session-id": data.sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
+
+    static sendMessage(data) {
+        axios.post('messages', data.data, {headers: {"session-id": data.sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
 }
 
 export { API, checkUserFromCookie };

@@ -1,17 +1,58 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Aux from '../../hoc/Aux';
-import Username from "./Username";
-import Password from "../Login/Password";
 import RegisterButton from "../Buttons/RegisterButton";
-import Email from "./Email";
+import LabelInput from "../Inputs/LabelInputs/LabelInput";
 
-const singUp = () => (
-    <Aux>
-        <Username />
-        <Email />
-        <Password />
-        <RegisterButton />
-    </Aux>
-);
+class SignUp extends Component {
+    state = {
+        username: "",
+        email: "",
+        password: "",
+    };
 
-export default singUp;
+    handleUsername(event) {
+        this.setState({
+            username: event.target.value
+        })
+    }
+
+    handleEmail(event) {
+        this.setState({
+            email: event.target.value
+        })
+    }
+
+    handlePassword(event) {
+        this.setState({
+            password: event.target.value
+        })
+    }
+
+    render() {
+        return (
+            <Aux>
+                <LabelInput
+                    type={"text"}
+                    label={"Username"}
+                    value={this.state.username}
+                    changed={(event) => this.handleUsername(event)}
+                />
+                <LabelInput
+                    type={"text"}
+                    label={"Email"}
+                    value={this.state.email}
+                    changed={(event) => this.handleEmail(event)}
+                />
+                <LabelInput
+                    type={"password"}
+                    label={"Password"}
+                    value={this.state.password}
+                    changed={(event) => this.handlePassword(event)}
+                />
+                <RegisterButton {...this.state} />
+            </Aux>
+        );
+    }
+}
+
+export default SignUp;

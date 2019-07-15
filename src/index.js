@@ -12,7 +12,10 @@ import {apiUrl} from "./globals/constants";
 
 axios.defaults.baseURL = apiUrl;
 
-const store = createStore(reducer);
+const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 axios.interceptors.response.use(response => {
     let responseData = {...response.data};

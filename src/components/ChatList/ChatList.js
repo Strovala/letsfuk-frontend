@@ -18,7 +18,7 @@ class ChatList extends Component {
             sessionId: sessionId,
             response: response => {
                 this.props.setChats(response.data);
-                this.props.changeStationChat(response.data.stationChat);
+                this.props.changeActiveStation(response.data.stationChat.receiver);
             }
         });
     }
@@ -62,7 +62,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         setChats: (chats) => dispatch({type: ActionTypes.CHATS_CHANGE, chats: chats}),
-        changeStationChat: (stationChat) => dispatch({type: ActionTypes.STATION_CHAT_CHANGE, stationChat: stationChat})
+        changeActiveStation: (station) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, station: station})
     }
 };
 
