@@ -14,6 +14,10 @@ const registerButton = (props) => (
             data: data,
             response: () => {
                 props.changeScreen(Screens.LOGIN);
+            },
+            error: error => {
+                if (error.response)
+                    props.onError(error.response.data)
             }
         });
     }}>SignUp</button>

@@ -22,7 +22,6 @@ axios.interceptors.response.use(response => {
     response.data = humps.camelizeKeys(responseData);
     return response;
 }, error => {
-    console.log(error);
     return Promise.reject(error);
 });
 

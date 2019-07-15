@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import Aux from '../../hoc/Aux';
 import RegisterButton from "../Buttons/RegisterButton";
 import LabelInput from "../Inputs/LabelInputs/LabelInput";
+import TextError from "../Errors/TextError";
 
 class SignUp extends Component {
     state = {
         username: "",
         email: "",
         password: "",
+        error: null,
     };
 
     handleUsername(event) {
@@ -25,6 +27,12 @@ class SignUp extends Component {
     handlePassword(event) {
         this.setState({
             password: event.target.value
+        })
+    }
+
+    handleError(error) {
+        this.setState({
+            error: error
         })
     }
 
@@ -49,7 +57,8 @@ class SignUp extends Component {
                     value={this.state.password}
                     changed={(event) => this.handlePassword(event)}
                 />
-                <RegisterButton {...this.state} />
+                <TextError error={this.state.error}/>
+                <RegisterButton {...this.state} onError={(error) => this.handleError(error)}/>
             </Aux>
         );
     }

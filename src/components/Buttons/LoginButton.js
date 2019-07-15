@@ -26,6 +26,10 @@ const loginButton = props => (
                     const webSocket = initWebSocket(userId);
                     props.changeWebSocket(webSocket);
                     props.changeScreen(Screens.CHAT_LIST);
+                },
+                error: error => {
+                    if (error.response)
+                        props.onError(error.response.data);
                 }
             });
         }, (err) => {
