@@ -61,6 +61,12 @@ class API {
             .then(data.response)
             .catch(data.error);
     }
+
+    static resetUnreadMessages(data) {
+        axios.put('/messages/unreads/reset', data.data, {headers: {"session-id": data.sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
 }
 
 export { API, checkUserFromCookie };

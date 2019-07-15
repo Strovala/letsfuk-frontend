@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from "axios";
 import Messages from "./Messages";
 import {ActionTypes, Constants, cookies} from "../../globals/constants";
 import connect from "react-redux/es/connect/connect";
@@ -44,7 +43,10 @@ class Chat extends Component {
             sender_id: senderId,
             count: 0,
         };
-        axios.put('/messages/unreads/reset', data, {headers: {"session-id": sessionId}})
+        API.resetUnreadMessages({
+            sessionId: sessionId,
+            data: data
+        });
     }
 
     getMessages() {
