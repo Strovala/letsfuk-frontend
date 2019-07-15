@@ -1,5 +1,4 @@
 import React from 'react';
-
 import SignupLayout from "./SignupLayout/SignupLayout";
 import LoginLayout from "./LoginLayout/LoginLayout";
 import {connect} from "react-redux";
