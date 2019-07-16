@@ -3,7 +3,16 @@ import Avatar from "../Message/Avatar"
 import connect from "react-redux/es/connect/connect";
 
 const message = (props) => {
-    let text = props.message.text + " at " + props.message.sentAt;
+    const formatSentAt = (dateString) => {
+        const date = new Date(dateString);
+        // Returns offset in minutes
+        const offset = new Date().getTimezoneOffset()/60;
+        const hours = date.getHours() - offset;
+        const minutes = date.getMinutes();
+        const formattedMinutes = ("0" + minutes).slice(-2);
+        return `${hours}:${formattedMinutes}`
+    };
+    let text = props.message.text + " at " + formatSentAt(props.message.sentAt);
     let userId = props.user.user.userId;
     let avatar = <Avatar sender={props.message.sender}/>;
     let message = (
