@@ -10,6 +10,7 @@ const logoutButton = props => (
             response: () => {
                 cookies.remove('user-id');
                 cookies.remove('session-id');
+                props.changeAuthenticated(false);
                 props.changeScreen(Screens.LOGIN);
                 // changing user needs to go after changing screen
                 // because Chat screen uses user
@@ -28,9 +29,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeWebSocket: (webSocket) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, webSocket: webSocket}),
-        changeUser: (user) => dispatch({type: ActionTypes.USER_CHANGE, user: user}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
+        changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
+        changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
+        changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
     }
 };
 

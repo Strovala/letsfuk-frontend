@@ -1,10 +1,11 @@
 import React from 'react';
+import Typography from "@material-ui/core/Typography/Typography";
 
 const textError = (props) => (
     props.error ? (
-        <div>
-            <output style={{color: "red"}}>{props.error.text}</output>
-        </div>
+        <Typography variant="body1" color="secondary">
+            {props.error.text}
+        </Typography>
     ): null
 );
 

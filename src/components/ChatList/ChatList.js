@@ -57,8 +57,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setChats: (chats) => dispatch({type: ActionTypes.CHATS_CHANGE, chats: chats}),
-        changeActiveStation: (station) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, station: station})
+        setChats: (value) => dispatch({type: ActionTypes.CHATS_CHANGE, value: value}),
+        changeActiveStation: (value) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, value: value})
     }
 };
 

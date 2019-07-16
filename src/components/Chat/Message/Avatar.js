@@ -1,6 +1,6 @@
 import React from "react";
 import {ActionTypes, Screens} from "../../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const avatar = (props) => (
     <output onClick={() => {
@@ -21,8 +21,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
+        changeReceiver: (value) => dispatch({type: ActionTypes.RECEIVER_CHANGE, value: value}),
     }
 };
 

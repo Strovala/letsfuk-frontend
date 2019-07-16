@@ -1,6 +1,6 @@
 import React  from 'react';
 import Avatar from "../Message/Avatar"
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const message = (props) => {
     const formatSentAt = (dateString) => {

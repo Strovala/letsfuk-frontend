@@ -1,7 +1,7 @@
 import React  from 'react';
 
 import {ActionTypes, Screens} from "../../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const chatPreview = (props) => {
     let lastMessageText = null;
@@ -30,9 +30,9 @@ const chatPreview = (props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
-        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
+        changeReceiver: (value) => dispatch({type: ActionTypes.RECEIVER_CHANGE, value: value}),
+        changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value})
     }
 };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Messages from "./Messages";
 import {ActionTypes, Constants, cookies} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import SendMessageButton from "./SendMessageButton";
 import ScrollMessages from "./ScrollMessages";
 import TextInput from "../Inputs/TextInput";
@@ -123,9 +123,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
-        changeReceiver: (receiver) => dispatch({type: ActionTypes.RECEIVER_CHANGE, receiver: receiver}),
-        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
+        changeReceiver: (value) => dispatch({type: ActionTypes.RECEIVER_CHANGE, value: value}),
+        changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value})
     }
 };
 

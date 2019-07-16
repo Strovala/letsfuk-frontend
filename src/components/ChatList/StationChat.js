@@ -1,6 +1,6 @@
 import ChatPreview from "./ChatPreview/ChatPreview";
 import React from "react";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 
 const stationChat = (props) => (
     <ChatPreview

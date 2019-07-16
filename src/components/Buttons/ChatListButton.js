@@ -13,7 +13,7 @@ const chatListButton = props => (
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
     }
 };
 

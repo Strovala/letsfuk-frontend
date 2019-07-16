@@ -1,17 +1,22 @@
 import React from 'react';
 import {ActionTypes, Screens} from "../../globals/constants";
 import {connect} from "react-redux";
+import Link from "@material-ui/core/Link/Link";
 
 const loginLayoutButton = props => (
-    <div>
-        <button onClick={() => props.changeScreen(Screens.LOGIN)}>Login</button>
-    </div>
+    <Link
+        variant={props.variant}
+        component={props.component}
+        className={props.className}
+        onClick={() => props.changeScreen(Screens.LOGIN)}>
+        {"Already have an account? Log in"}
+    </Link>
 );
 
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeScreen: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
     }
 };
 

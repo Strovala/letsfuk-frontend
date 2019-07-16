@@ -1,6 +1,6 @@
 import React from "react";
 import {ActionTypes, Constants} from "../../globals/constants";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import {API} from "../../globals/methods";
 
 const scrollMessages = (props) => (
@@ -32,7 +32,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeActiveChat: (chat) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, chat: chat})
+        changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value})
     }
 };
 

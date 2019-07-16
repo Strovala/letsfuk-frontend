@@ -2,6 +2,7 @@ import {ActionTypes, Screens} from "../globals/constants";
 
 
 const initialState = {
+    authenticated: false,
     screen: Screens.LOGIN,
     user: null,
     receiver: null,
@@ -16,37 +17,42 @@ const reducer = (state = initialState, action) => {
         case ActionTypes.SCREEN_CHANGE:
             return {
                 ...state,
-                screen: action.screen
+                screen: action.value
             };
         case ActionTypes.WEBSOCKET_CHANGE:
             return {
                 ...state,
-                webSocket: action.webSocket
+                webSocket: action.value
             };
         case ActionTypes.USER_CHANGE:
             return {
                 ...state,
-                user: action.user
+                user: action.value
             };
         case ActionTypes.RECEIVER_CHANGE:
             return {
                 ...state,
-                receiver: action.receiver
+                receiver: action.value
             };
         case ActionTypes.CHATS_CHANGE:
             return {
                 ...state,
-                chats: action.chats
+                chats: action.value
             };
         case ActionTypes.ACTIVE_CHAT_CHANGE:
             return {
                 ...state,
-                activeChat: action.chat
+                activeChat: action.value
             };
         case ActionTypes.ACTIVE_STAION_CHANGE:
             return {
                 ...state,
-                activeStation: action.station
+                activeStation: action.value
+            };
+        case ActionTypes.AUTHENTICATED_CHANGE:
+            return {
+                ...state,
+                authenticated: action.value
             };
         default:
             return state;

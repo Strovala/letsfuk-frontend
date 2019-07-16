@@ -1,14 +1,12 @@
 import React from 'react';
 import SignupLayout from "./LandingLayout/SignUpLayout";
-import LoginLayout from "./LandingLayout/LogInLayout";
+import LoginLayout from "./LandingLayout/LoginLayout";
 import {connect} from "react-redux";
 import {Screens} from "../../globals/constants";
 import ChatLayout from "./MainLayout/ChatLayout";
 import ChatListLayout from "./MainLayout/ChatListLayout";
-import Container from "@material-ui/core/Container/Container";
-import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 
-const layout = (props) => {
+const landingLayout = (props) => {
     let { screen } = props;
     let specificScreen = <LoginLayout />;
     switch (screen) {
@@ -27,13 +25,7 @@ const layout = (props) => {
         default:
             break;
     }
-    return (
-
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            {specificScreen}
-        </Container>
-    );
+    return specificScreen;
 };
 
 const mapStateToProps = state => {
@@ -42,4 +34,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(layout);
+export default connect(mapStateToProps)(landingLayout);
