@@ -11,6 +11,9 @@ import TextInput from "../../../Inputs/TextInput";
 import SendMessageButton from "../../../Chat/SendMessageButton";
 import TextField from "@material-ui/core/TextField/TextField";
 import Grid from "@material-ui/core/Grid/Grid";
+import Message from "../../../Chat/Message/Message";
+import MessagePreview from "./MessagePreview/MessagePreview";
+import Typography from "@material-ui/core/Typography/Typography";
 
 
 class ChatLayout extends Component {
@@ -106,23 +109,37 @@ class ChatLayout extends Component {
         if (!this.props.chat)
             return <Loading />;
         return (
-            <div>
-                <ScrollMessages limit={this.state.limit} changeLimit={(value) => this.handleLimit(value)}/>
-                <Messages />
-                <TextField
-                    id="standard-multiline-flexible"
-                    label="Multiline"
-                    multiline
-                    rowsMax="4"
-                    className={this.props.classes.textField}
-                    margin="normal"
-                    inputProps={{
-                        value: this.state.text,
-                        onChange: (event) => this.handleText(event)
-                    }}
-                />
-                <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
-            </div>
+            <Grid container >
+                <Grid item className={this.props.classes.chatHeading}>
+                    <Typography variant="h3" className={this.props.classes.heading}>{this.props.receiver.username}</Typography>
+                </Grid>
+                {this.props.chat.messages.map((message) => {
+                    return (
+                        <MessagePreview
+                            key={message.messageId}
+                            message={message}
+                            receiver={this.props.chat.receiver}
+                        />
+                    );
+                })}
+                <Grid container>
+                    <TextField
+                        id="standard-multiline-flexible"
+                        label="Multiline"
+                        multiline
+                        rowsMax="4"
+                        className={this.props.classes.textField}
+                        margin="normal"
+                        inputProps={{
+                            value: this.state.text,
+                            onChange: (event) => this.handleText(event)
+                        }}
+                    />
+                    <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
+                </Grid>
+            </Grid>
+            //     <ScrollMessages limit={this.state.limit} changeLimit={(value) => this.handleLimit(value)}/>
+
         );
     }
 }

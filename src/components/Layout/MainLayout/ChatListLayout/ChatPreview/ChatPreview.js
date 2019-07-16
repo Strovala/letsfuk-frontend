@@ -24,11 +24,9 @@ const chatPreview = (props) => {
                 alignItems="center"
                 className={props.classes.avatarGrid}
             >
-                <Grid item>
-                    <Avatar className={props.classes.avatar}>
-                        {props.chat.receiver.username.substring(0, 2).toUpperCase()}
-                    </Avatar>
-                </Grid>
+                <Avatar className={props.classes.avatar}>
+                    {props.chat.receiver.username.substring(0, 2).toUpperCase()}
+                </Avatar>
             </Grid>
             <MessagePreview
                 isStation={props.chat.receiver.isStation}

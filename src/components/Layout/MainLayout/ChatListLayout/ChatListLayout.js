@@ -5,10 +5,13 @@ import {withStyles} from "@material-ui/core";
 import {API} from "../../../../globals/methods";
 import {ActionTypes} from "../../../../globals/constants";
 import {connect} from "react-redux";
-import Grid from "@material-ui/core/Grid";
 import Loading from "../../../Loading/Loading";
 import ChatPreview from "./ChatPreview/ChatPreview";
 import LogoutButton from "../../../Buttons/LogoutButton";
+import GridList from "@material-ui/core/GridList/GridList";
+import Aux from "../../../../hoc/Aux";
+import GridListTile from "@material-ui/core/GridListTile/GridListTile";
+import Grid from "@material-ui/core/Grid/Grid";
 
 
 class ChatListLayout extends Component {

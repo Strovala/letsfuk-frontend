@@ -6,23 +6,16 @@ import {withStyles} from "@material-ui/core";
 
 const stationMessagePreview = (props) => (
     <Grid container direction="column" className={props.classes.messagesGrid}>
-        <Grid item>
-            <Typography variant="h6" className={props.classes.singleLineHeight}>
-                {props.username}
-            </Typography>
-        </Grid>
-
+        <Typography variant="h6" className={props.classes.singleLineHeight}>
+            {props.username}
+        </Typography>
         <Grid container direction="column">
-            <Grid item>
-                <Typography variant="body1" className={props.classes.singleLineHeight}>
-                    {props.sender}:
-                </Typography>
-            </Grid>
-            <Grid item >
-                <Typography variant="body2" className={props.classes.singleLineHeight}>
-                    {props.message}
-                </Typography>
-            </Grid>
+            <Typography variant="body1" className={props.classes.singleLineHeight}>
+                {props.sender}:
+            </Typography>
+            <Typography variant="body2" className={props.classes.singleLineHeight}>
+                {props.message}
+            </Typography>
         </Grid>
     </Grid>
 );
