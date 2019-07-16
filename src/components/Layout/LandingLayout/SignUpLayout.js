@@ -49,8 +49,8 @@ class SignUp extends Component {
         // In case user somehow land on SignUp page while he is logged in
         API.whoAmI({
             response: response => {
-                this.props.changeAuthenticated(true);
                 this.props.changeUser(response.data);
+                this.props.changeAuthenticated(true);
                 this.props.changeScreen(Screens.CHAT_LIST);
             },
         });
@@ -130,7 +130,7 @@ class SignUp extends Component {
 const mapDispatchToProps = dispatch => {
     return {
         changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
-        changeScreen: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
     }
 };

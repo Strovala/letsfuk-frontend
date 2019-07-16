@@ -43,11 +43,13 @@ class LogIn extends Component {
         // redirect to home page if user is logged in
         API.whoAmI({
             response: response => {
-                this.props.changeAuthenticated(true);
-                this.props.changeUser(response.data);
                 const webSocket = initWebSocket(response.data.user.userId);
                 this.props.changeWebSocket(webSocket);
+                // This needs to go after webSocket change
+                // because it will load ChatList screens before its ready
+                this.props.changeAuthenticated(true);
                 this.props.changeScreen(Screens.CHAT_LIST);
+                this.props.changeUser(response.data);
             },
         });
     }
@@ -113,8 +115,8 @@ class LogIn extends Component {
 const mapDispatchToProps = dispatch => {
     return {
         changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
-        changeScreen: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
-        changeWebSocket: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
+        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
+        changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
     }
 };

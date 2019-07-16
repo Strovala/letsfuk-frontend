@@ -1,3 +1,5 @@
+import {deepPurple} from "@material-ui/core/colors";
+
 const styles = theme => ({
     chats: {
         borderTop: "1px solid",
@@ -16,12 +18,19 @@ const styles = theme => ({
     },
     avatarGrid: {
         flex: 1,
-        avatar: {
-            cursor: "pointer",
-        }
+    },
+    avatar: {
+        color: '#fff',
+        backgroundColor: deepPurple[500],
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
     },
     messagesGrid: {
-        flex: 3,
+        marginLeft: theme.spacing(1),
+        flex: 4,
     },
     timeGrid: {
         flex: 1,

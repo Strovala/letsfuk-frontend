@@ -29,10 +29,12 @@ const loginButton = props => (
                         const userId = response.data.user.userId;
                         cookies.set('session-id', response.data.sessionId);
                         cookies.set('user-id', userId);
-                        props.changeAuthenticated(true);
                         props.changeUser(response.data);
                         const webSocket = initWebSocket(userId);
                         props.changeWebSocket(webSocket);
+                        // This needs to go after webSocket change
+                        // because it will load ChatList screens before its ready
+                        props.changeAuthenticated(true);
                         props.changeScreen(Screens.CHAT_LIST);
                     },
                     error: error => {

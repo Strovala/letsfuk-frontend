@@ -95,4 +95,11 @@ const formatSentAt = (dateString) => {
     return `${hours}:${formattedMinutes}`
 };
 
-export { API, formatSentAt };
+const trimLastMessageText = (text, size ) => {
+    if (text.length > size) {
+        text = `${text.substring(0, size)}...`;
+    }
+    return text;
+};
+
+export { API, formatSentAt, trimLastMessageText };
