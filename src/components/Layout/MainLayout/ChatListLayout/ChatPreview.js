@@ -6,43 +6,35 @@ import {withStyles} from "@material-ui/core";
 import {styles} from "../../MainLayout";
 import {ActionTypes} from "../../../../globals/constants";
 import {connect} from "react-redux";
+import {formatSentAt} from "../../../../globals/methods";
 
 const chatPreview = (props) => {
     let lastMessage = props.chat.messages[props.chat.messages.length-1];
+    let lineHeightStyle = null;
     let messagePreview = (
-        <Grid container direction="column" style={{flex: 3}}>
-            <Grid item style={{flex: 2}}>
-                <Typography variant="h6">
-                    {props.chat.receiver.username}
-                </Typography>
-            </Grid>
-            <Grid item style={{flex: 1}}>
-                <Typography variant="body2">
-                    {lastMessage.text}
-                </Typography>
-            </Grid>
+        <Grid item >
+            <Typography variant="body2">
+                {lastMessage.text}
+            </Typography>
         </Grid>
     );
-    // Need to
+    // Here we need to shrink line height style in order for text
+    // to fit as regular chat
+    // Also need to add sender username for group chat
+    // because receiver username is `Station`
     if (props.chat.receiver.isStation) {
+        lineHeightStyle = {lineHeight: 1};
         messagePreview = (
-            <Grid container direction="column" style={{flex: 3}}>
-                <Grid item style={{flex: 1}}>
-                    <Typography variant="h6" style={{lineHeight: 1}}>
-                        {props.chat.receiver.username}
+            <Grid container direction="column">
+                <Grid item>
+                    <Typography variant="body1" style={lineHeightStyle}>
+                        {lastMessage.sender.username}:
                     </Typography>
                 </Grid>
-                <Grid container direction="column">
-                    <Grid item style={{flex: 1}}>
-                        <Typography variant="body1" style={{lineHeight: 1}}>
-                            {lastMessage.sender.username}:
-                        </Typography>
-                    </Grid>
-                    <Grid item style={{flex: 1}}>
-                        <Typography variant="body2" style={{lineHeight: 1}}>
-                            {lastMessage.text}
-                        </Typography>
-                    </Grid>
+                <Grid item>
+                    <Typography variant="body2" style={lineHeightStyle}>
+                        {lastMessage.text}
+                    </Typography>
                 </Grid>
             </Grid>
         )
@@ -55,11 +47,21 @@ const chatPreview = (props) => {
                 alignItems="center"
                 className={props.classes.avatarGrid}
             >
-                <Avatar className={props.classes.avatarGrid.avatar}>H</Avatar>
+                <Avatar className={props.classes.avatarGrid.avatar}>
+                    {props.chat.receiver.username.toUpperCase()[0]}
+                </Avatar>
             </Grid>
-            {messagePreview}
+
+            <Grid container direction="column" className={props.classes.messagesGrid}>
+                <Grid item >
+                    <Typography variant="h6" style={lineHeightStyle}>
+                        {props.chat.receiver.username}
+                    </Typography>
+                </Grid>
+                {messagePreview}
+            </Grid>
             <Grid container justify="flex-end" className={props.classes.timeGrid}>
-                <Typography variant="subtitle1">Time</Typography>
+                <Typography variant="subtitle1">{formatSentAt(lastMessage.sentAt)}</Typography>
             </Grid>
         </Grid>
     )

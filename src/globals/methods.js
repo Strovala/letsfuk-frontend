@@ -85,4 +85,14 @@ class API {
     }
 }
 
-export { API };
+const formatSentAt = (dateString) => {
+    const date = new Date(dateString);
+    // Returns offset in minutes
+    const offset = new Date().getTimezoneOffset()/60;
+    const hours = date.getHours() - offset;
+    const minutes = date.getMinutes();
+    const formattedMinutes = ("0" + minutes).slice(-2);
+    return `${hours}:${formattedMinutes}`
+};
+
+export { API, formatSentAt };

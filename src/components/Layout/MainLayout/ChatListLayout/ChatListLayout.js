@@ -6,7 +6,6 @@ import {API} from "../../../../globals/methods";
 import {ActionTypes} from "../../../../globals/constants";
 import {connect} from "react-redux";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import StationChat from "./StationChat";
 import PrivateChats from "./PrivateChats";
 import Loading from "../../../Loading/Loading";
