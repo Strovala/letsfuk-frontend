@@ -69,7 +69,6 @@ class LogIn extends Component {
                         fullWidth
                         id="credentials"
                         label="Username / Email address"
-                        name="credentials"
                         autoComplete="username"
                         autoFocus
                         inputProps={{
@@ -82,7 +81,6 @@ class LogIn extends Component {
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Password"
                         type="password"
                         id="password"

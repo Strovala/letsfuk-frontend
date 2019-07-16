@@ -1,31 +1,18 @@
 import React from 'react';
-import SignupLayout from "./LandingLayout/SignUpLayout";
-import LoginLayout from "./LandingLayout/LoginLayout";
 import {connect} from "react-redux";
-import {Screens} from "../../globals/constants";
-import ChatLayout from "./MainLayout/ChatLayout";
-import ChatListLayout from "./MainLayout/ChatListLayout";
+import {Screens} from "../../../globals/constants";
+import LogInLayout from "./LogInLayout";
+import SignUpLayout from "./SignUpLayout";
 
 const landingLayout = (props) => {
-    let { screen } = props;
-    let specificScreen = <LoginLayout />;
-    switch (screen) {
+    switch (props.screen) {
         case (Screens.LOGIN):
-            specificScreen = <LoginLayout />;
-            break;
+            return <LogInLayout />;
         case (Screens.SIGNUP):
-            specificScreen = <SignupLayout />;
-            break;
-        case (Screens.CHAT_LIST):
-            specificScreen = <ChatListLayout />;
-            break;
-        case (Screens.CHAT):
-            specificScreen = <ChatLayout />;
-            break;
+            return <SignUpLayout />;
         default:
-            break;
+            return <LogInLayout />
     }
-    return specificScreen;
 };
 
 const mapStateToProps = state => {

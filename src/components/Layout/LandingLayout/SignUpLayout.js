@@ -73,7 +73,6 @@ class SignUp extends Component {
                         fullWidth
                         id="username"
                         label="Username"
-                        name="credentials"
                         autoComplete="username"
                         autoFocus
                         inputProps={{
@@ -88,7 +87,6 @@ class SignUp extends Component {
                         fullWidth
                         id="email"
                         label="Email address"
-                        name="email"
                         autoComplete="email"
                         inputProps={{
                             value: this.state.email,
@@ -100,7 +98,6 @@ class SignUp extends Component {
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Password"
                         type="password"
                         id="password"
