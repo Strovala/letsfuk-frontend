@@ -29,6 +29,9 @@ const styles = theme => ({
     avatarGrid: {
         flex: 1,
     },
+    chatLayout: {
+        display: "flex"
+    },
     avatar: {
         color: '#fff',
         backgroundColor: deepPurple[500],

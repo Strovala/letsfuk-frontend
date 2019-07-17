@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {styles} from "../../MainLayout";
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
 import {API} from "../../../../globals/methods";
@@ -15,6 +14,33 @@ import Message from "../../../Chat/Message/Message";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
 
+const styles = theme => ({
+    root: {
+
+    },
+    chatHeading: {
+        borderBottom: "1px solid",
+        paddingBottom: theme.spacing(2),
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        borderColor: "rgb(170,170,170, 0.7)",
+        width: "100%"
+    },
+    messages: {
+        flex: 8,
+        overflow: "auto",
+        direction: "rtl",
+        transform: "rotate(180deg)"
+    },
+    heading: {
+        margin: theme.spacing(2)
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+});
 
 class ChatLayout extends Component {
     state = {
@@ -109,19 +135,31 @@ class ChatLayout extends Component {
         if (!this.props.chat)
             return <Loading />;
         return (
-            <Grid container >
+            <Grid
+                container
+                direction="column"
+                className={this.props.classes.root}
+            >
                 <Grid item className={this.props.classes.chatHeading}>
                     <Typography variant="h3" className={this.props.classes.heading}>{this.props.receiver.username}</Typography>
                 </Grid>
-                {this.props.chat.messages.map((message) => {
-                    return (
-                        <MessagePreview
-                            key={message.messageId}
-                            message={message}
-                            receiver={this.props.chat.receiver}
-                        />
-                    );
-                })}
+                <Grid
+                    container
+                    direction="column"
+                    alignItems="flex-start"
+                    wrap="nowrap"
+                    className={this.props.classes.messages}
+                >
+                    {this.props.chat.messages.map((message) => {
+                        return (
+                            <MessagePreview
+                                key={message.messageId}
+                                message={message}
+                                receiver={this.props.chat.receiver}
+                            />
+                        );
+                    })}
+                </Grid>
                 <Grid container>
                     <TextField
                         id="standard-multiline-flexible"

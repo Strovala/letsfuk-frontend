@@ -5,7 +5,14 @@ import {formatSentAt} from "../../../../../globals/methods";
 
 const messagePreview = (props) => {
     return (
-        <Grid container direction="column" style={{backgroundColor: "rgb(63,81,181, 0.4)",marginTop: "8px", width: "75%", border: "1px solid black", borderRadius: "5%"}}>
+        <Grid container direction="column" style={{
+            direction: "ltr",
+            transform: "rotate(180deg)",
+            backgroundColor: "rgb(63,81,181, 0.4)",
+            marginTop: "8px", width: "75%",
+            border: "1px solid black",
+            borderRadius: "5%"
+        }}>
             <Grid item>
                 <Typography variant="body1" style={{lineHeight: 1, fontWeight: "bold", padding: "8px"}}>
                     {props.message.sender.username}

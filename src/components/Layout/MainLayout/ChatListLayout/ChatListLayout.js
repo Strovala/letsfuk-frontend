@@ -7,11 +7,7 @@ import {connect} from "react-redux";
 import Loading from "../../../Loading/Loading";
 import ChatPreview from "./ChatPreview/ChatPreview";
 import LogoutButton from "../../../Buttons/LogoutButton";
-import GridList from "@material-ui/core/GridList/GridList";
-import Aux from "../../../../hoc/Aux";
-import GridListTile from "@material-ui/core/GridListTile/GridListTile";
 import Grid from "@material-ui/core/Grid/Grid";
-import Paper from "@material-ui/core/Paper/Paper";
 
 const styles = (theme) => ({
     root: {

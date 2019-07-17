@@ -25,6 +25,7 @@ const styles = (theme) => ({
     },
     messageGrid: {
         flex: 3,
+        justifyContent: "center"
     },
     timeGrid: {
         flex: 1,
@@ -37,7 +38,7 @@ const styles = (theme) => ({
 });
 
 const chatPreview = (props) => {
-    let lastMessage = props.chat.messages[props.chat.messages.length-1];
+    let lastMessage = props.chat.messages[0];
 
     return (
         <Grid container direction="row" spacing={2} className={props.classes.root} onClick={() => {
@@ -62,7 +63,7 @@ const chatPreview = (props) => {
                 sender={lastMessage.sender.username}
                 message={lastMessage.text}
             />
-            <Grid container justify="flex-end" className={props.classes.timeGrid}>
+            <Grid container justify="flex-end" alignItems="center" className={props.classes.timeGrid}>
                 <Typography variant="subtitle1">{formatSentAt(lastMessage.sentAt)}</Typography>
             </Grid>
         </Grid>
