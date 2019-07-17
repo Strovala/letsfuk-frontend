@@ -1,19 +1,22 @@
 import React from 'react';
 import Message from "./Message/Message";
+import {connect} from "react-redux";
 
 const messages = (props) => (
-    props.messages.map((message) => {
+    props.chat.messages.map((message) => {
         return (
             <Message
-                {...props}
                 key={message.messageId}
-                receiverId={message.receiverId}
-                senderId={message.senderId}
-                text={message.text}
-                sentAt={message.sentAt}
+                message={message}
             />
         );
     })
 );
 
-export default messages;
+const mapStateToProps = state => {
+    return {
+        chat: state.activeChat,
+    }
+};
+
+export default connect(mapStateToProps)(messages);

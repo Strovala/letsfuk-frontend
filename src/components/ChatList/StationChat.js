@@ -1,16 +1,18 @@
 import ChatPreview from "./ChatPreview/ChatPreview";
 import React from "react";
+import {connect} from "react-redux";
 
 const stationChat = (props) => (
     <ChatPreview
-        {...props}
-        key={props.chatList.stationChat.receiverId}
-        receiverId={props.chatList.stationChat.receiverId}
-        messages={props.chatList.stationChat.messages}
-        lastMessage={props.chatList.stationChat.messages[0]}
-        unreadCount={props.chatList.stationChat.unread}
-        isStation={true}
+        key={props.chat.receiver.id}
+        chat={props.chat}
     />
 );
 
-export default stationChat;
+const mapStateToProps = state => {
+    return {
+        chat: state.chats.stationChat
+    }
+};
+
+export default connect(mapStateToProps)(stationChat);

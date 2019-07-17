@@ -1,52 +1,39 @@
-import React, { Component } from 'react';
-import axios from "axios";
-import {cookies, Screens} from "../../../App";
+import React  from 'react';
 import Avatar from "../Message/Avatar"
+import {connect} from "react-redux";
 
-class Message extends Component {
-    state = {
-        sender: null
+const message = (props) => {
+    const formatSentAt = (dateString) => {
+        const date = new Date(dateString);
+        // Returns offset in minutes
+        const offset = new Date().getTimezoneOffset()/60;
+        const hours = date.getHours() - offset;
+        const minutes = date.getMinutes();
+        const formattedMinutes = ("0" + minutes).slice(-2);
+        return `${hours}:${formattedMinutes}`
     };
-
-    componentDidMount() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
-        axios.get(`/users/${this.props.senderId}`, { headers: { "session-id": sessionId } })
-            .then(response => {
-                this.setState({sender: response.data});
-            })
-    }
-
-    avatarClicked(event) {
-        console.log(event);
-        this.props.changeReceiver(this.state.sender);
-        this.props.changeIsStation(false);
-        this.props.changeScreen(Screens.CHAT);
-    }
-
-    render() {
-        if (!this.state.sender) {
-            return null;
-        }
-        let text = this.props.text + " at " + this.props.sentAt;
-        let userId = this.props.getUserId();
-        let avatar = <Avatar avatarClicked={() => this.avatarClicked(this.state.sender)} value={this.state.sender.username}/>;
-        let message = (
+    let text = props.message.text + " at " + formatSentAt(props.message.sentAt);
+    let userId = props.user.user.userId;
+    let avatar = <Avatar sender={props.message.sender}/>;
+    let message = (
+        <div>
+            {avatar}: {text}
+        </div>
+    );
+    if (props.message.sender.userId === userId) {
+        message = (
             <div>
-                {avatar}: {text}
+                {text} :{avatar}
             </div>
         );
-        if (this.state.sender.userId === userId) {
-            message = (
-                <div>
-                    {text} :{avatar}
-                </div>
-            );
-        }
-        return message;
     }
-}
+    return message;
+};
 
-export default Message;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+    }
+};
+
+export default connect(mapStateToProps)(message);

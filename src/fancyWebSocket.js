@@ -9,6 +9,8 @@ socket.bind('some_event', function(data){
 socket.send( 'some_event', {name: 'ismael', message : 'Hello world'} );
 */
 
+import {webSocketUrl} from "./globals/constants";
+
 let FancyWebSocket = function(url){
     let conn = new WebSocket(url);
 
@@ -44,4 +46,15 @@ let FancyWebSocket = function(url){
     }
 };
 
+const initWebSocket = (userId) => {
+    let webSocket = new FancyWebSocket(webSocketUrl);
+    webSocket.bind('open', function(data){
+        webSocket.send('connect', {
+            id: userId
+        });
+    });
+    return webSocket;
+};
+
 export default FancyWebSocket;
+export {initWebSocket};

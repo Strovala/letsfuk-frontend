@@ -8,21 +8,32 @@ import humps from "humps";
 import {createStore} from "redux";
 import reducer from "./store/reducer";
 import {Provider} from "react-redux";
+import {apiUrl} from "./globals/constants";
 
-axios.defaults.baseURL = 'http://localhost:8888';
+axios.defaults.baseURL = apiUrl;
 
-const store = createStore(reducer);
+const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 axios.interceptors.response.use(response => {
     let responseData = {...response.data};
     response.data = humps.camelizeKeys(responseData);
     return response;
 }, error => {
-    console.log(error);
     return Promise.reject(error);
 });
 
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+// GET FULL HEIGht viewport
+const rootElement = document.getElementById('root');
+rootElement.style.position = 'absolute';
+rootElement.style.top = '0';
+rootElement.style.bottom = '0';
+rootElement.style.left = '0';
+rootElement.style.right = '0';
+rootElement.style.display = 'flex';
+ReactDOM.render(<Provider store={store}><App /></Provider>, rootElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

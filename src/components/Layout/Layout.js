@@ -1,53 +1,36 @@
-import React from 'react';
-
-import { Screens, ActionTypes } from './../../App';
-import ChatListLayout from "./ChatListLayout/ChatListLayout";
-import SignupLayout from "./SignupLayout/SignupLayout";
-import LoginLayout from "./LoginLayout/LoginLayout";
-import ChatLayout from "./ChatLayout/ChatLayout";
-import WithBackbutton from "../../hoc/WithBackbutton";
+import React, {Component} from 'react';
 import {connect} from "react-redux";
+import LandingLayout from "./LandingLayout/LandingLayout";
+import MainLayout from "./MainLayout/MainLayout";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+import {withStyles} from "@material-ui/core";
+
+const styles = theme => ({
+    '@global': {
+        body: {
+            backgroundColor: theme.palette.common.white,
+        }
+    },
+    container: {
+        display: 'flex'
+    }
+});
 
 const layout = (props) => {
-    let { screen } = props;
-    let specificScreen = null;
-    let newProps = {...props};
-    newProps.changeScreen = props.onScreenChange;
-    switch (screen) {
-        case (Screens.CHATLIST):
-            specificScreen = (
-                <ChatListLayout {...newProps}/>
-            );
-            break;
-        case (Screens.SIGNUP):
-            specificScreen = <SignupLayout {...newProps} />;
-            break;
-        case (Screens.LOGIN):
-            specificScreen = <LoginLayout {...newProps} />;
-            break;
-        case (Screens.CHAT):
-            specificScreen = (
-                <WithBackbutton backbuttonClicked={() => props.onScreenChange(Screens.CHATLIST)}>
-                    <ChatLayout {...newProps} />
-                </WithBackbutton>
-            );
-            break;
-        default:
-            break;
-    }
-    return specificScreen;
+    const layout = props.authenticated ? <MainLayout/> : <LandingLayout/>;
+    return (
+        <Container component="main" maxWidth="xs" className={props.classes.container} >
+            <CssBaseline />
+            {layout}
+        </Container>
+    )
 };
 
 const mapStateToProps = state => {
     return {
-        screen: state.screen
+        authenticated: state.authenticated
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onScreenChange: (screen) => dispatch({type: ActionTypes.SCREEN_CHANGE, screen: screen})
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(layout);
+export default withStyles(styles)(connect(mapStateToProps)(layout));
