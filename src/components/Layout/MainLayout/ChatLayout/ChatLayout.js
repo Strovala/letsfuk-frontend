@@ -4,13 +4,9 @@ import {connect} from "react-redux";
 import {API} from "../../../../globals/methods";
 import {ActionTypes, Constants, cookies} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
-import ScrollMessages from "../../../Chat/ScrollMessages";
-import Messages from "../../../Chat/Messages";
-import TextInput from "../../../Inputs/TextInput";
-import SendMessageButton from "../../../Chat/SendMessageButton";
+import SendMessageButton from "../../../Buttons/SendMessageButton";
 import TextField from "@material-ui/core/TextField/TextField";
 import Grid from "@material-ui/core/Grid/Grid";
-import Message from "../../../Chat/Message/Message";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
 
