@@ -24,7 +24,7 @@ const Constants = {
 
 const https = false ;
 const apiSecure = https ? 'https': 'http';
-const apiHost = 'localhost';
+const apiHost = 'euve258483.serverprofi24.net';
 const apiPort = 8888;
 const apiHostPort = `${apiHost}:${apiPort}`;
 const webSocketUrl = `ws://${apiHostPort}/websocket`;
