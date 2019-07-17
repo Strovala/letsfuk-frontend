@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from "react-redux";
 import LandingLayout from "./LandingLayout/LandingLayout";
 import MainLayout from "./MainLayout/MainLayout";
@@ -10,14 +10,17 @@ const styles = theme => ({
     '@global': {
         body: {
             backgroundColor: theme.palette.common.white,
-        },
+        }
     },
+    container: {
+        display: 'flex'
+    }
 });
 
 const layout = (props) => {
     const layout = props.authenticated ? <MainLayout/> : <LandingLayout/>;
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={props.classes.container} >
             <CssBaseline />
             {layout}
         </Container>

@@ -21,7 +21,10 @@ const styles = theme => ({
         borderColor: "rgb(170,170,170, 0.7)",
     },
     paper: {
-        marginTop: theme.spacing(2)
+    },
+    chatList: {
+        flex: 8,
+        overflow: "auto"
     },
     avatarGrid: {
         flex: 1,

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
-import {styles} from "../index";
 import {withStyles} from "@material-ui/core";
 import {API} from "../../../../globals/methods";
 import {ActionTypes} from "../../../../globals/constants";
@@ -12,7 +11,22 @@ import GridList from "@material-ui/core/GridList/GridList";
 import Aux from "../../../../hoc/Aux";
 import GridListTile from "@material-ui/core/GridListTile/GridListTile";
 import Grid from "@material-ui/core/Grid/Grid";
+import Paper from "@material-ui/core/Paper/Paper";
 
+const styles = (theme) => ({
+    root: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column"
+    },
+    heading: {
+        margin: theme.spacing(2)
+    },
+    chatList: {
+        flex: 8,
+        overflow: "auto"
+    },
+});
 
 class ChatListLayout extends Component {
 
@@ -45,12 +59,14 @@ class ChatListLayout extends Component {
         if (!this.props.chats)
             return <Loading />;
         return (
-            <div className={this.props.classes.paper}>
+            <Grid container direction="column" className={this.props.classes.root}>
                 <Typography variant="h3" className={this.props.classes.heading}>Chats</Typography>
                 <Grid
                     container
                     direction="column"
                     alignItems="flex-start"
+                    wrap="nowrap"
+                    className={this.props.classes.chatList}
                 >
                     <ChatPreview
                         key={this.props.chats.stationChat.receiver.id}
@@ -66,7 +82,7 @@ class ChatListLayout extends Component {
                     })}
                 </Grid>
                 <LogoutButton />
-            </div>
+            </Grid>
         );
     }
 }

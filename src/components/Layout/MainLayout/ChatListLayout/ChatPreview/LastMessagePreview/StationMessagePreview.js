@@ -5,7 +5,7 @@ import {styles} from "../LastMessagePreview";
 import {withStyles} from "@material-ui/core";
 
 const stationMessagePreview = (props) => (
-    <Grid container direction="column" className={props.classes.messagesGrid}>
+    <Grid container direction="column" className={props.className}>
         <Typography variant="h6" className={props.classes.singleLineHeight}>
             {props.username}
         </Typography>
