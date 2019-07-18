@@ -26,9 +26,9 @@ const https = true ;
 const apiSecure = https ? 'https': 'http';
 const apiHost = 'euve258483.serverprofi24.net';
 const apiPort = 443;
-const apiHostPort = `${apiHost}:${apiPort}`;
-const webSocketUrl = `ws://${apiHostPort}/api/websocket`;
-const apiUrl = `${apiSecure}://${apiHostPort}/api`;
+const internalPort = 8888;
+const webSocketUrl = `wss://${apiHost}:${internalPort}/websocket`;
+const apiUrl = `${apiSecure}://${apiHost}:${apiPort}/api`;
 const cookies = new Cookies();
 
 export {
