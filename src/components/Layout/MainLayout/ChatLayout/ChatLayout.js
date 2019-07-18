@@ -9,18 +9,18 @@ import TextField from "@material-ui/core/TextField/TextField";
 import Grid from "@material-ui/core/Grid/Grid";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
+import SendIcon from "@material-ui/icons/Send";
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 const styles = theme => ({
     root: {
-
+        display: "flex"
     },
     chatHeading: {
-        borderBottom: "1px solid",
-        paddingBottom: theme.spacing(2),
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        borderColor: "rgb(170,170,170, 0.7)",
-        width: "100%"
+        fontSize: "4vh",
+        fontWeight: "bold",
+        marginTop: "1vh",
+        marginBottom: "1vh",
     },
     messages: {
         flex: 8,
@@ -28,14 +28,12 @@ const styles = theme => ({
         direction: "rtl",
         transform: "rotate(180deg)"
     },
-    heading: {
-        margin: theme.spacing(2)
-    },
     textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
+        flex: 8
     },
+    sendMessageGrid: {
+        marginBottom: "2vh"
+    }
 });
 
 class ChatLayout extends Component {
@@ -45,12 +43,8 @@ class ChatLayout extends Component {
     };
 
     getMessagesFromBackend() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         API.getMessages({
-            sessionId: sessionId,
+            user: this.props.user,
             receiverId: this.props.receiver.id,
             limit: this.state.limit,
             response: response => {
@@ -64,17 +58,13 @@ class ChatLayout extends Component {
     }
 
     resetUnreadMessages(stationId, senderId) {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         let data = {
             station_id: stationId,
             sender_id: senderId,
             count: 0,
         };
         API.resetUnreadMessages({
-            sessionId: sessionId,
+            user: this.props.user,
             data: data
         });
     }
@@ -137,7 +127,7 @@ class ChatLayout extends Component {
                 className={this.props.classes.root}
             >
                 <Grid item className={this.props.classes.chatHeading}>
-                    <Typography variant="h3" className={this.props.classes.heading}>{this.props.receiver.username}</Typography>
+                    <Typography variant="h6">{this.props.receiver.username}</Typography>
                 </Grid>
                 <Grid
                     container
@@ -156,14 +146,14 @@ class ChatLayout extends Component {
                         );
                     })}
                 </Grid>
-                <Grid container>
+                <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
                     <TextField
                         id="standard-multiline-flexible"
-                        label="Multiline"
                         multiline
                         rowsMax="4"
                         className={this.props.classes.textField}
-                        margin="normal"
+                        margin="none"
+                        autoFocus
                         inputProps={{
                             value: this.state.text,
                             onChange: (event) => this.handleText(event)
@@ -172,7 +162,6 @@ class ChatLayout extends Component {
                     <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
                 </Grid>
             </Grid>
-            //     <ScrollMessages limit={this.state.limit} changeLimit={(value) => this.handleLimit(value)}/>
 
         );
     }
@@ -181,6 +170,7 @@ class ChatLayout extends Component {
 
 const mapStateToProps = state => {
     return {
+        user: state.user,
         chat: state.activeChat,
         receiver: state.receiver,
         limit: state.limit,

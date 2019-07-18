@@ -86,7 +86,11 @@ class API {
 }
 
 const formatSentAt = (dateString) => {
-    const date = new Date(dateString);
+    // Format string for safari
+    dateString = dateString.replace(/\s/, 'T');
+    // Cannot use newDate(dateString) because of Safari / Chrome problem
+    const a = dateString.split(/[^0-9]/);
+    const date=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5]);
     // Returns offset in minutes
     const offset = new Date().getTimezoneOffset()/60;
     const hours = date.getHours() - offset;

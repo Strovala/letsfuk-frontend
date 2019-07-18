@@ -1,10 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
 import {API} from "../../globals/methods";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import SendIcon from "@material-ui/icons/Send";
 
 
 const sendMessageButton = (props) => (
-    <button onClick={() => {
+    <IconButton onClick={() => {
         let data = {
             "text": props.text
         };
@@ -16,7 +18,9 @@ const sendMessageButton = (props) => (
             data: data
         });
         props.clearText();
-    }}>Send</button>
+    }}>
+        <SendIcon />
+    </IconButton>
 );
 
 const mapStateToProps = state => {

@@ -11,7 +11,8 @@ const messagePreview = (props) => {
             backgroundColor: "rgb(63,81,181, 0.4)",
             marginTop: "8px", width: "75%",
             border: "1px solid black",
-            borderRadius: "5%"
+            borderRadius: "5%",
+            display: "grid"
         }}>
             <Grid item>
                 <Typography variant="body1" style={{lineHeight: 1, fontWeight: "bold", padding: "8px"}}>
