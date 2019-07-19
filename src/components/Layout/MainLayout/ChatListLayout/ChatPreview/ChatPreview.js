@@ -16,7 +16,7 @@ const styles = (theme) => ({
         marginTop: "1vh",
         marginBottom: "0.3vh",
         borderColor: "rgb(170,170,170, 0.7)",
-        flex: "1 0 50px"
+        flex: "0 0 50px"
     },
     avatarGrid: {
         flex: 1,
