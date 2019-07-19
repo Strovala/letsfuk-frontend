@@ -6,10 +6,10 @@ import {withStyles} from "@material-ui/core";
 
 const privateMessagePreview = (props) => (
     <Grid container direction="column" className={props.className}>
-        <Typography variant="h6">
+        <Typography variant="h6" className={props.classes.receiverPrivate}>
             {props.username}
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" className={props.classes.textPrivate}>
             {props.message}
         </Typography>
     </Grid>

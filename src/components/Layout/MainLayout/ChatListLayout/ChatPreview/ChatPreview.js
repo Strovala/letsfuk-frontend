@@ -12,34 +12,58 @@ import {deepPurple} from "@material-ui/core/colors";
 const styles = (theme) => ({
     root: {
         borderTop: "1px solid",
-        paddingTop: theme.spacing(2),
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
+        paddingTop: "1vh",
+        marginTop: "1vh",
+        marginBottom: "0.3vh",
         borderColor: "rgb(170,170,170, 0.7)",
-        flex: "0 0 14%",
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        flex: "1 0 50px"
     },
     avatarGrid: {
         flex: 1,
     },
     messageGrid: {
         flex: 3,
-        justifyContent: "center"
+    },
+    messageGridInside: {
+        display: "inline-block"
     },
     timeGrid: {
-        flex: 1,
-        paddingRight: theme.spacing(2),
+        flex: 1
+    },
+    unreadGrid: {
+        flex: 1
+    },
+    time: {
+        paddingRight: "4vh",
+        flex: 1
     },
     avatar: {
         color: '#fff',
         backgroundColor: deepPurple[500],
     },
+    unread: {
+        backgroundColor: "#FF0000",
+        width: "20px",
+        height: "20px",
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: '#fff',
+        borderRadius: "50%",
+        marginRight: "5vw",
+    }
 });
 
 const chatPreview = (props) => {
-    let lastMessage = props.chat.messages[0];
-
+    let lastMessage = props.chat.messages[props.chat.messages.length - 1];
+    let unread = null;
+    if (props.chat.unread)
+        unread = (
+            <Grid container justify="flex-end" className={props.classes.unreadGrid}>
+                <Grid container justify="center" alignItems="center" className={props.classes.unread}>
+                    {props.chat.unread}
+                </Grid>
+            </Grid>
+        );
     return (
         <Grid container direction="row" spacing={2} className={props.classes.root} onClick={() => {
             props.changeActiveChat(props.chat);
@@ -56,15 +80,20 @@ const chatPreview = (props) => {
                     {props.chat.receiver.username.substring(0, 2).toUpperCase()}
                 </Avatar>
             </Grid>
-            <MessagePreview
-                className={props.classes.messageGrid}
-                isStation={props.chat.receiver.isStation}
-                username={props.chat.receiver.username}
-                sender={lastMessage.sender.username}
-                message={lastMessage.text}
-            />
-            <Grid container justify="flex-end" alignItems="center" className={props.classes.timeGrid}>
-                <Typography variant="subtitle1">{formatSentAt(lastMessage.sentAt)}</Typography>
+            <Grid container justify="center" alignItems="center" className={props.classes.messageGrid}>
+                <MessagePreview
+                    className={props.classes.messageGridInside}
+                    isStation={props.chat.receiver.isStation}
+                    username={props.chat.receiver.username}
+                    sender={lastMessage.sender.username}
+                    message={lastMessage.text}
+                />
+            </Grid>
+            <Grid container direction="column" className={props.classes.timeGrid}>
+                <Grid container justify="flex-end" alignItems="center" className={props.classes.time}>
+                    <Typography variant="subtitle1">{formatSentAt(lastMessage.sentAt)}</Typography>
+                </Grid>
+                {unread}
             </Grid>
         </Grid>
     )

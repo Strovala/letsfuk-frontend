@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
 import {API} from "../../../../globals/methods";
-import {ActionTypes, Constants, cookies} from "../../../../globals/constants";
+import {ActionTypes, Constants, Screens} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
 import SendMessageButton from "../../../Buttons/SendMessageButton";
 import TextField from "@material-ui/core/TextField/TextField";
 import Grid from "@material-ui/core/Grid/Grid";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
-import SendIcon from "@material-ui/icons/Send";
-import IconButton from "@material-ui/core/IconButton/IconButton";
+import BackButton from "../../../Buttons/BackButton";
 
 const styles = theme => ({
     root: {
@@ -21,18 +20,28 @@ const styles = theme => ({
         fontWeight: "bold",
         marginTop: "1vh",
         marginBottom: "1vh",
+        flex: 9
     },
     messages: {
+        display: "inline-block",
         flex: 8,
-        overflow: "auto",
-        direction: "rtl",
-        transform: "rotate(180deg)"
+        overflow: "auto"
     },
     textField: {
         flex: 8
     },
     sendMessageGrid: {
         marginBottom: "2vh"
+    },
+    sendMessageButton: {
+        marginLeft: "3vh",
+        padding: 0
+    },
+    back: {
+        flex: 1
+    },
+    backButton: {
+        padding: 0
     }
 });
 
@@ -41,6 +50,10 @@ class ChatLayout extends Component {
         text: "",
         limit: Constants.LIMIT
     };
+
+    scrollToLastMessage() {
+        this.messagesComponent.scrollTop = this.messagesComponent.scrollHeight;
+    }
 
     getMessagesFromBackend() {
         API.getMessages({
@@ -53,6 +66,7 @@ class ChatLayout extends Component {
                     ...this.props.chat,
                     messages: messages
                 });
+                this.scrollToLastMessage();
             }
         });
     }
@@ -88,6 +102,7 @@ class ChatLayout extends Component {
                 return;
             that.getMessages();
         });
+        this.scrollToLastMessage();
     }
 
     componentWillUnmount() {
@@ -126,14 +141,20 @@ class ChatLayout extends Component {
                 direction="column"
                 className={this.props.classes.root}
             >
-                <Grid item className={this.props.classes.chatHeading}>
-                    <Typography variant="h6">{this.props.receiver.username}</Typography>
+                <Grid container justify="center" alignItems="center">
+                    <Grid item className={this.props.classes.back}>
+                        <BackButton className={this.props.classes.backButton} clicked={() => {
+                            this.props.changeScreen(Screens.CHAT_LIST)
+                        }}/>
+                    </Grid>
+                    <Grid item className={this.props.classes.chatHeading}>
+                        <Typography variant="h6">{this.props.receiver.username}</Typography>
+                    </Grid>
                 </Grid>
                 <Grid
+                    ref={(ref) => this.messagesComponent = ref}
                     container
                     direction="column"
-                    alignItems="flex-start"
-                    wrap="nowrap"
                     className={this.props.classes.messages}
                 >
                     {this.props.chat.messages.map((message) => {
@@ -153,13 +174,12 @@ class ChatLayout extends Component {
                         rowsMax="4"
                         className={this.props.classes.textField}
                         margin="none"
-                        autoFocus
                         inputProps={{
                             value: this.state.text,
                             onChange: (event) => this.handleText(event)
                         }}
                     />
-                    <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
+                    <SendMessageButton className={this.props.classes.sendMessageButton} text={this.state.text} clearText={() => this.clearText()}/>
                 </Grid>
             </Grid>
 
@@ -187,4 +207,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ChatLayout));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ChatLayout));

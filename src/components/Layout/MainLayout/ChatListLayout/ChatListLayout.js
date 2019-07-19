@@ -16,11 +16,15 @@ const styles = (theme) => ({
         flexDirection: "column"
     },
     heading: {
-        margin: theme.spacing(2)
+        fontSize: "1.25rem",
+        fontWeight: "bold",
+        marginTop: "1vh",
+        marginBottom: "1vh",
     },
     chatList: {
         flex: 8,
-        overflow: "auto"
+        overflow: "auto",
+        overflowX: "hidden"
     },
 });
 

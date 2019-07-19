@@ -1,6 +1,4 @@
 import React from "react";
-import {styles} from "../LastMessagePreview";
-import {withStyles} from "@material-ui/core";
 import {trimLastMessageText} from "../../../../../../globals/methods";
 import PrivateMessagePreview from "./PrivateMessagePreview";
 import StationMessagePreview from "./StationMessagePreview";
@@ -16,4 +14,4 @@ const messagePreview = (props) => {
     return preview;
 };
 
-export default withStyles(styles)(messagePreview);
+export default messagePreview;

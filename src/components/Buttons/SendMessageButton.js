@@ -6,7 +6,7 @@ import SendIcon from "@material-ui/icons/Send";
 
 
 const sendMessageButton = (props) => (
-    <IconButton onClick={() => {
+    <IconButton className={props.className} onClick={() => {
         let data = {
             "text": props.text
         };
