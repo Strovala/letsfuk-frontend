@@ -32,7 +32,8 @@ const styles = theme => ({
         lineHeight: 1,
         wordBreak: "break-word",
         paddingLeft: "8px",
-        paddingTop: "8px"
+        paddingTop: "8px",
+        whiteSpace: "pre-line"
     }
 });
 const messagePreview = (props) => {

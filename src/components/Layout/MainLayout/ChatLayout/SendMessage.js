@@ -23,8 +23,11 @@ const sendMessageComponent = (props) => {
     let messageTextField = React.createRef();
 
     function sendMessage() {
+        let processedText = text.trim();
+        if (!processedText)
+            return;
         let data = {
-            "text": text
+            "text": processedText
         };
         if (!props.receiver.isStation) {
             data['user_id'] = props.receiver.userId;
@@ -50,7 +53,6 @@ const sendMessageComponent = (props) => {
                     value: text,
                     onChange: (event) => {
                         setText(event.target.value);
-                        console.log(event.target.value);
                     },
                     onKeyPress: (event) => {
                         if (event.key === 'Enter' && !event.shiftKey) {
