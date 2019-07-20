@@ -34,11 +34,11 @@ const sendMessageComponent = (props) => {
         }
         API.sendMessage({
             user: props.user,
-            data: data
+            data: data,
+            response: () => props.getMessages()
         });
         messageTextField.focus();
         setText("");
-        props.getMessages()
     }
 
     return (
