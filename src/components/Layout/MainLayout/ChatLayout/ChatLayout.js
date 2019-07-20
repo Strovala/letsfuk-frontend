@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
 import BackButton from "../../../Buttons/BackButton";
+import humps from "humps";
 
 const styles = theme => ({
     root: {
@@ -117,13 +118,17 @@ class ChatLayout extends Component {
         });
     }
 
-    getMessages() {
-        this.getMessagesFromBackend();
+    resetUnreads() {
         if (this.props.receiver.isStation)
             this.resetUnreadMessages(this.props.receiver.id, undefined);
         else {
             this.resetUnreadMessages(undefined, this.props.receiver.id);
         }
+    }
+
+    getMessages() {
+        this.getMessagesFromBackend();
+        this.resetUnreads();
     }
 
     getChats() {
@@ -139,12 +144,19 @@ class ChatLayout extends Component {
     componentDidMount() {
         this._ismounted = true;
         this.getMessages();
-        let that = this;
-        this.props.webSocket.bind('message', function (data) {
-            if (!that._ismounted)
+        this.props.webSocket.bind('message', (data) => {
+            if (!this._ismounted)
                 return;
-            that.getMessages();
-            that.getChats();
+            data = humps.camelizeKeys(data);
+            // Just update sent message to chats
+            let messages = this.props.chat.messages;
+            messages.push(data);
+            this.props.changeActiveChat({
+                ...this.props.chat,
+                messages: messages
+            });
+            this.resetUnreads();
+            this.scrollToLastMessage();
         });
         this.scrollToLastMessage();
     }
@@ -232,8 +244,16 @@ class ChatLayout extends Component {
                     })}
                 </Grid>
                 <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
-                    <SendMessage getMessages={() => {
-                        this.getMessages();
+                    <SendMessage afterSending={(data) => {
+                        // Just update sent message to chats
+                        let messages = this.props.chat.messages;
+                        messages.push(data);
+                        this.props.changeActiveChat({
+                            ...this.props.chat,
+                            messages: messages
+                        });
+                        this.resetUnreads();
+                        this.scrollToLastMessage();
                     }}/>
                 </Grid>
             </Grid>

@@ -35,7 +35,7 @@ const sendMessageComponent = (props) => {
         API.sendMessage({
             user: props.user,
             data: data,
-            response: () => props.getMessages()
+            response: (response) => props.afterSending(response.data)
         });
         messageTextField.focus();
         setText("");

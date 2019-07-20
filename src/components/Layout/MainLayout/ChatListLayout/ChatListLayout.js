@@ -8,6 +8,7 @@ import Loading from "../../../Loading/Loading";
 import ChatPreview from "./ChatPreview/ChatPreview";
 import LogoutButton from "../../../Buttons/LogoutButton";
 import Grid from "@material-ui/core/Grid/Grid";
+import humps from "humps";
 
 const styles = (theme) => ({
     root: {
@@ -43,11 +44,11 @@ class ChatListLayout extends Component {
     componentDidMount() {
         this._ismounted = true;
         this.getChats();
-        let that = this;
-        this.props.webSocket.bind('message', function (data) {
-            if (!that._ismounted)
+        this.props.webSocket.bind('message', (data) => {
+            if (!this._ismounted)
                 return;
-            that.getChats();
+            data = humps.camelizeKeys(data);
+            this.getChats();
         });
     }
 
