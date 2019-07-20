@@ -47,19 +47,51 @@ const styles = theme => ({
 class ChatLayout extends Component {
     state = {
         text: "",
-        limit: Constants.LIMIT
+        limit: Constants.LIMIT,
+        loadedAll: false
     };
 
     scrollToLastMessage() {
-        this.messagesComponent.scrollTop = this.messagesComponent.scrollHeight;
+        if (this.messagesComponent)
+            this.messagesComponent.scrollTop = this.messagesComponent.scrollHeight;
     }
 
-    getMessagesFromBackend() {
+    loadMoreMessages() {
+        const newLimit = this.state.limit + Constants.LIMIT;
         API.getMessages({
             user: this.props.user,
             receiverId: this.props.receiver.id,
-            limit: this.state.limit,
+            limit: newLimit,
             response: response => {
+                if (!this._ismounted) return;
+                let messages = response.data.messages;
+                if (messages.length === this.props.chat.messages.length) {
+                    this.setState({
+                        loadedAll: true
+                    });
+                }
+                this.props.changeActiveChat({
+                    ...this.props.chat,
+                    messages: messages
+                });
+                this.setState({
+                    limit: newLimit
+                });
+            }
+        });
+    }
+
+    getMessagesFromBackend(limit) {
+        limit = limit || this.state.limit;
+        API.getMessages({
+            user: this.props.user,
+            receiverId: this.props.receiver.id,
+            limit: limit,
+            response: response => {
+                if (!this._ismounted) return;
+                this.setState({
+                    limit: limit
+                });
                 let messages = response.data.messages;
                 this.props.changeActiveChat({
                     ...this.props.chat,
@@ -125,10 +157,23 @@ class ChatLayout extends Component {
         })
     }
 
-    handleLimit(value) {
-        this.setState({
-            limit: value
-        })
+    scrollHandler() {
+        const isIn = this.isTriggererInViewport();
+        if (isIn) {
+            this.scrollTriggerer = null;
+            this.loadMoreMessages();
+        }
+    }
+
+    isTriggererInViewport(offset = 0) {
+        if (this.state.loadedAll) return false;
+        if (!this.scrollTriggerer) return false;
+        const top = this.scrollTriggerer.getBoundingClientRect().top;
+        return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+    }
+
+    setScrollTriggerrer(value) {
+        this.scrollTriggerer = value;
     }
 
     render() {
@@ -151,14 +196,21 @@ class ChatLayout extends Component {
                     </Grid>
                 </Grid>
                 <Grid
-                    ref={(ref) => this.messagesComponent = ref}
+                    id="scroll-msgs"
+                    ref={(ref) => {
+                        this.messagesComponent = ref;
+                    }}
+                    onScroll={() => this.scrollHandler()}
                     container
                     direction="column"
                     className={this.props.classes.messages}
                 >
-                    {this.props.chat.messages.map((message) => {
+                    {this.props.chat.messages.map((message, index) => {
                         return (
                             <MessagePreview
+                                id={`${index}_el`}
+                                // 5th message from top triggers loading more messages
+                                setRef={(ref) => index === Constants.TRIGGER_MESSAGE_INDEX ? this.setScrollTriggerrer(ref): null}
                                 key={message.messageId}
                                 message={message}
                                 receiver={this.props.chat.receiver}
@@ -181,7 +233,6 @@ const mapStateToProps = state => {
         user: state.user,
         chat: state.activeChat,
         receiver: state.receiver,
-        limit: state.limit,
         webSocket: state.webSocket,
     }
 };

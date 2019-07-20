@@ -61,7 +61,9 @@ const messagePreview = (props) => {
         )
     }
     return (
-        <Grid container direction="row" className={props.classes.root} style={{justifyContent: justifyContent}}>
+        <Grid container direction="row" className={props.classes.root} style={{justifyContent: justifyContent}} ref={
+            (ref) => props.setRef(ref)
+        }>
             <Grid container direction="column" className={props.classes.item} style={{backgroundColor: backgroundColor}}>
                 {username}
                 <Typography variant="subtitle1" className={props.classes.message}>
