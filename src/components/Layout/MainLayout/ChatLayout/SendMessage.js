@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {connect} from "react-redux";
-import {API} from "../../../../globals/methods";
+import {API, mobileCheck} from "../../../../globals/methods";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import TextField from "@material-ui/core/TextField/TextField";
@@ -55,6 +55,9 @@ const sendMessageComponent = (props) => {
                         setText(event.target.value);
                     },
                     onKeyPress: (event) => {
+                        const isMobile = mobileCheck();
+                        if (isMobile)
+                            return;
                         if (event.key === 'Enter' && !event.shiftKey) {
                             sendMessage();
                             if(event.preventDefault) event.preventDefault();
