@@ -38,6 +38,7 @@ const sendMessageComponent = (props) => {
         });
         messageTextField.focus();
         setText("");
+        props.getMessages()
     }
 
     return (
@@ -68,7 +69,6 @@ const sendMessageComponent = (props) => {
             />
             <IconButton className={props.classes.sendMessageButton} onClick={() => {
                 sendMessage();
-                props.getMessages()
             }}>
                 <SendIcon/>
             </IconButton>
