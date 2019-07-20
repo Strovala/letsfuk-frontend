@@ -4,8 +4,7 @@ import {connect} from "react-redux";
 import {API} from "../../../../globals/methods";
 import {ActionTypes, Constants, Screens} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
-import SendMessageButton from "../../../Buttons/SendMessageButton";
-import TextField from "@material-ui/core/TextField/TextField";
+import SendMessage from "./SendMessage";
 import Grid from "@material-ui/core/Grid/Grid";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
@@ -168,18 +167,7 @@ class ChatLayout extends Component {
                     })}
                 </Grid>
                 <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
-                    <TextField
-                        id="standard-multiline-flexible"
-                        multiline
-                        rowsMax="4"
-                        className={this.props.classes.textField}
-                        margin="none"
-                        inputProps={{
-                            value: this.state.text,
-                            onChange: (event) => this.handleText(event)
-                        }}
-                    />
-                    <SendMessageButton className={this.props.classes.sendMessageButton} text={this.state.text} clearText={() => this.clearText()}/>
+                    <SendMessage />
                 </Grid>
             </Grid>
 
