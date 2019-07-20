@@ -2,40 +2,46 @@ import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
 import {API} from "../../../../globals/methods";
-import {ActionTypes, Constants, cookies} from "../../../../globals/constants";
+import {ActionTypes, Constants, Screens} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
-import SendMessageButton from "../../../Buttons/SendMessageButton";
-import TextField from "@material-ui/core/TextField/TextField";
+import SendMessage from "./SendMessage";
 import Grid from "@material-ui/core/Grid/Grid";
 import MessagePreview from "./MessagePreview/MessagePreview";
 import Typography from "@material-ui/core/Typography/Typography";
+import BackButton from "../../../Buttons/BackButton";
 
 const styles = theme => ({
     root: {
-
+        display: "flex"
     },
     chatHeading: {
-        borderBottom: "1px solid",
-        paddingBottom: theme.spacing(2),
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        borderColor: "rgb(170,170,170, 0.7)",
-        width: "100%"
+        fontSize: "4vh",
+        fontWeight: "bold",
+        marginTop: "1vh",
+        marginBottom: "1vh",
+        flex: 9
     },
     messages: {
+        display: "inline-block",
         flex: 8,
-        overflow: "auto",
-        direction: "rtl",
-        transform: "rotate(180deg)"
-    },
-    heading: {
-        margin: theme.spacing(2)
+        overflow: "auto"
     },
     textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
+        flex: 8
     },
+    sendMessageGrid: {
+        marginBottom: "2vh"
+    },
+    sendMessageButton: {
+        marginLeft: "3vh",
+        padding: 0
+    },
+    back: {
+        flex: 1
+    },
+    backButton: {
+        padding: 0
+    }
 });
 
 class ChatLayout extends Component {
@@ -44,13 +50,13 @@ class ChatLayout extends Component {
         limit: Constants.LIMIT
     };
 
+    scrollToLastMessage() {
+        this.messagesComponent.scrollTop = this.messagesComponent.scrollHeight;
+    }
+
     getMessagesFromBackend() {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         API.getMessages({
-            sessionId: sessionId,
+            user: this.props.user,
             receiverId: this.props.receiver.id,
             limit: this.state.limit,
             response: response => {
@@ -59,22 +65,19 @@ class ChatLayout extends Component {
                     ...this.props.chat,
                     messages: messages
                 });
+                this.scrollToLastMessage();
             }
         });
     }
 
     resetUnreadMessages(stationId, senderId) {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = this.props.user.sessionId;
-        }
         let data = {
             station_id: stationId,
             sender_id: senderId,
             count: 0,
         };
         API.resetUnreadMessages({
-            sessionId: sessionId,
+            user: this.props.user,
             data: data
         });
     }
@@ -98,6 +101,7 @@ class ChatLayout extends Component {
                 return;
             that.getMessages();
         });
+        this.scrollToLastMessage();
     }
 
     componentWillUnmount() {
@@ -136,14 +140,20 @@ class ChatLayout extends Component {
                 direction="column"
                 className={this.props.classes.root}
             >
-                <Grid item className={this.props.classes.chatHeading}>
-                    <Typography variant="h3" className={this.props.classes.heading}>{this.props.receiver.username}</Typography>
+                <Grid container justify="center" alignItems="center">
+                    <Grid item className={this.props.classes.back}>
+                        <BackButton className={this.props.classes.backButton} clicked={() => {
+                            this.props.changeScreen(Screens.CHAT_LIST)
+                        }}/>
+                    </Grid>
+                    <Grid item className={this.props.classes.chatHeading}>
+                        <Typography variant="h6">{this.props.receiver.username}</Typography>
+                    </Grid>
                 </Grid>
                 <Grid
+                    ref={(ref) => this.messagesComponent = ref}
                     container
                     direction="column"
-                    alignItems="flex-start"
-                    wrap="nowrap"
                     className={this.props.classes.messages}
                 >
                     {this.props.chat.messages.map((message) => {
@@ -156,23 +166,10 @@ class ChatLayout extends Component {
                         );
                     })}
                 </Grid>
-                <Grid container>
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="Multiline"
-                        multiline
-                        rowsMax="4"
-                        className={this.props.classes.textField}
-                        margin="normal"
-                        inputProps={{
-                            value: this.state.text,
-                            onChange: (event) => this.handleText(event)
-                        }}
-                    />
-                    <SendMessageButton text={this.state.text} clearText={() => this.clearText()}/>
+                <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
+                    <SendMessage />
                 </Grid>
             </Grid>
-            //     <ScrollMessages limit={this.state.limit} changeLimit={(value) => this.handleLimit(value)}/>
 
         );
     }
@@ -181,6 +178,7 @@ class ChatLayout extends Component {
 
 const mapStateToProps = state => {
     return {
+        user: state.user,
         chat: state.activeChat,
         receiver: state.receiver,
         limit: state.limit,
@@ -197,4 +195,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ChatLayout));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ChatLayout));

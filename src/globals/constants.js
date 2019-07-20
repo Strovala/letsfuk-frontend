@@ -22,14 +22,14 @@ const Constants = {
     LIMIT: 20
 };
 
-const https = false;
+const https = true ;
+const dev = false;
 const apiSecure = https ? 'https': 'http';
-// const apiHost = 'localhost';
 const apiHost = 'euve258483.serverprofi24.net';
-const apiPort = 8888;
-const apiHostPort = `${apiHost}:${apiPort}`;
-const webSocketUrl = `ws://${apiHostPort}/websocket`;
-const apiUrl = `${apiSecure}://${apiHostPort}`;
+const apiPort = 443;
+const internalPort = 8888;
+const webSocketUrl = dev ? 'ws://localhost:8888/websocket': `wss://${apiHost}:${internalPort}/websocket`;
+const apiUrl = dev ? `http://localhost:8888`: `${apiSecure}://${apiHost}:${apiPort}/api`;
 const cookies = new Cookies();
 
 export {

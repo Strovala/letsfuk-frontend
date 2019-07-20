@@ -43,7 +43,9 @@ const loginButton = props => (
                     }
                 });
             }, (err) => {
-                console.log(err);
+                props.onError({
+                    text: err.message
+                })
             }, {
                 maximumAge: 60000,
                 timeout: 5000,
