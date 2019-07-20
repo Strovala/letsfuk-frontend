@@ -49,11 +49,14 @@ const sendMessageComponent = (props) => {
                 inputProps={{
                     value: text,
                     onChange: (event) => {
-                        setText(event.target.value)
+                        setText(event.target.value);
+                        console.log(event.target.value);
                     },
                     onKeyPress: (event) => {
-                        if (event.key === 'Enter') {
+                        if (event.key === 'Enter' && !event.shiftKey) {
                             sendMessage();
+                            if(event.preventDefault) event.preventDefault();
+                            return false;
                         }
                     }
                 }}
