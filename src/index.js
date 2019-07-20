@@ -25,8 +25,8 @@ axios.interceptors.response.use(response => {
     return Promise.reject(error);
 });
 
-// GET FULL HEIGht viewport
 const rootElement = document.getElementById('root');
+// For full height viewport
 rootElement.style.position = 'absolute';
 rootElement.style.top = '0';
 rootElement.style.bottom = '0';

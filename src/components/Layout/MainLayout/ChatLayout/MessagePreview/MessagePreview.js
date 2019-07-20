@@ -15,6 +15,24 @@ const styles = theme => ({
         width: "75%",
         border: "1px solid black",
         borderRadius: "5%",
+    },
+    username: {
+        lineHeight: 1,
+        fontWeight: "bold",
+        paddingLeft: "8px",
+        paddingTop: "8px"
+    },
+    sentAt: {
+        lineHeight: 1,
+        paddingRight: "8px",
+        paddingBottom: "4px",
+        paddingTop: "4px"
+    },
+    message: {
+        lineHeight: 1,
+        wordBreak: "break-word",
+        paddingLeft: "8px",
+        paddingTop: "8px"
     }
 });
 const messagePreview = (props) => {
@@ -24,26 +42,32 @@ const messagePreview = (props) => {
         justifyContent = "flex-end";
         backgroundColor = "rgb(63,81,181, 0.4)";
     }
+    let username = null;
+    if (props.receiver.isStation) {
+        username = (
+            <Grid item onClick={() => {
+                if (props.message.sender.userId === props.user.user.userId)
+                    return;
+                const receiver = props.message.sender;
+                receiver.id = receiver.userId;
+                props.changeReceiver(receiver);
+                props.changeScreen(Screens.CHAT);
+            }}>
+                <Typography variant="body1" className={props.classes.username}>
+                    {props.message.sender.username}
+                </Typography>
+            </Grid>
+        )
+    }
     return (
         <Grid container direction="row" className={props.classes.root} style={{justifyContent: justifyContent}}>
             <Grid container direction="column" className={props.classes.item} style={{backgroundColor: backgroundColor}}>
-                <Grid item onClick={() => {
-                    if (props.message.sender.userId === props.user.user.userId)
-                        return;
-                    const receiver = props.message.sender;
-                    receiver.id = receiver.userId;
-                    props.changeReceiver(receiver);
-                    props.changeScreen(Screens.CHAT);
-                }}>
-                    <Typography variant="body1" style={{lineHeight: 1, fontWeight: "bold", padding: "8px"}}>
-                        {props.message.sender.username}
-                    </Typography>
-                </Grid>
-                <Typography variant="subtitle1" style={{lineHeight: 1, wordBreak: "break-word", paddingLeft: "8px"}}>
+                {username}
+                <Typography variant="subtitle1" className={props.classes.message}>
                     {props.message.text}
                 </Typography>
                 <Grid container justify="flex-end">
-                    <Typography variant="overline" style={{ lineHeight: 1, paddingRight: "8px",paddingBottom: "4px", paddingTop: "4px"}}>
+                    <Typography variant="overline" className={props.classes.sentAt}>
                         {formatSentAt(props.message.sentAt)}
                     </Typography>
                 </Grid>
