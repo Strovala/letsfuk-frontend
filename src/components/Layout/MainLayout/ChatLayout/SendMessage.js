@@ -43,7 +43,6 @@ const sendMessageComponent = (props) => {
     return (
         <Aux>
             <TextField
-                id="standard-multiline-flexible"
                 inputRef={(ref) => { messageTextField = ref; }}
                 multiline
                 rowsMax="4"
@@ -68,7 +67,8 @@ const sendMessageComponent = (props) => {
                 autoFocus
             />
             <IconButton className={props.classes.sendMessageButton} onClick={() => {
-                sendMessage()
+                sendMessage();
+                props.getMessages()
             }}>
                 <SendIcon/>
             </IconButton>

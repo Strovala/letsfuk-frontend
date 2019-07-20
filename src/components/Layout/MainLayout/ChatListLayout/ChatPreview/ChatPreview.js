@@ -5,7 +5,7 @@ import React from "react";
 import {withStyles} from "@material-ui/core";
 import {ActionTypes, Screens} from "../../../../../globals/constants";
 import {connect} from "react-redux";
-import {formatSentAt} from "../../../../../globals/methods";
+import {formatSentAtForChatList} from "../../../../../globals/methods";
 import MessagePreview from "./LastMessagePreview/MessagePreview";
 import {deepPurple} from "@material-ui/core/colors";
 
@@ -35,7 +35,7 @@ const styles = (theme) => ({
     },
     time: {
         paddingRight: "4vh",
-        flex: 1
+        flex: 1,
     },
     avatar: {
         color: '#fff',
@@ -50,6 +50,9 @@ const styles = (theme) => ({
         color: '#fff',
         borderRadius: "50%",
         marginRight: "5vw",
+    },
+    sentAt: {
+        fontSize: "0.8rem"
     }
 });
 
@@ -91,7 +94,7 @@ const chatPreview = (props) => {
             </Grid>
             <Grid container direction="column" className={props.classes.timeGrid}>
                 <Grid container justify="flex-end" alignItems="center" className={props.classes.time}>
-                    <Typography variant="subtitle1">{formatSentAt(lastMessage.sentAt)}</Typography>
+                    <Typography variant="body1" className={props.classes.sentAt}>{formatSentAtForChatList(lastMessage.sentAt)}</Typography>
                 </Grid>
                 {unread}
             </Grid>

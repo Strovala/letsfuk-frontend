@@ -19,12 +19,12 @@ const Screens = {
 };
 
 const Constants = {
-    LIMIT: 40,
+    LIMIT: 25,
     TRIGGER_MESSAGE_INDEX: 10
 };
 
 const https = true ;
-const dev = false;
+const dev = true;
 const apiSecure = https ? 'https': 'http';
 const apiHost = 'euve258483.serverprofi24.net';
 const apiPort = 443;

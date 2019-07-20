@@ -85,18 +85,61 @@ class API {
     }
 }
 
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+
 const formatSentAt = (dateString) => {
     // Format string for safari
     dateString = dateString.replace(/\s/, 'T');
     // Cannot use newDate(dateString) because of Safari / Chrome problem
     const a = dateString.split(/[^0-9]/);
-    const date=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5]);
+    return new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5]);
+};
+
+const formatSentAtForChatList = (dateString) => {
+    const date = formatSentAt(dateString);
     // Returns offset in minutes
+    const diff = new Date() - date;
+    const daysPassed = Math.floor(diff / 8.64e+7);
+    const sentAt = getSentAt(date);
+    if (daysPassed === 0)
+        return sentAt;
+    if (daysPassed < 7) {
+        if (daysPassed === 1) {
+            return `Yesterday`
+        }
+        return `${days[date.getDay()]}`
+    }
+    const yearsPassed = Math.floor(diff / 3.154e+10);
+    if (yearsPassed < 1) {
+        return `${months[date.getMonth()]} ${date.getDate()}`
+    }
+    const formattedMonth = ("0" + date.getMonth()).slice(-2);
+    const formattedDate = ("0" + date.getDate()).slice(-2);
+    return `${formattedMonth}/${formattedDate}/${date.getFullYear()}`;
+};
+
+const formatSentAtForMessage = (dateString) => {
+    const date = formatSentAt(dateString);
+    // Returns offset in minutes
+
+    const diff = new Date() - date;
+    const daysPassed = Math.floor(diff / 8.64e+7);
+    const sentAt = getSentAt(date);
+    if (daysPassed === 0)
+        return sentAt;
+    return `${formatSentAtForChatList(dateString)}, ${sentAt}`
+};
+
+const getSentAt = (date) => {
     const offset = new Date().getTimezoneOffset()/60;
     const hours = date.getHours() - offset;
     const minutes = date.getMinutes();
     const formattedMinutes = ("0" + minutes).slice(-2);
-    return `${hours}:${formattedMinutes}`
+    return `${hours}:${formattedMinutes}`;
 };
 
 const trimLastMessageText = (text, size ) => {
@@ -115,4 +158,4 @@ const mobileCheck = function() {
     return check;
 };
 
-export { API, formatSentAt, trimLastMessageText, mobileCheck };
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck };

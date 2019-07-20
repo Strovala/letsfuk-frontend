@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid/Grid";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import {formatSentAt} from "../../../../../globals/methods";
+import {formatSentAtForMessage} from "../../../../../globals/methods";
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
 import {ActionTypes, Screens} from "../../../../../globals/constants";
@@ -26,7 +26,8 @@ const styles = theme => ({
         lineHeight: 1,
         paddingRight: "8px",
         paddingBottom: "4px",
-        paddingTop: "4px"
+        paddingTop: "4px",
+        fontSize: "0.8rem"
     },
     message: {
         lineHeight: 1,
@@ -70,8 +71,8 @@ const messagePreview = (props) => {
                     {props.message.text}
                 </Typography>
                 <Grid container justify="flex-end">
-                    <Typography variant="overline" className={props.classes.sentAt}>
-                        {formatSentAt(props.message.sentAt)}
+                    <Typography variant="body1" className={props.classes.sentAt}>
+                        {formatSentAtForMessage(props.message.sentAt)}
                     </Typography>
                 </Grid>
             </Grid>

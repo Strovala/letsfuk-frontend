@@ -116,12 +116,21 @@ class ChatLayout extends Component {
 
     getMessages() {
         this.getMessagesFromBackend();
-
         if (this.props.receiver.isStation)
             this.resetUnreadMessages(this.props.receiver.id, undefined);
         else {
             this.resetUnreadMessages(undefined, this.props.receiver.id);
         }
+    }
+
+    getChats() {
+        API.getChats({
+            user: this.props.user,
+            response: response => {
+                this.props.setChats(response.data);
+                this.props.changeActiveStation(response.data.stationChat.receiver);
+            }
+        });
     }
 
     componentDidMount() {
@@ -132,6 +141,7 @@ class ChatLayout extends Component {
             if (!that._ismounted)
                 return;
             that.getMessages();
+            that.getChats();
         });
         this.scrollToLastMessage();
     }
@@ -219,7 +229,10 @@ class ChatLayout extends Component {
                     })}
                 </Grid>
                 <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
-                    <SendMessage />
+                    <SendMessage getMessages={() => {
+                        this.getMessagesFromBackend();
+                        this.getChats()
+                    }}/>
                 </Grid>
             </Grid>
 
@@ -241,7 +254,9 @@ const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
         changeReceiver: (value) => dispatch({type: ActionTypes.RECEIVER_CHANGE, value: value}),
-        changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value})
+        changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value}),
+        setChats: (value) => dispatch({type: ActionTypes.CHATS_CHANGE, value: value}),
+        changeActiveStation: (value) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, value: value})
     }
 };
 
