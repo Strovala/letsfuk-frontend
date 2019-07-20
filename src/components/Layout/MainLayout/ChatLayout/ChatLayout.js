@@ -110,7 +110,10 @@ class ChatLayout extends Component {
         };
         API.resetUnreadMessages({
             user: this.props.user,
-            data: data
+            data: data,
+            response: () => {
+                this.getChats()
+            }
         });
     }
 
@@ -230,8 +233,7 @@ class ChatLayout extends Component {
                 </Grid>
                 <Grid container direction="row" className={this.props.classes.sendMessageGrid}>
                     <SendMessage getMessages={() => {
-                        this.getMessagesFromBackend();
-                        this.getChats()
+                        this.getMessages();
                     }}/>
                 </Grid>
             </Grid>
