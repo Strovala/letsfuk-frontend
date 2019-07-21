@@ -116,6 +116,7 @@ const addTimeZoneOffset = (dateString) => {
             }
         }
     }
+    date.setHours(hours);
     return date
 };
 
