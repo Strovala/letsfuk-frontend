@@ -19,8 +19,8 @@ const Screens = {
 };
 
 const Constants = {
-    LIMIT: 25,
-    TRIGGER_MESSAGE_INDEX: 10
+    LIMIT: 100,
+    TRIGGER_MESSAGE_INDEXES: [0, 1, 2, 3, 4, 5]
 };
 
 const https = true ;

@@ -53,8 +53,8 @@ class ChatLayout extends Component {
     };
 
     scrollToLastMessage() {
-        if (this.messagesComponent)
-            this.messagesComponent.scrollTop = this.messagesComponent.scrollHeight;
+        if (this.scrollComponent)
+            this.scrollComponent.scrollTop = this.scrollComponent.scrollHeight;
     }
 
     loadMoreMessages() {
@@ -183,22 +183,29 @@ class ChatLayout extends Component {
     }
 
     scrollHandler() {
+        console.log(this.scrollComponent.scrollTop);
         const isIn = this.isTriggererInViewport();
         if (isIn) {
-            this.scrollTriggerer = null;
+            this.triggers = [];
             this.loadMoreMessages();
         }
     }
 
     isTriggererInViewport(offset = 0) {
         if (this.state.loadedAll) return false;
-        if (!this.scrollTriggerer) return false;
-        const top = this.scrollTriggerer.getBoundingClientRect().top;
-        return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+        if (this.triggers.length === 0) return false;
+        return this.triggers.some((trigger) => {
+            const top = trigger.getBoundingClientRect().top;
+            return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+        });
     }
 
-    setScrollTriggerrer(value) {
-        this.scrollTriggerer = value;
+    setTrigger(value) {
+        if (!value)
+            return;
+        if (!this.triggers)
+            this.triggers = [];
+        this.triggers.push(value);
     }
 
     render() {
@@ -223,8 +230,9 @@ class ChatLayout extends Component {
                 <Grid
                     id="scroll-msgs"
                     ref={(ref) => {
-                        this.messagesComponent = ref;
+                        this.scrollComponent = ref;
                     }}
+                    // Skip this for now, as I'm gonna get messages with no limit for now
                     onScroll={() => this.scrollHandler()}
                     container
                     direction="column"
@@ -234,8 +242,8 @@ class ChatLayout extends Component {
                         return (
                             <MessagePreview
                                 id={`${index}_el`}
-                                // 5th message from top triggers loading more messages
-                                setRef={(ref) => index === Constants.TRIGGER_MESSAGE_INDEX ? this.setScrollTriggerrer(ref): null}
+                                // Messages with indexed trigger loading more messages
+                                setTrigger={(ref) => Constants.TRIGGER_MESSAGE_INDEXES.includes(index) ? this.setTrigger(ref): null}
                                 key={message.messageId}
                                 message={message}
                                 receiver={this.props.chat.receiver}
@@ -252,7 +260,7 @@ class ChatLayout extends Component {
                             ...this.props.chat,
                             messages: messages
                         });
-                        this.resetUnreads();
+                        this.getChats();
                         this.scrollToLastMessage();
                     }}/>
                 </Grid>

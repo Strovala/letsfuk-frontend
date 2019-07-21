@@ -63,7 +63,7 @@ const messagePreview = (props) => {
     }
     return (
         <Grid container direction="row" className={props.classes.root} style={{justifyContent: justifyContent}} ref={
-            (ref) => props.setRef(ref)
+            (ref) => props.setTrigger(ref)
         }>
             <Grid container direction="column" className={props.classes.item} style={{backgroundColor: backgroundColor}}>
                 {username}
