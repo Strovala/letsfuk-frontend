@@ -91,22 +91,48 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 ];
 
 
-const formatSentAt = (dateString) => {
+const addTimeZoneOffset = (dateString) => {
     // Format string for safari
     dateString = dateString.replace(/\s/, 'T');
     // Cannot use newDate(dateString) because of Safari / Chrome problem
     const a = dateString.split(/[^0-9]/);
-    return new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5]);
+    const date = new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5]);
+    const offset = new Date().getTimezoneOffset()/60;
+    let hours = date.getHours() - offset;
+    if (hours > 24) {
+        hours = hours % 24;
+        date.setHours(hours);
+        let day = date.getDate() + 1;
+        const daysInMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+        if (day > daysInMonth) {
+            day = day % daysInMonth;
+            date.setDate(day);
+            let month = date.getMonth() + 1;
+            if (month > 12) {
+                month = month % 12;
+                date.setMonth(month);
+                const year = date.getFullYear() + 1;
+                date.setFullYear(year);
+            }
+        }
+    }
+    return date
 };
 
 const formatSentAtForChatList = (dateString) => {
-    const date = formatSentAt(dateString);
+    const date = addTimeZoneOffset(dateString);
     // Returns offset in minutes
+    const now = new Date();
     const diff = new Date() - date;
     const daysPassed = Math.floor(diff / 8.64e+7);
     const sentAt = getSentAt(date);
-    if (daysPassed === 0)
-        return sentAt;
+    if (daysPassed === 0) {
+        const minutesSinceMidnight = now.getHours() * 60 + now.getMinutes();
+        const minutesPassed = Math.floor(diff / 60000);
+        if (minutesPassed <= minutesSinceMidnight)
+            return sentAt;
+        return 'Yesterday'
+    }
     if (daysPassed < 7) {
         if (daysPassed === 1) {
             return `Yesterday`
@@ -123,20 +149,23 @@ const formatSentAtForChatList = (dateString) => {
 };
 
 const formatSentAtForMessage = (dateString) => {
-    const date = formatSentAt(dateString);
-    // Returns offset in minutes
-
-    const diff = new Date() - date;
+    const date = addTimeZoneOffset(dateString);
+    const now = new Date();
+    const diff = now - date;
     const daysPassed = Math.floor(diff / 8.64e+7);
     const sentAt = getSentAt(date);
-    if (daysPassed === 0)
-        return sentAt;
+    if (daysPassed === 0) {
+        const minutesSinceMidnight = now.getHours() * 60 + now.getMinutes();
+        const minutesPassed = Math.floor(diff / 60000);
+        if (minutesPassed <= minutesSinceMidnight)
+            return sentAt;
+    }
     return `${formatSentAtForChatList(dateString)}, ${sentAt}`
 };
 
 const getSentAt = (date) => {
-    const offset = new Date().getTimezoneOffset()/60;
-    const hours = (date.getHours() - offset) % 24;
+    // Returns offset in minutes
+    const hours = date.getHours();
     const minutes = date.getMinutes();
     const formattedMinutes = ("0" + minutes).slice(-2);
     return `${hours}:${formattedMinutes}`;
