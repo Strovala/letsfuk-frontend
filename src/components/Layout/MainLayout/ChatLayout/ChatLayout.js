@@ -183,7 +183,6 @@ class ChatLayout extends Component {
     }
 
     scrollHandler() {
-        console.log(this.scrollComponent.scrollTop);
         const isIn = this.isTriggererInViewport();
         if (isIn) {
             this.triggers = [];
