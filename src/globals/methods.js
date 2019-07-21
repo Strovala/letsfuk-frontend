@@ -136,7 +136,7 @@ const formatSentAtForMessage = (dateString) => {
 
 const getSentAt = (date) => {
     const offset = new Date().getTimezoneOffset()/60;
-    const hours = date.getHours() - offset;
+    const hours = (date.getHours() - offset) % 24;
     const minutes = date.getMinutes();
     const formattedMinutes = ("0" + minutes).slice(-2);
     return `${hours}:${formattedMinutes}`;
