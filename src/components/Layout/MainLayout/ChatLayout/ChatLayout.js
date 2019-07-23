@@ -240,11 +240,11 @@ class ChatLayout extends Component {
                     {this.props.chat.messages.map((message, index) => {
                         return (
                             <MessagePreview
-                                id={`${index}_el`}
                                 // Messages with indexed trigger loading more messages
                                 setTrigger={(ref) => Constants.TRIGGER_MESSAGE_INDEXES.includes(index) ? this.setTrigger(ref): null}
                                 key={message.messageId}
                                 message={message}
+                                prevMessage={index !== 0 ? this.props.chat.messages[index-1]: null}
                                 receiver={this.props.chat.receiver}
                             />
                         );

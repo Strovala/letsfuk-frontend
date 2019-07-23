@@ -46,7 +46,9 @@ const messagePreview = (props) => {
         backgroundColor = "rgb(63,81,181, 0.4)";
     }
     let username = null;
-    if (props.receiver.isStation) {
+    const currentMessageSenderId = props.message.sender.userId;
+    const prevMessageSenderId = props.prevMessage ? props.prevMessage.sender.userId: null;
+    if (props.receiver.isStation && currentMessageSenderId !== prevMessageSenderId) {
         username = (
             <Grid item onClick={() => {
                 if (props.message.sender.userId === props.user.user.userId)
