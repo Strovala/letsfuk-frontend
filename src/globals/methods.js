@@ -218,11 +218,8 @@ const tryNewStation = (data) => {
             user: data.user,
             response: response => {
                 const stationLocation = response.data;
-                console.log(currentLocation);
-                console.log(stationLocation);
                 // In meters
                 const distance = distanceBetweenLocations(currentLocation, stationLocation);
-                console.log(distance);
                 if (distance > Constants.DISTANCE_TRESHOLD) {
                     API.subscribeToStation({
                         user: data.user,
