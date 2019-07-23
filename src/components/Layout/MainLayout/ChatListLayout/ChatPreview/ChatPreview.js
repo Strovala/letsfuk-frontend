@@ -49,7 +49,7 @@ const styles = (theme) => ({
         fontWeight: "bold",
         color: '#fff',
         borderRadius: "50%",
-        marginRight: "5vw",
+        marginRight: "8px",
     },
     sentAt: {
         fontSize: "0.8rem"
@@ -61,7 +61,7 @@ const chatPreview = (props) => {
     let unread = null;
     if (props.chat.unread)
         unread = (
-            <Grid container justify="flex-end" className={props.classes.unreadGrid}>
+            <Grid container justify="center" className={props.classes.unreadGrid}>
                 <Grid container justify="center" alignItems="center" className={props.classes.unread}>
                     {props.chat.unread}
                 </Grid>
@@ -93,7 +93,7 @@ const chatPreview = (props) => {
                 />
             </Grid>
             <Grid container direction="column" className={props.classes.timeGrid}>
-                <Grid container justify="flex-end" alignItems="center" className={props.classes.time}>
+                <Grid container justify="center" alignItems="center" className={props.classes.time}>
                     <Typography variant="body1" className={props.classes.sentAt}>{formatSentAtForChatList(lastMessage.sentAt)}</Typography>
                 </Grid>
                 {unread}
