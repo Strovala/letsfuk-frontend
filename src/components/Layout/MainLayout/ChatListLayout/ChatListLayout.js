@@ -50,9 +50,10 @@ class ChatListLayout extends Component {
             data = humps.camelizeKeys(data);
             this.getChats();
         });
-        tryNewStation({
-            user: this.props.user,
-        })
+        if (this.props.user)
+            tryNewStation({
+                user: this.props.user,
+            })
     }
 
     componentWillUnmount() {
