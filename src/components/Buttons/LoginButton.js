@@ -5,7 +5,7 @@ import {
     Screens
 } from "../../globals/constants";
 import {connect} from "react-redux";
-import {API, startPeriodicStationJob} from "../../globals/methods";
+import {API} from "../../globals/methods";
 import {initWebSocket} from "../../fancyWebSocket";
 import Button from "@material-ui/core/Button/Button";
 
@@ -40,12 +40,6 @@ const loginButton = props => (
                         // because it will load ChatList screens before its ready
                         props.changeAuthenticated(true);
                         props.changeScreen(Screens.CHAT_LIST);
-
-                        // Start periodic job for getting new station
-                        const job = startPeriodicStationJob({
-                            user: response.data
-                        });
-                        props.changePeriodicJob(job);
                     },
                     error: error => {
                         if (error.response)
@@ -70,7 +64,6 @@ const mapDispatchToProps = dispatch => {
         changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
         changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
-        changePeriodicJob: (value) => dispatch({type: ActionTypes.JOB_CHANGE, value: value}),
     }
 };
 

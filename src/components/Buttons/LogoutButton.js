@@ -16,11 +16,6 @@ const logoutButton = props => (
                 // because Chat screen uses user
                 props.changeUser(null);
                 props.changeWebSocket(null);
-
-                // Clear interval for periodic station
-                const job = props.job;
-                props.changePeriodicJob(null);
-                clearInterval(job);
             }
         })
     }}>Logout</button>
@@ -39,7 +34,6 @@ const mapDispatchToProps = dispatch => {
         changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
         changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
-        changePeriodicJob: (value) => dispatch({type: ActionTypes.JOB_CHANGE, value: value}),
     }
 };
 

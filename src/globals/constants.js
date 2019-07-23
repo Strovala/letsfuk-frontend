@@ -22,7 +22,7 @@ const Screens = {
 const Constants = {
     LIMIT: 100,
     TRIGGER_MESSAGE_INDEXES: [0, 1, 2, 3, 4, 5],
-    PERIODICIC_TIME: 1000*60*10
+    DISTANCE_TRESHOLD: 1000
 };
 
 const https = true ;

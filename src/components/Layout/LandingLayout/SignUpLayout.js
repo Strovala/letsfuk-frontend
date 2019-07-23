@@ -8,7 +8,7 @@ import LoginLayoutButton from "../../Buttons/LoginLayoutButton";
 import RegisterButton from "../../Buttons/RegisterButton";
 import {withStyles} from "@material-ui/core";
 import TextError from "../../Errors/TextError";
-import {API, startPeriodicStationJob} from "../../../globals/methods";
+import {API} from "../../../globals/methods";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import {connect} from "react-redux";
 
@@ -52,12 +52,6 @@ class SignUp extends Component {
                 this.props.changeUser(response.data);
                 this.props.changeAuthenticated(true);
                 this.props.changeScreen(Screens.CHAT_LIST);
-
-                // Start periodic job for getting new station
-                const job = startPeriodicStationJob({
-                    user: response.data
-                });
-                this.props.changePeriodicJob(job);
             },
         });
     }
@@ -138,7 +132,6 @@ const mapDispatchToProps = dispatch => {
         changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
         changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
-        changePeriodicJob: (value) => dispatch({type: ActionTypes.JOB_CHANGE, value: value}),
     }
 };
 

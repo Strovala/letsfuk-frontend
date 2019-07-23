@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {withStyles} from "@material-ui/core";
-import {API} from "../../../../globals/methods";
+import {API, tryNewStation} from "../../../../globals/methods";
 import {ActionTypes} from "../../../../globals/constants";
 import {connect} from "react-redux";
 import Loading from "../../../Loading/Loading";
@@ -50,9 +50,8 @@ class ChatListLayout extends Component {
             data = humps.camelizeKeys(data);
             this.getChats();
         });
-        API.subscribeToStation({
+        tryNewStation({
             user: this.props.user,
-            error: (error) => {}
         })
     }
 

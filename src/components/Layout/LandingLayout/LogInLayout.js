@@ -8,7 +8,7 @@ import LoginButton from "../../Buttons/LoginButton";
 import SignUpLayoutButton from "../../Buttons/SignUpLayoutButton";
 import TextError from "../../Errors/TextError";
 import {withStyles} from "@material-ui/core";
-import {API, startPeriodicStationJob} from "../../../globals/methods";
+import {API} from "../../../globals/methods";
 import {initWebSocket} from "../../../fancyWebSocket";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import {connect} from "react-redux";
@@ -50,12 +50,6 @@ class LogIn extends Component {
                 this.props.changeAuthenticated(true);
                 this.props.changeScreen(Screens.CHAT_LIST);
                 this.props.changeUser(response.data);
-
-                // Start periodic job for getting new station
-                const job = startPeriodicStationJob({
-                    user: response.data
-                });
-                this.props.changePeriodicJob(job);
             },
         });
     }
@@ -124,7 +118,6 @@ const mapDispatchToProps = dispatch => {
         changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
         changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
         changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
-        changePeriodicJob: (value) => dispatch({type: ActionTypes.JOB_CHANGE, value: value}),
     }
 };
 

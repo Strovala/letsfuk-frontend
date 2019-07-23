@@ -84,26 +84,24 @@ class API {
             .catch(data.error);
     }
 
+    static getUserStation(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.get(`/users//${data.user.user.userId}/station`, {headers: {"session-id": sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
+
     static subscribeToStation(data) {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
-        navigator.geolocation.getCurrentPosition((location) => {
-            let payload = {
-                lat: location.coords.latitude,
-                lon: location.coords.longitude
-            };
-            axios.post('/stations/subscribe', payload, {headers: {"session-id": sessionId}})
-                .then(data.response)
-                .catch(data.error);
-        },
-            (err) => data.error(err),
-        {
-            maximumAge: 60000,
-            timeout: 5000,
-            enableHighAccuracy: true
-        });
+        axios.post('/stations/subscribe', data.data, {headers: {"session-id": sessionId}})
+            .then(data.response)
+            .catch(data.error);
     }
 }
 
@@ -210,13 +208,57 @@ const mobileCheck = function() {
     return check;
 };
 
-const startPeriodicStationJob = (data) => {
-    return setInterval(() => {
-        API.subscribeToStation({
+const tryNewStation = (data) => {
+    navigator.geolocation.getCurrentPosition((location) => {
+        const currentLocation = {
+            lat: location.coords.latitude,
+            lon: location.coords.longitude
+        };
+        API.getUserStation({
             user: data.user,
-            error: (error) => {}
-        })
-    }, Constants.PERIODICIC_TIME);
+            response: response => {
+                const stationLocation = response.data;
+                console.log(currentLocation);
+                console.log(stationLocation);
+                // In meters
+                const distance = distanceBetweenLocations(currentLocation, stationLocation);
+                console.log(distance);
+                if (distance > Constants.DISTANCE_TRESHOLD) {
+                    API.subscribeToStation({
+                        user: data.user,
+                        data: currentLocation
+                    })
+                }
+            }
+        });
+    }, (error) => {},
+    {
+        maximumAge: 60000,
+        timeout: 5000,
+        enableHighAccuracy: true
+    });
 };
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, startPeriodicStationJob };
+const distanceBetweenLocations = (location1, location2) => {
+    const R = 6371e3; // metres
+    const phi1 = location1.lat.toRad();
+    const phi2 = location2.lat.toRad();
+    const dphi = (location2.lat-location1.lat).toRad();
+    const dlambda = (location2.lon-location1.lon).toRad();
+    const a = Math.sin(dphi/2) * Math.sin(dphi/2) +
+        Math.cos(phi1) * Math.cos(phi2) *
+        Math.sin(dlambda/2) * Math.sin(dlambda/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return R * c;
+};
+
+
+/** Converts numeric degrees to radians */
+if (typeof(Number.prototype.toRad) === "undefined") {
+    Number.prototype.toRad = function() {
+        return this * Math.PI / 180;
+    }
+}
+
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation };
