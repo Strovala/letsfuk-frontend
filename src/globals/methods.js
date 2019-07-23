@@ -1,5 +1,5 @@
 import axios from "axios";
-import {cookies} from "./constants";
+import {Constants, cookies} from "./constants";
 
 class API {
 
@@ -82,6 +82,28 @@ class API {
         axios.put('/messages/unreads/reset', data.data, {headers: {"session-id": sessionId}})
             .then(data.response)
             .catch(data.error);
+    }
+
+    static subscribeToStation(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        navigator.geolocation.getCurrentPosition((location) => {
+            let payload = {
+                lat: location.coords.latitude,
+                lon: location.coords.longitude
+            };
+            axios.post('/stations/subscribe', payload, {headers: {"session-id": sessionId}})
+                .then(data.response)
+                .catch(data.error);
+        },
+            (err) => data.error(err),
+        {
+            maximumAge: 60000,
+            timeout: 5000,
+            enableHighAccuracy: true
+        });
     }
 }
 
@@ -188,4 +210,13 @@ const mobileCheck = function() {
     return check;
 };
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck };
+const startPeriodicStationJob = (data) => {
+    return setInterval(() => {
+        API.subscribeToStation({
+            user: data.user,
+            error: (error) => {}
+        })
+    }, Constants.PERIODICIC_TIME);
+};
+
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, startPeriodicStationJob };

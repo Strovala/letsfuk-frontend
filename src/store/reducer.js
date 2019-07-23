@@ -9,7 +9,8 @@ const initialState = {
     webSocket: null,
     chats: null,
     stationChat: null,
-    activeChat: null
+    activeChat: null,
+    periodicJob: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -53,6 +54,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 authenticated: action.value
+            };
+        case ActionTypes.JOB_CHANGE:
+            return {
+                ...state,
+                periodicJob: action.value
             };
         default:
             return state;
