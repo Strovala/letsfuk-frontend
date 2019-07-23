@@ -50,6 +50,10 @@ class ChatListLayout extends Component {
             data = humps.camelizeKeys(data);
             this.getChats();
         });
+        API.subscribeToStation({
+            user: this.props.user,
+            error: (error) => {}
+        })
     }
 
     componentWillUnmount() {
