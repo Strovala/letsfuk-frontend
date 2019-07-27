@@ -1,24 +1,58 @@
 import axios from "axios";
 import {Constants, cookies} from "./constants";
+import humps from "humps";
 
 class API {
+    static getFromCache(url, channel, data) {
+        if ('caches' in window) {
+            const apiUrl = `${axios.defaults.baseURL}${url}`;
+            caches.match(apiUrl)
+                .then(response => {
+                    if (response && !channel.dataReceived) {
+                        response.json()
+                            .then(responseData => {
+                                response.data = humps.camelizeKeys(responseData);
+                                data.response(response);
+                            })
+                    }
+                })
+        }
+    }
 
     static whoAmI(data) {
+        let url = `/whoami`;
+        // in case that network is faster than cache
+        let channel = {
+            dataReceived: false
+        };
+        API.getFromCache(url, channel, data);
         const sessionId = cookies.get('session-id');
         if (!sessionId)
             return;
-        axios.get('/whoami', { headers: { "session-id": sessionId } })
-            .then(data.response)
+        axios.get(url, { headers: { "session-id": sessionId } })
+            .then(response => {
+                channel.dataReceived = true;
+                data.response(response)
+            })
             .catch(data.error);
     }
 
     static getUser(data) {
+        let url = `/users/${data.userId}`;
+        // in case that network is faster than cache
+        let channel = {
+            dataReceived: false
+        };
+        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
-        axios.get(`/users/${data.userId}`, { headers: { "session-id": sessionId } })
-            .then(data.response)
+        axios.get(url, { headers: { "session-id": sessionId } })
+            .then(response => {
+                channel.dataReceived = true;
+                data.response(response)
+            })
             .catch(data.error);
     };
 
@@ -45,22 +79,40 @@ class API {
     }
 
     static getChats(data) {
+        let url = '/messages';
+        // in case that network is faster than cache
+        let channel = {
+            dataReceived: false
+        };
+        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
-        axios.get('/messages', {headers: {"session-id": sessionId}})
-            .then(data.response)
+        axios.get(url, {headers: {"session-id": sessionId}})
+            .then(response => {
+                channel.dataReceived = true;
+                data.response(response)
+            })
             .catch(data.error);
     }
 
     static getMessages(data) {
+        let url = `/messages/${data.receiverId}?limit=${data.limit}`;
+        // in case that network is faster than cache
+        let channel = {
+            dataReceived: false
+        };
+        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
-        axios.get(`/messages/${data.receiverId}?limit=${data.limit}`, {headers: {"session-id": sessionId}})
-            .then(data.response)
+        axios.get(url, {headers: {"session-id": sessionId}})
+            .then(response => {
+                channel.dataReceived = true;
+                data.response(response)
+            })
             .catch(data.error);
     }
 
@@ -85,12 +137,21 @@ class API {
     }
 
     static getUserStation(data) {
+        let url = `/users//${data.user.user.userId}/station`;
+        // in case that network is faster than cache
+        let channel = {
+            dataReceived: false
+        };
+        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
-        axios.get(`/users//${data.user.user.userId}/station`, {headers: {"session-id": sessionId}})
-            .then(data.response)
+        axios.get(url, {headers: {"session-id": sessionId}})
+            .then(response => {
+                channel.dataReceived = true;
+                data.response(response)
+            })
             .catch(data.error);
     }
 

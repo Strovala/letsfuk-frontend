@@ -64,8 +64,10 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
+    "build": "node scripts/build.js && npm run build-sw && npm run clean-cra-sw",
+    "test": "node scripts/test.js",
+    "build-sw": "node ./src/sw-build.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -125,5 +127,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "workbox-build": "^4.3.1"
   }
 }
