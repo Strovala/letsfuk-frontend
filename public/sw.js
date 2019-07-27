@@ -62,6 +62,16 @@
 // }
 const STATIC_CACHE_VERSION='static-v0';
 const DYNAMIC_CACHE_VERSION='dynamic-v1';
+const STATIC_FILES = [
+    '/',
+    '/favicon.ico',
+    '/manifest.json',
+    '/static/js/bundle.js',
+    '/static/js/0.chunk.js',
+    '/static/js/0.chunk.js.map',
+    '/static/js/main.chunk.js',
+    'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
+];
 
 self.addEventListener('install', (event) => {
     console.log('[Service Worker] Installing service worker', event);
@@ -69,16 +79,7 @@ self.addEventListener('install', (event) => {
         caches.open(STATIC_CACHE_VERSION)
             .then((cache) => {
             console.log('[Service Worker] Precaching App Shell');
-            cache.addAll([
-                '/',
-                '/favicon.ico',
-                '/manifest.json',
-                '/static/js/bundle.js',
-                '/static/js/0.chunk.js',
-                '/static/js/0.chunk.js.map',
-                '/static/js/main.chunk.js',
-                'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
-            ]);
+            cache.addAll(STATIC_FILES);
         })
     )
 });
@@ -122,11 +123,27 @@ self.addEventListener('fetch', (event) => {
     const urls = [
         'http://localhost:8888',
         '/api',
+    ];
+    const fetchOnly = [
         'sockjs-node'
     ];
+    let fetchOnlyMatch = fetchOnly.some(url => {
+        return event.request.url.indexOf(url) > -1
+    });
+    if (fetchOnlyMatch) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
     let match = urls.some(url => {
         return event.request.url.indexOf(url) > -1
     });
+    const staticFileUrl = new RegExp(`\\b${STATIC_FILES.join('\\b|\\b')}\\b`).test(event.request.url);
+    if (staticFileUrl) {
+        event.respondWith(
+            caches.match(event.request)
+        );
+        return;
+    }
     if (match) {
         event.respondWith(
             caches.open(DYNAMIC_CACHE_VERSION)
@@ -139,29 +156,29 @@ self.addEventListener('fetch', (event) => {
                         })
                 })
         );
-    } else {
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    if (response)
-                        return response;
-                    return fetch(event.request)
-                        .then(response => {
-                            return caches.open(DYNAMIC_CACHE_VERSION)
-                                .then(cache => {
-                                    // clone() because .put is using response object
-                                    cache.put(event.request.url, response.clone());
-                                    return response
-                                })
-                        })
-                        .catch(error => {
-                            return caches.open(STATIC_CACHE_VERSION)
-                                .then(cache => {
-                                    return cache.match('/')
-                                })
-                        })
-
-                })
-        );
+        return;
     }
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                if (response)
+                    return response;
+                return fetch(event.request)
+                    .then(response => {
+                        return caches.open(DYNAMIC_CACHE_VERSION)
+                            .then(cache => {
+                                // clone() because .put is using response object
+                                cache.put(event.request.url, response.clone());
+                                return response
+                            })
+                    })
+                    .catch(error => {
+                        return caches.open(STATIC_CACHE_VERSION)
+                            .then(cache => {
+                                return cache.match('/')
+                            })
+                    })
+
+            })
+    );
 });
