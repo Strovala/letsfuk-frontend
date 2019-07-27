@@ -63,7 +63,6 @@
 const STATIC_CACHE_VERSION='static-v0';
 const DYNAMIC_CACHE_VERSION='dynamic-v1';
 const STATIC_FILES = [
-    '/',
     '/favicon.ico',
     '/manifest.json',
     '/static/js/bundle.js',
@@ -119,13 +118,33 @@ self.addEventListener('activate', (event) => {
 //     );
 // });
 
+const trimCache = (cacheName, maxItems) => {
+    caches.open(cacheName)
+        .then(cache => {
+            cache.keys()
+                .then(keys => {
+                    if (keys.length > maxItems) {
+                        cache.delete(keys[0])
+                            .then(() => trimCache(cacheName, maxItems))
+                    }
+                })
+        })
+};
+
+const isInArray = (str, arr) => {
+    return arr.some(url => {
+        return str.indexOf(url) > -1
+    });
+};
+
 self.addEventListener('fetch', (event) => {
     const urls = [
         'http://localhost:8888',
         '/api',
     ];
     const fetchOnly = [
-        'sockjs-node'
+        'sockjs-node',
+        'fonts.gstatic.com'
     ];
     let fetchOnlyMatch = fetchOnly.some(url => {
         return event.request.url.indexOf(url) > -1
@@ -134,10 +153,8 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(fetch(event.request));
         return;
     }
-    let match = urls.some(url => {
-        return event.request.url.indexOf(url) > -1
-    });
-    const staticFileUrl = new RegExp(`\\b${STATIC_FILES.join('\\b|\\b')}\\b`).test(event.request.url);
+    let match = isInArray(event.request.url, urls);
+    const staticFileUrl = isInArray(event.request.url, STATIC_FILES);
     if (staticFileUrl) {
         event.respondWith(
             caches.match(event.request)
@@ -173,10 +190,11 @@ self.addEventListener('fetch', (event) => {
                             })
                     })
                     .catch(error => {
-                        return caches.open(STATIC_CACHE_VERSION)
-                            .then(cache => {
-                                return cache.match('/')
-                            })
+                        console.log(error);
+                        // return caches.open(STATIC_CACHE_VERSION)
+                        //     .then(cache => {
+                        //         return cache.match('/')
+                        //     })
                     })
 
             })
