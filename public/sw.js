@@ -1,7 +1,10 @@
 importScripts('/idb.js');
+importScripts('/camelize.js');
 
 const idbPromise = idb.open('store', 1, (db) => {
-    db.createObjectStore('')
+    if (!db.objectStoreNames.contains('chats')) {
+        db.createObjectStore('chats', {keyPath: 'id'})
+    }
 });
 
 
@@ -18,7 +21,7 @@ const trimCache = (cacheName, maxItems) => {
         })
 };
 
-const STATIC_CACHE_VERSION='static-v1';
+const STATIC_CACHE_VERSION='static-v0';
 const DYNAMIC_CACHE_VERSION='dynamic-v2';
 const STATIC_FILES = [
     '/favicon.ico',
@@ -93,14 +96,20 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             caches.open(DYNAMIC_CACHE_VERSION)
                 .then((cache) => {
+                    let resp = null;
                     return fetch(event.request)
                         .then(response => {
+                            resp = response;
+                            const clonedResponse = resp.clone();
+                            return clonedResponse.json()
+                        })
+                        .then(data => {
+                            resp.data = camelizeKeys(data);
                             if (event.request.method === "GET") {
                                 // clone() because .put is using response object
-                                cache.put(event.request.url, response.clone());
+                                cache.put(event.request.url, resp.clone());
                             }
-
-                            return response
+                            return resp
                         })
                 })
         );
@@ -111,15 +120,22 @@ self.addEventListener('fetch', (event) => {
             .then(response => {
                 if (response)
                     return response;
+                let resp = null;
                 return fetch(event.request)
                     .then(response => {
+                        resp = response;
+                        const clonedResponse = resp.clone();
+                        return clonedResponse.json()
+                    })
+                    .then(data => {
                         return caches.open(DYNAMIC_CACHE_VERSION)
                             .then(cache => {
+                                resp.data = camelizeKeys(data);
                                 if (event.request.method === "GET") {
                                     // clone() because .put is using response object
-                                    cache.put(event.request.url, response.clone());
+                                    cache.put(event.request.url, resp.clone());
                                 }
-                                return response
+                                return resp
                             })
                     })
                     .catch(error => {
