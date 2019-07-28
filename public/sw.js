@@ -2,12 +2,11 @@ importScripts('/idb.js');
 importScripts('/camelize.js');
 importScripts('/utility.js');
 
-const STATIC_CACHE_VERSION='static-v1';
+const STATIC_CACHE_VERSION='static-v0';
 const DYNAMIC_CACHE_VERSION='dynamic-v2';
 const STATIC_FILES = [
     '/favicon.ico',
     '/manifest.json',
-    '/idb.js',
     '/camelize.js',
     '/static/js/bundle.js',
     '/static/js/0.chunk.js',
@@ -91,15 +90,10 @@ self.addEventListener('fetch', (event) => {
                             if (event.request.method === "GET") {
                                 if (event.request.url.indexOf('/messages') === event.request.url.length-9) {
                                     writeData('chats', {
-                                        id: data.stationChat.receiver.id,
-                                        ...data.stationChat
+                                        id: 'chats',
+                                        ...data
                                     });
-                                    data.privateChats.map(privateChat => (
-                                        writeData('chats', {
-                                            id: privateChat.receiver.id,
-                                            ...privateChat
-                                        })
-                                    ));
+                                    console.log('updated chats', data);
                                 } else {
                                     // clone() because .put is using response object
                                     cache.put(event.request.url, resp.clone());

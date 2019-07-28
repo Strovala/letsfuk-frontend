@@ -1,6 +1,7 @@
 import axios from "axios";
 import {Constants, cookies} from "./constants";
 import humps from "humps";
+import {ReactIndexedDB} from "react-indexed-db";
 
 class API {
     static getFromCache(url, channel, data) {
@@ -17,6 +18,25 @@ class API {
                     }
                 })
         }
+    }
+
+    static getFromIndexedDB(store, key, data) {
+        return new Promise(function(resolve, reject) {
+            if ('indexedDB' in window) {
+                db.getByKey(store, key)
+                    .then(val => {
+                        if (val) {
+                            console.log('from indexesdb', val);
+                            data.response({data: val});
+                            return true
+                        }
+                        return false
+                    })
+                    .then(success => {
+                        resolve(success)
+                    });
+            }
+        });
     }
 
     static whoAmI(data) {
@@ -80,23 +100,21 @@ class API {
 
     static getChats(data) {
         let url = '/messages';
-        // in case that network is faster than cache
-        let channel = {
-            dataReceived: false
-        };
-        // Comment this for now because its showing outdated messages for a
-        // second
-        // API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
         axios.get(url, {headers: {"session-id": sessionId}})
             .then(response => {
-                channel.dataReceived = true;
                 data.response(response)
             })
-            .catch(data.error);
+            .catch(error => {
+                API.getFromIndexedDB('chats', 'chats', data)
+                    .then(success => {
+                        if (!success)
+                            data.error(error);
+                    });
+            });
     }
 
     static getMessages(data) {
@@ -320,5 +338,17 @@ if (typeof(Number.prototype.toRad) === "undefined") {
         return this * Math.PI / 180;
     }
 }
+
+const initDB = () => {
+    db = new ReactIndexedDB('store', 1);
+    db.openDatabase(1, (evt) => {
+        evt.currentTarget.result.createObjectStore('chats', { keyPath: 'id' });
+    }).then((info) => {
+        console.log('Initialized db');
+    });
+    return db;
+};
+let db = initDB();
+
 
 export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation };
