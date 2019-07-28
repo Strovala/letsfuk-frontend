@@ -84,7 +84,9 @@ class API {
         let channel = {
             dataReceived: false
         };
-        API.getFromCache(url, channel, data);
+        // Comment this for now because its showing outdated messages for a
+        // second
+        // API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
