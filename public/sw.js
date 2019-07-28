@@ -2,15 +2,12 @@ importScripts('/idb.js');
 importScripts('/camelize.js');
 importScripts('/utility.js');
 
-const STATIC_CACHE_VERSION='static-v0';
+const STATIC_CACHE_VERSION='static-v1';
 const DYNAMIC_CACHE_VERSION='dynamic-v2';
 const STATIC_FILES = [
     '/favicon.ico',
     '/manifest.json',
     '/camelize.js',
-    '/static/js/bundle.js',
-    '/static/js/0.chunk.js',
-    '/static/js/main.chunk.js',
     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
 ];
 
@@ -55,6 +52,7 @@ self.addEventListener('fetch', (event) => {
         '/api',
     ];
     const fetchOnly = [
+        '/static',
         'sockjs-node',
         'fonts.gstatic.com',
         '.map',

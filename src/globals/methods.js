@@ -23,7 +23,7 @@ class API {
     static getFromIndexedDB(store, key, data) {
         return new Promise(function(resolve, reject) {
             if ('indexedDB' in window) {
-                db.getByKey(store, key)
+                indexedDB.getByKey(store, key)
                     .then(val => {
                         if (val) {
                             console.log('from indexesdb', val);
@@ -340,15 +340,15 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 }
 
 const initDB = () => {
-    db = new ReactIndexedDB('store', 1);
-    db.openDatabase(1, (evt) => {
+    indexedDB = new ReactIndexedDB('store', 1);
+    indexedDB.openDatabase(1, (evt) => {
         evt.currentTarget.result.createObjectStore('chats', { keyPath: 'id' });
     }).then((info) => {
-        console.log('Initialized db');
+        console.log('Initialized indexedDB');
     });
-    return db;
+    return indexedDB;
 };
-let db = initDB();
+let indexedDB = initDB();
 
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation };
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB };
