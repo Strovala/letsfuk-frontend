@@ -1,32 +1,14 @@
 importScripts('/idb.js');
 importScripts('/camelize.js');
+importScripts('/utility.js');
 
-const idbPromise = idb.open('store', 1, (db) => {
-    if (!db.objectStoreNames.contains('chats')) {
-        db.createObjectStore('chats', {keyPath: 'id'})
-    }
-});
-
-
-const trimCache = (cacheName, maxItems) => {
-    caches.open(cacheName)
-        .then(cache => {
-            cache.keys()
-                .then(keys => {
-                    if (keys.length > maxItems) {
-                        cache.delete(keys[0])
-                            .then(() => trimCache(cacheName, maxItems))
-                    }
-                })
-        })
-};
-
-const STATIC_CACHE_VERSION='static-v0';
+const STATIC_CACHE_VERSION='static-v1';
 const DYNAMIC_CACHE_VERSION='dynamic-v2';
 const STATIC_FILES = [
     '/favicon.ico',
     '/manifest.json',
     '/idb.js',
+    '/camelize.js',
     '/static/js/bundle.js',
     '/static/js/0.chunk.js',
     '/static/js/main.chunk.js',
@@ -39,7 +21,8 @@ self.addEventListener('install', (event) => {
         caches.open(STATIC_CACHE_VERSION)
             .then((cache) => {
             console.log('[Service Worker] Precaching App Shell');
-            cache.addAll(STATIC_FILES);
+            // Concat because it could not find localhost:3000 in fetch logic below
+            cache.addAll(STATIC_FILES.concat(['/']));
         })
     )
 });
@@ -104,10 +87,23 @@ self.addEventListener('fetch', (event) => {
                             return clonedResponse.json()
                         })
                         .then(data => {
-                            resp.data = camelizeKeys(data);
+                            data = camelizeKeys(data);
                             if (event.request.method === "GET") {
-                                // clone() because .put is using response object
-                                cache.put(event.request.url, resp.clone());
+                                if (event.request.url.indexOf('/messages') === event.request.url.length-9) {
+                                    writeData('chats', {
+                                        id: data.stationChat.receiver.id,
+                                        ...data.stationChat
+                                    });
+                                    data.privateChats.map(privateChat => (
+                                        writeData('chats', {
+                                            id: privateChat.receiver.id,
+                                            ...privateChat
+                                        })
+                                    ));
+                                } else {
+                                    // clone() because .put is using response object
+                                    cache.put(event.request.url, resp.clone());
+                                }
                             }
                             return resp
                         })
