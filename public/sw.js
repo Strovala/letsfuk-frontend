@@ -12,39 +12,23 @@ if ('function' === typeof importScripts) {
 
         /* injection point for manifest files.  */
         workbox.precaching.precacheAndRoute([
-            {
-                "url": "camelize.js",
-                "revision": "39c1d316b164fbb20a1c21c41013ba3b"
-            },
-            {
-                "url": "idb.js",
-                "revision": "1be734559ee6f3fcec2274321fea1286"
-            },
-            {
-                "url": "index.html",
-                "revision": "5adc4e1dd3bc2585e0dbf37a734e3918"
-            },
-            {
-                "url": "sw.js",
-                "revision": "ed88322339d91d0f1c572fdb4dac911e"
-            },
-            {
-                "url": "utility.js",
-                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
-            },
-            {
-                "url": "/static/js/bundle.js",
-                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
-            },
-            {
-                "url": "/static/js/0.chunk.js",
-                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
-            },
-            {
-                "url": "/static/js/main.chunk.js",
-                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
-            }
-        ]);
+  {
+    "url": "camelize.js",
+    "revision": "39c1d316b164fbb20a1c21c41013ba3b"
+  },
+  {
+    "url": "idb.js",
+    "revision": "1be734559ee6f3fcec2274321fea1286"
+  },
+  {
+    "url": "index.html",
+    "revision": "5adc4e1dd3bc2585e0dbf37a734e3918"
+  },
+  {
+    "url": "utility.js",
+    "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
+  }
+]);
 
         /* custom cache rules*/
         workbox.routing.registerNavigationRoute('/index.html', {
