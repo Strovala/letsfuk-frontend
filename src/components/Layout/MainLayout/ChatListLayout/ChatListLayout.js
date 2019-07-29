@@ -9,6 +9,9 @@ import ChatPreview from "./ChatPreview/ChatPreview";
 import LogoutButton from "../../../Buttons/LogoutButton";
 import Grid from "@material-ui/core/Grid/Grid";
 import humps from "humps";
+import EnableNotificationsButton
+    from "../../../Buttons/EnableNotificationsButton";
+import LoginButton from "../../../Buttons/LoginButton";
 
 const styles = (theme) => ({
     root: {
@@ -86,6 +89,12 @@ class ChatListLayout extends Component {
                         );
                     })}
                 </Grid>
+                <EnableNotificationsButton
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={this.props.classes.submit}
+                />
                 <LogoutButton />
             </Grid>
         );
