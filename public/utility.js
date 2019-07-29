@@ -1,7 +1,8 @@
 
 const dbPromise = idb.open('store', 1, (db) => {
     if (!db.objectStoreNames.contains('chats')) {
-        db.createObjectStore('chats', {keyPath: 'id'})
+        db.createObjectStore('chats', {keyPath: 'id'});
+        db.createObjectStore('messages', {keyPath: 'id'})
     }
 });
 

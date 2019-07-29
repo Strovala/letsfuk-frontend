@@ -57,25 +57,6 @@ class API {
             .catch(data.error);
     }
 
-    static getUser(data) {
-        let url = `/users/${data.userId}`;
-        // in case that network is faster than cache
-        let channel = {
-            dataReceived: false
-        };
-        API.getFromCache(url, channel, data);
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = data.user.sessionId;
-        }
-        axios.get(url, { headers: { "session-id": sessionId } })
-            .then(response => {
-                channel.dataReceived = true;
-                data.response(response)
-            })
-            .catch(data.error);
-    };
-
     static logout(data) {
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
@@ -111,7 +92,7 @@ class API {
             .catch(error => {
                 API.getFromIndexedDB('chats', 'chats', data)
                     .then(success => {
-                        if (!success)
+                        if (!success && data.error)
                             data.error(error);
                     });
             });
@@ -119,21 +100,21 @@ class API {
 
     static getMessages(data) {
         let url = `/messages/${data.receiverId}?limit=${data.limit}`;
-        // in case that network is faster than cache
-        let channel = {
-            dataReceived: false
-        };
-        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
         axios.get(url, {headers: {"session-id": sessionId}})
             .then(response => {
-                channel.dataReceived = true;
                 data.response(response)
             })
-            .catch(data.error);
+            .catch(error => {
+                API.getFromIndexedDB('messages', data.receiverId, data)
+                    .then(success => {
+                        if (!success && data.error)
+                            data.error(error);
+                    });
+            });
     }
 
     static sendMessage(data) {
@@ -157,7 +138,7 @@ class API {
     }
 
     static getUserStation(data) {
-        let url = `/users//${data.user.user.userId}/station`;
+        let url = `/users/${data.user.user.userId}/station`;
         // in case that network is faster than cache
         let channel = {
             dataReceived: false
@@ -343,6 +324,7 @@ const initDB = () => {
     indexedDB = new ReactIndexedDB('store', 1);
     indexedDB.openDatabase(1, (evt) => {
         evt.currentTarget.result.createObjectStore('chats', { keyPath: 'id' });
+        evt.currentTarget.result.createObjectStore('messages', { keyPath: 'id' });
     }).then((info) => {
         console.log('Initialized indexedDB');
     });

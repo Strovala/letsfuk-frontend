@@ -1,139 +1,125 @@
-importScripts('/idb.js');
-importScripts('/camelize.js');
-importScripts('/utility.js');
-
-const STATIC_CACHE_VERSION='static-v1';
-const DYNAMIC_CACHE_VERSION='dynamic-v2';
-const STATIC_FILES = [
-    '/favicon.ico',
-    '/manifest.json',
-    '/camelize.js',
-    'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap',
-];
-
-self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Installing service worker', event);
-    event.waitUntil(
-        caches.open(STATIC_CACHE_VERSION)
-            .then((cache) => {
-            console.log('[Service Worker] Precaching App Shell');
-            // Concat because it could not find localhost:3000 in fetch logic below
-            cache.addAll(STATIC_FILES.concat(['/']));
-        })
-    )
-});
-
-self.addEventListener('activate', (event) => {
-    console.log('[Service Worker] Activating service worker', event);
-    event.waitUntil(
-      caches.keys()
-          .then(keyList => {
-              return Promise.all(keyList.map(key => {
-                  if (key !== STATIC_CACHE_VERSION && key !== DYNAMIC_CACHE_VERSION) {
-                      console.log('[Service Worker] Removing old cache', key);
-                      return caches.delete(key);
-                  }
-                  return null;
-              }))
-          })
+if ('function' === typeof importScripts) {
+    importScripts(
+        'https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js'
     );
-    return self.clients.claim();
-});
+    importScripts('/idb.js');
+    importScripts('/camelize.js');
+    importScripts('/utility.js');
 
-const isInArray = (str, arr) => {
-    return arr.some(url => {
-        return str.indexOf(url) > -1
-    });
-};
+    /* global workbox */
+    if (workbox) {
+        console.log('Workbox is loaded');
 
-self.addEventListener('fetch', (event) => {
-    const urls = [
-        'http://localhost:8888',
-        '/api',
-    ];
-    const fetchOnly = [
-        '/static',
-        'sockjs-node',
-        'fonts.gstatic.com',
-        '.map',
-    ];
-    let fetchOnlyMatch = fetchOnly.some(url => {
-        return event.request.url.indexOf(url) > -1
-    });
-    if (fetchOnlyMatch) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
-    let match = isInArray(event.request.url, urls);
-    const staticFileUrl = isInArray(event.request.url, STATIC_FILES);
-    if (staticFileUrl) {
-        event.respondWith(
-            caches.match(event.request)
+        /* injection point for manifest files.  */
+        workbox.precaching.precacheAndRoute([
+            {
+                "url": "camelize.js",
+                "revision": "39c1d316b164fbb20a1c21c41013ba3b"
+            },
+            {
+                "url": "idb.js",
+                "revision": "1be734559ee6f3fcec2274321fea1286"
+            },
+            {
+                "url": "index.html",
+                "revision": "5adc4e1dd3bc2585e0dbf37a734e3918"
+            },
+            {
+                "url": "sw.js",
+                "revision": "ed88322339d91d0f1c572fdb4dac911e"
+            },
+            {
+                "url": "utility.js",
+                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
+            },
+            {
+                "url": "/static/js/bundle.js",
+                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
+            },
+            {
+                "url": "/static/js/0.chunk.js",
+                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
+            },
+            {
+                "url": "/static/js/main.chunk.js",
+                "revision": "f314a5008d212bcd01c523bd2b4eaca4"
+            }
+        ]);
+
+        /* custom cache rules*/
+        workbox.routing.registerNavigationRoute('/index.html', {
+            blacklist: [/^\/_/, /\/[^\/]+\.[^\/]+$/],
+        });
+
+        workbox.routing.registerRoute(
+            /\.(?:png|gif|jpg|jpeg)$/,
+            workbox.strategies.cacheFirst({
+                cacheName: 'images',
+                plugins: [
+                    new workbox.expiration.Plugin({
+                        maxEntries: 60,
+                        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+                    }),
+                ],
+            })
         );
-        return;
-    }
-    if (match) {
-        event.respondWith(
-            caches.open(DYNAMIC_CACHE_VERSION)
-                .then((cache) => {
-                    let resp = null;
-                    return fetch(event.request)
-                        .then(response => {
-                            resp = response;
-                            const clonedResponse = resp.clone();
-                            return clonedResponse.json()
-                        })
+
+        workbox.routing.registerRoute(
+            /.*(?:googleapis|gstatic)\.com.*$/,
+            workbox.strategies.staleWhileRevalidate({
+                cacheName: 'google-fonts'
+            })
+        );
+
+        workbox.routing.registerRoute(/.*(?:api\/messages\/?)$/, (args) => {
+            return fetch(args.event.request)
+                .then(response => {
+                    const clonedResp = response.clone();
+                    return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            if (event.request.method === "GET") {
-                                if (event.request.url.indexOf('/messages') === event.request.url.length-9) {
-                                    writeData('chats', {
-                                        id: 'chats',
-                                        ...data
-                                    });
-                                    console.log('updated chats', data);
-                                } else {
-                                    // clone() because .put is using response object
-                                    cache.put(event.request.url, resp.clone());
-                                }
-                            }
-                            return resp
+                            writeData('chats', {
+                                id: 'chats',
+                                ...data
+                            });
+                            console.log('updated chats', data);
+                            return response
                         })
                 })
-        );
-        return;
-    }
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response)
-                    return response;
-                let resp = null;
-                return fetch(event.request)
-                    .then(response => {
-                        resp = response;
-                        const clonedResponse = resp.clone();
-                        return clonedResponse.json()
-                    })
-                    .then(data => {
-                        return caches.open(DYNAMIC_CACHE_VERSION)
-                            .then(cache => {
-                                resp.data = camelizeKeys(data);
-                                if (event.request.method === "GET") {
-                                    // clone() because .put is using response object
-                                    cache.put(event.request.url, resp.clone());
-                                }
-                                return resp
-                            })
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        // return caches.open(STATIC_CACHE_VERSION)
-                        //     .then(cache => {
-                        //         return cache.match('/')
-                        //     })
-                    })
+        });
 
+        workbox.routing.registerRoute(/.*(?:api\/messages\/).+$/, (args) => {
+            return fetch(args.event.request)
+                .then(response => {
+                    const clonedResp = response.clone();
+                    return clonedResp.json()
+                        .then(data => {
+                            data = camelizeKeys(data);
+                            writeData('messages', {
+                                id: data.receiver.id,
+                                ...data
+                            });
+                            console.log('updated messages', data);
+                            return response
+                        })
+                })
+        });
+
+        workbox.routing.registerRoute(
+            /.*(?:api\/whoami\/?)$/,
+            workbox.strategies.networkFirst({
+                cacheName: 'whoami'
             })
-    );
-});
+        );
+
+        workbox.routing.registerRoute(
+            /.*(?:api\/users\/(.+)\/station\/?)$/,
+            workbox.strategies.networkFirst({
+                cacheName: 'station'
+            })
+        );
+
+    } else {
+        console.log('Workbox could not be loaded. No Offline support');
+    }
+}
