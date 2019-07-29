@@ -148,15 +148,25 @@ class ChatLayout extends Component {
             if (!this._ismounted)
                 return;
             data = humps.camelizeKeys(data);
-            // Just update sent message to chats
-            let messages = this.props.chat.messages;
-            messages.push(data);
-            this.props.changeActiveChat({
-                ...this.props.chat,
-                messages: messages
-            });
-            this.resetUnreads();
-            this.scrollToLastMessage();
+            console.log(data);
+            // If one who sent message is receiver in this private chat
+            // Station will never be sender
+            if (data.sender.userId === this.props.receiver.id) {
+                // Just update sent message to chats
+                let messages = this.props.chat.messages;
+                messages.push(data);
+                this.props.changeActiveChat({
+                    ...this.props.chat,
+                    messages: messages
+                });
+                this.resetUnreads();
+                this.scrollToLastMessage();
+            } else {
+                this.getChats();
+                // Don't want to notify on every station message
+                if (!data.isStation)
+                    new Notification(`You have new message from ${data.sender.username}`)
+            }
         });
         this.scrollToLastMessage();
     }
