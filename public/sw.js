@@ -1,6 +1,6 @@
 if ('function' === typeof importScripts) {
     importScripts(
-        'https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js'
+        'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js'
     );
     importScripts('/idb.js');
     importScripts('/camelize.js');
@@ -38,21 +38,11 @@ if ('function' === typeof importScripts) {
   },
   {
     "url": "utility.js",
-    "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-  },
-            {
-                "url": "/static/js/bundle.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            },
-            {
-                "url": "/static/js/0.chunk.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            },
-            {
-                "url": "/static/js/main.chunk.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            }
+    "revision": "657913ab2a72d50e43daf038ae1eff8f"
+  }
 ]);
+
+
 
         /* custom cache rules*/
         workbox.routing.registerNavigationRoute('/index.html', {

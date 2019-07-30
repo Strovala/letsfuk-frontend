@@ -5,10 +5,10 @@ const buildSW = () => {
     // This will return a Promise
     return workboxBuild.injectManifest({
         swSrc: 'src/sw-template.js',
-        swDest: 'public/sw.js',
-        globDirectory: 'public',
+        swDest: 'build/sw.js',
+        globDirectory: 'build',
         globPatterns: [
-            '**\/*.{js,css,html,png}',
+            '**\/*.{js,css,html}',
         ]
     }).then(({count, size, warnings}) => {
         // Optionally, log any warnings and details.
