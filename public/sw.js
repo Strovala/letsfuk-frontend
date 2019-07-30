@@ -27,7 +27,19 @@ if ('function' === typeof importScripts) {
   {
     "url": "utility.js",
     "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-  }
+  },
+    {
+        "url": "/static/js/bundle.js",
+        "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
+    },
+    {
+        "url": "/static/js/0.chunk.js",
+        "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
+    },
+    {
+        "url": "/static/js/main.chunk.js",
+        "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
+    }
 ]);
 
         /* custom cache rules*/
@@ -62,10 +74,9 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('chats', {
+                            writeData('chats', Object.assign({
                                 id: 'chats',
-                                ...data
-                            });
+                            }, data));
                             console.log('updated chats', data);
                             return response
                         })
@@ -79,10 +90,9 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('messages', {
+                            writeData('messages', Object.assign({
                                 id: data.receiver.id,
-                                ...data
-                            });
+                            }, data));
                             console.log('updated messages', data);
                             return response
                         })

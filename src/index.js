@@ -5,16 +5,20 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import axios from 'axios';
 import humps from "humps";
-import {createStore} from "redux";
+import {compose, createStore} from "redux";
 import reducer from "./store/reducer";
 import {Provider} from "react-redux";
 import {apiUrl} from "./globals/constants";
 
 axios.defaults.baseURL = apiUrl;
 
+const composeEnhancers = (
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+    (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 25 }) || compose)
+);
 const store = createStore(
     reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers()
 );
 
 axios.interceptors.response.use(response => {

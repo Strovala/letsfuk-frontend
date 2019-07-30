@@ -40,6 +40,8 @@ const loginButton = props => (
                         // because it will load ChatList screens before its ready
                         props.changeAuthenticated(true);
                         props.changeScreen(Screens.CHAT_LIST);
+                        // In order to cache
+                        API.whoAmI()
                     },
                     error: error => {
                         if (error.response)

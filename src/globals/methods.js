@@ -12,6 +12,7 @@ class API {
                     if (response && !channel.dataReceived) {
                         response.json()
                             .then(responseData => {
+                                console.log('from cache', responseData);
                                 response.data = humps.camelizeKeys(responseData);
                                 data.response(response);
                             })
@@ -41,19 +42,11 @@ class API {
 
     static whoAmI(data) {
         let url = `/whoami`;
-        // in case that network is faster than cache
-        let channel = {
-            dataReceived: false
-        };
-        API.getFromCache(url, channel, data);
         const sessionId = cookies.get('session-id');
         if (!sessionId)
             return;
         axios.get(url, { headers: { "session-id": sessionId } })
-            .then(response => {
-                channel.dataReceived = true;
-                data.response(response)
-            })
+            .then(data.response)
             .catch(data.error);
     }
 
@@ -139,18 +132,12 @@ class API {
 
     static getUserStation(data) {
         let url = `/users/${data.user.user.userId}/station`;
-        // in case that network is faster than cache
-        let channel = {
-            dataReceived: false
-        };
-        API.getFromCache(url, channel, data);
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;
         }
         axios.get(url, {headers: {"session-id": sessionId}})
             .then(response => {
-                channel.dataReceived = true;
                 data.response(response)
             })
             .catch(data.error);
@@ -333,4 +320,18 @@ const initDB = () => {
 let indexedDB = initDB();
 
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB };
+const clearCaches = () => {
+    if ('caches' in window) {
+        caches.keys().then(function (cacheKeys) {
+            cacheKeys.map(cacheKey => {
+                if (cacheKey.indexOf('workbox-precache') !== -1)
+                    return null;
+                if (cacheKey === 'google-fonts')
+                    return null;
+                return caches.delete(cacheKey);
+            })
+        });
+    }
+};
+
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches };

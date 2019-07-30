@@ -164,8 +164,24 @@ class ChatLayout extends Component {
             } else {
                 this.getChats();
                 // Don't want to notify on every station message
-                if (!data.isStation)
-                    new Notification(`You have new message from ${data.sender.username}`)
+                if (!data.isStation) {
+                    if ('serviceWorker' in navigator) {
+                        const options = {
+                            body: "This is body",
+                            icon: "",
+                            image: "",
+                            dir: "ltr",
+                            lang: "en-US", //BCP 47
+                            vibrate: [100, 50, 200],
+                            badge: "Same as icon",
+                        };
+                        navigator.serviceWorker.ready
+                            .then(sw => {
+                                sw.showNotification(`You have new message from ${data.sender.username}`, options)
+                            })
+                    }
+                }
+
             }
         });
         this.scrollToLastMessage();
