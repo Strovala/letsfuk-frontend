@@ -45,9 +45,10 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('chats', Object.assign({
+                            writeData('chats', {
                                 id: 'chats',
-                            }, data));
+                                ...data
+                            });
                             console.log('updated chats', data);
                             return response
                         })
@@ -61,9 +62,10 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('messages', Object.assign({
+                            writeData('messages', {
                                 id: data.receiver.id,
-                            }, data));
+                                ...data
+                            });
                             console.log('updated messages', data);
                             return response
                         })
