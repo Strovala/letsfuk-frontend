@@ -11,20 +11,7 @@ if ('function' === typeof importScripts) {
         console.log('Workbox is loaded');
 
         /* injection point for manifest files.  */
-        workbox.precaching.precacheAndRoute([
-            {
-                "url": "/static/js/bundle.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            },
-            {
-                "url": "/static/js/0.chunk.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            },
-            {
-                "url": "/static/js/main.chunk.js",
-                "revision": "9a206d60cbec8a3e1a77d0b44ee056f3"
-            }
-        ]);
+        workbox.precaching.precacheAndRoute([]);
 
         /* custom cache rules*/
         workbox.routing.registerNavigationRoute('/index.html', {

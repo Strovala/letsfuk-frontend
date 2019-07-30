@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
-import {API} from "../../../../globals/methods";
+import {API, trimLastMessageText} from "../../../../globals/methods";
 import {ActionTypes, Constants, Screens} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
 import SendMessage from "./SendMessage";
@@ -167,13 +167,11 @@ class ChatLayout extends Component {
                 if (!data.isStation) {
                     if ('serviceWorker' in navigator) {
                         const options = {
-                            body: "This is body",
-                            icon: "",
-                            image: "",
-                            dir: "ltr",
+                            body: trimLastMessageText(data.text, 20),
+                            icon: "img/icons/icon_96x96.png",
                             lang: "en-US", //BCP 47
                             vibrate: [100, 50, 200],
-                            badge: "Same as icon",
+                            badge: "img/icons/icon_96x96.png",
                         };
                         navigator.serviceWorker.ready
                             .then(sw => {

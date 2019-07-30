@@ -9,17 +9,25 @@ import {compose, createStore} from "redux";
 import reducer from "./store/reducer";
 import {Provider} from "react-redux";
 import {apiUrl} from "./globals/constants";
+import {mobileCheck} from "./globals/methods";
 
 axios.defaults.baseURL = apiUrl;
 
-const composeEnhancers = (
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
-    (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 25 }) || compose)
-);
-const store = createStore(
+let store = createStore(
     reducer,
-    composeEnhancers()
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+const mobile = mobileCheck();
+if (!mobile) {
+    const composeEnhancers = (
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+        (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 25 }) || compose)
+    );
+    store = createStore(
+        reducer,
+        composeEnhancers()
+    );
+}
 
 axios.interceptors.response.use(response => {
     let responseData = {...response.data};
