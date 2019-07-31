@@ -100,10 +100,10 @@ if ('function' === typeof importScripts) {
                         ));
                         console.log('CLient', client);
                         if (client !== undefined) {
-                            client.navigate('http://localhost:3000');
+                            client.navigate('https://euve258483.serverprofi24.net/');
                             client.focus();
                         } else {
-                            clients.openWindow("http://localhost:3000")
+                            clients.openWindow("https://euve258483.serverprofi24.net/")
                         }
                         notification.close();
                     })

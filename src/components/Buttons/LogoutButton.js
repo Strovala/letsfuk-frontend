@@ -5,29 +5,33 @@ import {connect} from "react-redux";
 
 const logoutButton = props => (
     <button onClick={() => {
-        API.logout({
-            user: props.user,
-            response: () => {
-                cookies.remove('user-id');
-                cookies.remove('session-id');
-                clearCaches();
-                props.changeAuthenticated(false);
-                props.changeScreen(Screens.LOGIN);
-                // changing user needs to go after changing screen
-                // because Chat screen uses user
-                getPushNotificationSub()
-                    .then(sub => {
-                        if (sub !== null) {
-                            API.unsubscribePushNotification({
-                                user: props.user,
-                                data: sub.toJSON()
-                            })
-                        }
-                    });
-                props.changeUser(null);
-                props.changeWebSocket(null);
-            }
-        })
+        const logout = () => {
+            API.logout({
+                user: props.user,
+                response: () => {
+                    cookies.remove('user-id');
+                    cookies.remove('session-id');
+                    clearCaches();
+                    props.changeAuthenticated(false);
+                    props.changeScreen(Screens.LOGIN);
+                    // changing user needs to go after changing screen
+                    // because Chat screen uses user
+                    props.changeUser(null);
+                    props.changeWebSocket(null);
+                }
+            })
+        }
+        getPushNotificationSub()
+            .then(sub => {
+                if (sub !== null) {
+                    API.unsubscribePushNotification({
+                        user: props.user,
+                        data: sub.toJSON(),
+                        response: logout,
+                        error: logout
+                    })
+                }
+            });
     }}>Logout</button>
 );
 
