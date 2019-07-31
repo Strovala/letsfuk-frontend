@@ -22,7 +22,7 @@ const enableNotificationsButton = props => {
                 Notification.requestPermission()
                     .then(result => {
                         if (result === 'granted') {
-                            configurePushSub();
+                            configurePushSub(props.user);
                             setVisible(false);
                         }
                     })
@@ -30,13 +30,10 @@ const enableNotificationsButton = props => {
     );
 };
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
-        changeUser: (value) => dispatch({type: ActionTypes.USER_CHANGE, value: value}),
-        changeWebSocket: (value) => dispatch({type: ActionTypes.WEBSOCKET_CHANGE, value: value}),
-        changeAuthenticated: (value) => dispatch({type: ActionTypes.AUTHENTICATED_CHANGE, value: value}),
+        user: state.user
     }
 };
 
-export default connect(null, mapDispatchToProps)(enableNotificationsButton);
+export default connect(mapStateToProps)(enableNotificationsButton);

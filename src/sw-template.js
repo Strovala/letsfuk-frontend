@@ -45,10 +45,9 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('chats', {
+                            writeData('chats', Object.assign({
                                 id: 'chats',
-                                ...data
-                            });
+                            }, data));
                             console.log('updated chats', data);
                             return response
                         })
@@ -62,10 +61,9 @@ if ('function' === typeof importScripts) {
                     return clonedResp.json()
                         .then(data => {
                             data = camelizeKeys(data);
-                            writeData('messages', {
+                            writeData('messages', Object.assign({
                                 id: data.receiver.id,
-                                ...data
-                            });
+                            }, data));
                             console.log('updated messages', data);
                             return response
                         })
@@ -85,6 +83,58 @@ if ('function' === typeof importScripts) {
                 cacheName: 'station'
             })
         );
+
+
+        self.addEventListener('notificationclick', event => {
+            console.log('Notification was clicked', event);
+            const notification = event.notification;
+            const action = event.action;
+
+            console.log(notification);
+            console.log(action);
+            event.waitUntil(
+                clients.matchAll()
+                    .then(clis => {
+                        const client = clis.find(c => (
+                            c.visibilityState === 'visible'
+                        ));
+                        console.log('CLient', client);
+                        if (client !== undefined) {
+                            client.navigate('http://localhost:3000');
+                            client.focus();
+                        } else {
+                            clients.openWindow("http://localhost:3000")
+                        }
+                        notification.close();
+                    })
+            )
+        });
+
+        self.addEventListener('notificationclose', event => {
+            console.log('Notification was closed')
+        });
+
+        self.addEventListener('push', event => {
+            console.log('Push Notification received', event);
+            let data = {text: "...", sender: {username: "someone"}};
+            if (event.data) {
+                data = JSON.parse(event.data.text())
+            }
+            const options = {
+                body: data.text,
+                icon: "img/icons/icon_96x96.png",
+                lang: "en-US", //BCP 47
+                vibrate: [100, 50, 200],
+                badge: "img/icons/icon_96x96.png",
+                tag: "new-message",
+                renotify: true
+            };
+            console.log('Push event', `You have new message from ${data.sender.username}`);
+            event.waitUntil(
+                self.registration.showNotification(`You have new message from ${data.sender.username}`, options)
+            )
+        });
+
 
     } else {
         console.log('Workbox could not be loaded. No Offline support');

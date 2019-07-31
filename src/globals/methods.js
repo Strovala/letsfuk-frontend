@@ -152,6 +152,26 @@ class API {
             .then(data.response)
             .catch(data.error);
     }
+
+    static subscribePushNotification(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.post('/push-notifications/subscribe', data.data, {headers: {"session-id": sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
+
+    static unsubscribePushNotification(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        axios.post('/push-notifications/unsubscribe', data.data, {headers: {"session-id": sessionId}})
+            .then(data.response)
+            .catch(data.error);
+    }
 }
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -349,7 +369,7 @@ const urlBase64ToUint8Array = (base64String) => {
     return outputArray;
 };
 
-const configurePushSub = () => {
+const configurePushSub = (user) => {
     if (!('serviceWorker' in navigator))
         return;
     let reg;
@@ -368,16 +388,33 @@ const configurePushSub = () => {
                     applicationServerKey: convertedVapidPublicKey
                 })
             } else {
-                // We already subscribed
+                // We already subscribed update if it's new user, update it
+                // in next promise chain
+                return sub
             }
         })
         .then(newSub => {
             // send new sub to backend for storing
-            console.log('new', newSub.toJSON());
+            API.subscribePushNotification({
+                user: user,
+                data: newSub.toJSON()
+            });
         })
         .catch(err => {
             console.log(err);
         })
 };
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub };
+const getPushNotificationSub = () => {
+    if (!('serviceWorker' in navigator))
+        return null;
+    return navigator.serviceWorker.ready
+        .then(sw => {
+            return sw.pushManager.getSubscription()
+        })
+        .catch(err => {
+            console.log(err);
+        })
+};
+
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub, getPushNotificationSub };

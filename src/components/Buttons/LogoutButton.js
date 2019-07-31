@@ -1,5 +1,5 @@
 import React from 'react';
-import {API, clearCaches} from "../../globals/methods";
+import {API, clearCaches, getPushNotificationSub} from "../../globals/methods";
 import {Screens, cookies, ActionTypes} from "../../globals/constants";
 import {connect} from "react-redux";
 
@@ -15,6 +15,15 @@ const logoutButton = props => (
                 props.changeScreen(Screens.LOGIN);
                 // changing user needs to go after changing screen
                 // because Chat screen uses user
+                getPushNotificationSub()
+                    .then(sub => {
+                        if (sub !== null) {
+                            API.unsubscribePushNotification({
+                                user: props.user,
+                                data: sub.toJSON()
+                            })
+                        }
+                    });
                 props.changeUser(null);
                 props.changeWebSocket(null);
             }
