@@ -4,6 +4,7 @@ import {
 } from "../../globals/constants";
 import {connect} from "react-redux";
 import Button from "@material-ui/core/Button/Button";
+import {configurePushSub} from "../../globals/methods";
 
 const enableNotificationsButton = props => {
     const [visible, setVisible] = useState(true);
@@ -21,6 +22,7 @@ const enableNotificationsButton = props => {
                 Notification.requestPermission()
                     .then(result => {
                         if (result === 'granted') {
+                            configurePushSub();
                             setVisible(false);
                         }
                     })

@@ -172,6 +172,8 @@ class ChatLayout extends Component {
                             lang: "en-US", //BCP 47
                             vibrate: [100, 50, 200],
                             badge: "img/icons/icon_96x96.png",
+                            tag: "new-message",
+                            renotify: true
                         };
                         navigator.serviceWorker.ready
                             .then(sw => {

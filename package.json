@@ -58,6 +58,7 @@
     "terser-webpack-plugin": "1.2.2",
     "universal-cookie": "^3.1.0",
     "url-loader": "1.1.2",
+    "web-push": "^3.3.5",
     "webpack": "4.28.3",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
@@ -67,7 +68,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && npm run build-sw",
     "test": "node scripts/test.js",
-    "build-sw": "node ./src/sw-build.js"
+    "build-sw": "node ./src/sw-build.js",
+    "web-push": "web-push"
   },
   "eslintConfig": {
     "extends": "react-app"

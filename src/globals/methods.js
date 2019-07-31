@@ -334,4 +334,50 @@ const clearCaches = () => {
     }
 };
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches };
+const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+};
+
+const configurePushSub = () => {
+    if (!('serviceWorker' in navigator))
+        return;
+    let reg;
+    navigator.serviceWorker.ready
+        .then(sw => {
+            reg = sw;
+            return sw.pushManager.getSubscription()
+        })
+        .then(sub => {
+            if (sub === null) {
+                // Create subscription
+                const vapidPublicKey = 'BEX7QPgjsx85cMdCyQWPj28nSHSNUIxfMpd3FKztFw9ca__-8etdU6g6fiTYC_zRHnoP4r6Wv8DFl9o7JWI-SmI';
+                const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+                return reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedVapidPublicKey
+                })
+            } else {
+                // We already subscribed
+            }
+        })
+        .then(newSub => {
+            // send new sub to backend for storing
+            console.log('new', newSub.toJSON());
+        })
+        .catch(err => {
+            console.log(err);
+        })
+};
+
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub };
