@@ -172,6 +172,17 @@ class API {
             .then(data.response)
             .catch(data.error);
     }
+
+    static checkPushNotificationSubscription(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.get('/push-notifications/check', {
+            params: data.params,
+            headers: {"session-id": sessionId}
+        })
+    }
 }
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -369,7 +380,7 @@ const urlBase64ToUint8Array = (base64String) => {
     return outputArray;
 };
 
-const configurePushSub = (user) => {
+const configurePushSub = (data) => {
     if (!('serviceWorker' in navigator))
         return;
     let reg;
@@ -396,8 +407,9 @@ const configurePushSub = (user) => {
         .then(newSub => {
             // send new sub to backend for storing
             API.subscribePushNotification({
-                user: user,
-                data: newSub.toJSON()
+                user: data.user,
+                data: newSub.toJSON(),
+                response: data.response
             });
         })
         .catch(err => {
@@ -405,16 +417,37 @@ const configurePushSub = (user) => {
         })
 };
 
-const getPushNotificationSub = () => {
+const getPushNotificationUserSub = (user) => {
     if (!('serviceWorker' in navigator))
         return null;
     return navigator.serviceWorker.ready
         .then(sw => {
             return sw.pushManager.getSubscription()
+                .then(sub => {
+                    if (sub !== null) {
+                        const subJson = sub.toJSON();
+                        return API.checkPushNotificationSubscription({
+                            user: user,
+                            params: {
+                                endpoint: subJson.endpoint,
+                                auth: subJson.keys.auth,
+                                p256dh: subJson.keys.p256dh
+                            }
+                        })
+                            .then(() => {
+                                return sub;
+                            })
+                            .catch(error => {
+                                console.log(error);
+                                return null;
+                            })
+                    }
+                    return sub
+                })
         })
         .catch(err => {
             console.log(err);
         })
 };
 
-export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub, getPushNotificationSub };
+export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub, getPushNotificationUserSub };

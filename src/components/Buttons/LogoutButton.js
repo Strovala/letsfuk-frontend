@@ -1,5 +1,9 @@
 import React from 'react';
-import {API, clearCaches, getPushNotificationSub} from "../../globals/methods";
+import {
+    API,
+    clearCaches,
+    getPushNotificationUserSub
+} from "../../globals/methods";
 import {Screens, cookies, ActionTypes} from "../../globals/constants";
 import {connect} from "react-redux";
 
@@ -20,8 +24,8 @@ const logoutButton = props => (
                     props.changeWebSocket(null);
                 }
             })
-        }
-        getPushNotificationSub()
+        };
+        getPushNotificationUserSub(props.user)
             .then(sub => {
                 if (sub !== null) {
                     API.unsubscribePushNotification({
@@ -30,6 +34,8 @@ const logoutButton = props => (
                         response: logout,
                         error: logout
                     })
+                } else {
+                    logout()
                 }
             });
     }}>Logout</button>

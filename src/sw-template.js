@@ -140,3 +140,7 @@ if ('function' === typeof importScripts) {
         console.log('Workbox could not be loaded. No Offline support');
     }
 }
+
+self.addEventListener("pushsubscriptionchange", event => {
+    console.log('Changed push subscription', event);
+});
