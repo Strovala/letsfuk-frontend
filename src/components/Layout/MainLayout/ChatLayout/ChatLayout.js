@@ -48,7 +48,7 @@ const styles = theme => ({
 class ChatLayout extends Component {
     state = {
         text: "",
-        limit: Constants.LIMIT,
+        limit: Constants.MESSAGES_LIMIT,
         loadedAll: false
     };
 
@@ -58,7 +58,7 @@ class ChatLayout extends Component {
     }
 
     loadMoreMessages() {
-        const newLimit = this.state.limit + Constants.LIMIT;
+        const newLimit = this.state.limit + Constants.MESSAGES_LIMIT;
         API.getMessages({
             user: this.props.user,
             receiverId: this.props.receiver.id,
@@ -246,10 +246,11 @@ class ChatLayout extends Component {
                     className={this.props.classes.messages}
                 >
                     {this.props.chat.messages.map((message, index) => {
+                        const shouldBeTrigger = 0 <= index <= Constants.TRIGGER_MESSAGE_INDEXES_COUNT;
                         return (
                             <MessagePreview
                                 // Messages with indexed trigger loading more messages
-                                setTrigger={(ref) => Constants.TRIGGER_MESSAGE_INDEXES.includes(index) ? this.setTrigger(ref): null}
+                                setTrigger={(ref) => shouldBeTrigger ? this.setTrigger(ref): null}
                                 key={message.messageId}
                                 message={message}
                                 prevMessage={index !== 0 ? this.props.chat.messages[index-1]: null}

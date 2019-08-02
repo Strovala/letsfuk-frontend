@@ -20,8 +20,10 @@ const Screens = {
 };
 
 const Constants = {
-    LIMIT: 100,
-    TRIGGER_MESSAGE_INDEXES: [0, 1, 2, 3, 4, 5],
+    MESSAGES_LIMIT: 100,
+    CHATS_LIMIT: 20,
+    TRIGGER_MESSAGE_INDEXES_COUNT: 5,
+    TRIGGER_CHAT_INDEXES_COUNT: 5,
     DISTANCE_TRESHOLD: 1000,
     X_TOTAL_HEADER: 'x-total'
 };

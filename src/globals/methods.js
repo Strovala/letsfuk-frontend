@@ -74,6 +74,8 @@ class API {
 
     static getChats(data) {
         let url = '/messages';
+        if (data.limit)
+            url = `/messages?limit=${data.limit}`;
         let sessionId = cookies.get('session-id');
         if (!sessionId) {
             sessionId = data.user.sessionId;

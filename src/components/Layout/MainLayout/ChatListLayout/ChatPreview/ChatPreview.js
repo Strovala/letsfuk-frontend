@@ -68,11 +68,17 @@ const chatPreview = (props) => {
             </Grid>
         );
     return (
-        <Grid container direction="row" spacing={2} className={props.classes.root} onClick={() => {
-            props.changeActiveChat(props.chat);
-            props.changeReceiver(props.chat.receiver);
-            props.changeScreen(Screens.CHAT)
-        }}>
+        <Grid
+            container direction="row" spacing={2} className={props.classes.root}
+            onClick={() => {
+                props.changeActiveChat(props.chat);
+                props.changeReceiver(props.chat.receiver);
+                props.changeScreen(Screens.CHAT)
+            }}
+            ref={
+              (ref) => props.setTrigger ? props.setTrigger(ref): null
+            }
+        >
             <Grid
                 container
                 justify="center"
