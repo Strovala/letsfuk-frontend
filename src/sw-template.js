@@ -32,7 +32,7 @@ if ('function' === typeof importScripts) {
         );
 
         workbox.routing.registerRoute(
-            /.*(?:googleapis|gstatic)\.com.*$/,
+            /.*(?:fonts.googleapis|fonts.gstatic)\.com.*$/,
             workbox.strategies.staleWhileRevalidate({
                 cacheName: 'google-fonts'
             })
