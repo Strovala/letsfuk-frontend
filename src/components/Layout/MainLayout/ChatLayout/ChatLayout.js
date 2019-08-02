@@ -66,7 +66,9 @@ class ChatLayout extends Component {
             response: response => {
                 if (!this._ismounted) return;
                 let messages = response.data.messages;
-                if (messages.length === this.props.chat.messages.length) {
+                const totalString = response.headers[Constants.X_TOTAL_HEADER];
+                const total = parseInt(totalString);
+                if (messages.length === total) {
                     this.setState({
                         loadedAll: true
                     });
@@ -148,7 +150,6 @@ class ChatLayout extends Component {
             if (!this._ismounted)
                 return;
             data = humps.camelizeKeys(data);
-            console.log(data);
             // If one who sent message is receiver in this private chat
             // Station will never be sender
             if (data.sender.userId === this.props.receiver.id) {
@@ -202,7 +203,7 @@ class ChatLayout extends Component {
         if (this.triggers.length === 0) return false;
         return this.triggers.some((trigger) => {
             const top = trigger.getBoundingClientRect().top;
-            return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+            return (top + offset) >= 0 && (top - offset) <= window.innerHeight
         });
     }
 

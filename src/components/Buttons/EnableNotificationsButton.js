@@ -13,7 +13,6 @@ const enableNotificationsButton = props => {
         return null;
     getPushNotificationUserSub()
         .then(sub => {
-            console.log("Registered sub", sub);
             setDisabled(sub !== null);
         });
     return (
