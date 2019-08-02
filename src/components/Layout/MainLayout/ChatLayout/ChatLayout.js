@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
-import {API, trimLastMessageText} from "../../../../globals/methods";
+import {API} from "../../../../globals/methods";
 import {ActionTypes, Constants, Screens} from "../../../../globals/constants";
 import Loading from "../../../Loading/Loading";
 import SendMessage from "./SendMessage";

@@ -20,7 +20,7 @@ const Screens = {
 };
 
 const Constants = {
-    LIMIT: 10,
+    LIMIT: 100,
     TRIGGER_MESSAGE_INDEXES: [0, 1, 2, 3, 4, 5],
     DISTANCE_TRESHOLD: 1000
 };
