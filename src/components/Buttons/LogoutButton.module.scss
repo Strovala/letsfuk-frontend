@@ -1,0 +1,16 @@
+$color-primary: rgb(52, 152, 219);
+
+.Btn {
+  background-color: $color-primary;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  justify-content: center;
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .2);
+  color: whitesmoke;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.7rem;
+}

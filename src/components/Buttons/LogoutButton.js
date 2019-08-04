@@ -6,9 +6,10 @@ import {
 } from "../../globals/methods";
 import {Screens, cookies, ActionTypes} from "../../globals/constants";
 import {connect} from "react-redux";
+import {Btn} from './LogoutButton.module.scss';
 
 const logoutButton = props => (
-    <button onClick={() => {
+    <button className={Btn} onClick={() => {
         const logout = () => {
             API.logout({
                 user: props.user,
