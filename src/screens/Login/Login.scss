@@ -1,0 +1,147 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+
+.login {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    flex: 0 1 30rem;
+    background-size: cover;
+    background: linear-gradient(rgba($color-primary-light, .5), $color-primary-dark),
+    url(../../img/hangout-small.png) no-repeat bottom center;
+
+    position: relative;
+  }
+
+  &__heading {
+    @include absCenter;
+    color: $color-white;
+    text-align: center;
+  }
+
+  &__heading-title {
+    text-transform: uppercase;
+    font-size: 7rem;
+    font-weight: 100;
+    padding-top: 8rem;
+    line-height: 1;
+  }
+
+  &__heading-message {
+    font-size: 1.4rem;
+    letter-spacing: .2rem;
+  }
+
+  &__content {
+    position: relative;
+    background-color: $color-grey-light-2;
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+    overflow: hidden;
+    margin-top: -3rem;
+    z-index: 1;
+    flex: 1;
+    box-shadow: 0 -1rem 4rem rgba($color-black, .4);
+  }
+
+  &__no-account {
+    font-size: 1.2rem;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $color-primary;
+  }
+}
+
+.form {
+  padding: 4rem 1rem 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $color-grey-dark-2;
+
+  &__group:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  &__group {
+    position: relative;
+    flex: 1;
+    width: 90%;
+    padding: .5rem 1rem;
+  }
+
+  &__input-icon {
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    margin-right: 1rem;
+    font-size: 1.7rem;
+    opacity: .8;
+  }
+
+  &__input {
+    color: $color-grey-dark-1;
+    width: 100%;
+    font-size: 1.7rem;
+    font-family: inherit;
+    background-color: transparent;
+    border: none;
+    border-bottom: .2rem solid rgba($color-grey-dark-1, .2);
+    padding-bottom: 1rem;
+    padding-left: 3rem;
+    transition: border-bottom .3s;
+
+    &:focus {
+      outline: none;
+      background-color: $color-grey-light-2;
+      border-bottom: .2rem solid $color-primary;
+      padding-left: 3rem;
+      &::-webkit-input-placeholder {
+        opacity: 0;
+      }
+    }
+
+    &:focus:invalid {
+      border-bottom: .2rem solid $color-secondary;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:hover {
+      -webkit-box-shadow: 0 0 0 100rem $color-grey-light-2 inset !important;
+    }
+
+    &::-webkit-input-placeholder {
+      color: $color-grey-dark-2;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    font-size: 1.7rem;
+    background-image: linear-gradient(to right bottom, $color-primary-light, $color-primary-dark);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__account-check {
+    font-size: 1.2rem;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: $color-primary;
+  }
+
+  &__error {
+    font-size: 1.5rem;
+    color: $color-secondary;
+    text-align: center;
+  }
+}

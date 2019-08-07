@@ -38,6 +38,13 @@ if ('function' === typeof importScripts) {
             })
         );
 
+        workbox.routing.registerRoute(
+            /.*kit-free.fontawesome.com.*$/,
+            workbox.strategies.staleWhileRevalidate({
+                cacheName: 'awesome-fonts'
+            })
+        );
+
         workbox.routing.registerRoute(/.*(?:api\/messages\/?)$/, (args) => {
             return fetch(args.event.request)
                 .then(response => {

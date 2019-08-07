@@ -27,10 +27,10 @@ const enableNotificationsButton = props => {
                 Notification.requestPermission()
                     .then(result => {
                         if (result === 'granted') {
-                            configurePushSub({
-                                user: props.user,
-                                response: () => setDisabled(true)
-                            })
+                            configurePushSub({user: props.user})
+                                .then(sub => {
+                                    setDisabled(sub !== null);
+                                })
                         }
                     })
             }}>Enable Notifications</Button>

@@ -1,0 +1,25 @@
+@import "variables";
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+.app {
+  background-color: $color-grey-light-2;
+
+  min-height: 100vh;
+  display: flex;
+
+}

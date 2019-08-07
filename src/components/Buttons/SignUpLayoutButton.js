@@ -8,7 +8,7 @@ const signUpLayoutButton = props => (
         variant={props.variant}
         component={props.component}
         className={props.className}
-        onClick={() => props.changeScreen(Screens.SIGNUP)}>
+        onClick={() => props.changeScreen(Screens.REGISTER)}>
         {"Don't have an account? Sign Up"}
     </Link>
 );

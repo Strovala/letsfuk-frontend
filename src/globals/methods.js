@@ -320,10 +320,10 @@ const tryNewStation = (data) => {
 
 const distanceBetweenLocations = (location1, location2) => {
     const R = 6371e3; // metres
-    const phi1 = location1.lat.toRad();
-    const phi2 = location2.lat.toRad();
-    const dphi = (location2.lat-location1.lat).toRad();
-    const dlambda = (location2.lon-location1.lon).toRad();
+    const phi1 = location1.lat * Math.PI / 180;
+    const phi2 = location2.lat * Math.PI / 180;
+    const dphi = (location2.lat-location1.lat) * Math.PI / 180;
+    const dlambda = (location2.lon-location1.lon) * Math.PI / 180;
     const a = Math.sin(dphi/2) * Math.sin(dphi/2) +
         Math.cos(phi1) * Math.cos(phi2) *
         Math.sin(dlambda/2) * Math.sin(dlambda/2);
@@ -331,14 +331,6 @@ const distanceBetweenLocations = (location1, location2) => {
 
     return R * c;
 };
-
-
-/** Converts numeric degrees to radians */
-if (typeof(Number.prototype.toRad) === "undefined") {
-    Number.prototype.toRad = function() {
-        return this * Math.PI / 180;
-    }
-}
 
 const initDB = () => {
     indexedDB = new ReactIndexedDB('store', 1);
@@ -370,7 +362,7 @@ const clearCaches = () => {
 const urlBase64ToUint8Array = (base64String) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
+        .replace(/-/g, '+')
         .replace(/_/g, '/');
 
     const rawData = window.atob(base64);
@@ -386,70 +378,82 @@ const configurePushSub = (data) => {
     if (!('serviceWorker' in navigator))
         return;
     let reg;
-    navigator.serviceWorker.ready
-        .then(sw => {
-            reg = sw;
-            return sw.pushManager.getSubscription()
-        })
-        .then(sub => {
-            if (sub === null) {
-                // Create subscription
-                const vapidPublicKey = 'BEX7QPgjsx85cMdCyQWPj28nSHSNUIxfMpd3FKztFw9ca__-8etdU6g6fiTYC_zRHnoP4r6Wv8DFl9o7JWI-SmI';
-                const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
-                return reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: convertedVapidPublicKey
+
+    return navigator.serviceWorker.getRegistrations().then(registrations => {
+        if (registrations.length) {
+            return navigator.serviceWorker.ready
+                .then(sw => {
+                    reg = sw;
+                    return sw.pushManager.getSubscription()
                 })
-            } else {
-                // We already subscribed update if it's new user, update it
-                // in next promise chain
-                return sub
-            }
-        })
-        .then(newSub => {
-            // send new sub to backend for storing
-            API.subscribePushNotification({
-                user: data.user,
-                data: newSub.toJSON(),
-                response: data.response
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        })
+                .then(sub => {
+                    if (sub === null) {
+                        // Create subscription
+                        const vapidPublicKey = 'BEX7QPgjsx85cMdCyQWPj28nSHSNUIxfMpd3FKztFw9ca__-8etdU6g6fiTYC_zRHnoP4r6Wv8DFl9o7JWI-SmI';
+                        const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+                        return reg.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: convertedVapidPublicKey
+                        })
+                    } else {
+                        // We already subscribed update if it's new user, update it
+                        // in next promise chain
+                        return sub
+                    }
+                })
+                .then(newSub => {
+                    // send new sub to backend for storing
+                    API.subscribePushNotification({
+                        user: data.user,
+                        data: newSub.toJSON(),
+                        response: data.response
+                    });
+                    return newSub;
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        return null;
+    });
 };
 
 const getPushNotificationUserSub = (user) => {
     if (!('serviceWorker' in navigator))
         return null;
-    return navigator.serviceWorker.ready
-        .then(sw => {
-            return sw.pushManager.getSubscription()
-                .then(sub => {
-                    if (sub !== null) {
-                        const subJson = sub.toJSON();
-                        return API.checkPushNotificationSubscription({
-                            user: user,
-                            params: {
-                                endpoint: subJson.endpoint,
-                                auth: subJson.keys.auth,
-                                p256dh: subJson.keys.p256dh
+    return navigator.serviceWorker.getRegistrations().then(registrations => {
+        if (registrations.length) {
+            return navigator.serviceWorker.ready
+                .then(sw => {
+                    return sw.pushManager.getSubscription()
+                        .then(sub => {
+                            if (sub !== null) {
+                                const subJson = sub.toJSON();
+                                return API.checkPushNotificationSubscription({
+                                    user: user,
+                                    params: {
+                                        endpoint: subJson.endpoint,
+                                        auth: subJson.keys.auth,
+                                        p256dh: subJson.keys.p256dh
+                                    }
+                                })
+                                    .then(() => {
+                                        return sub;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                        return null;
+                                    })
                             }
+                            return sub
                         })
-                            .then(() => {
-                                return sub;
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                return null;
-                            })
-                    }
-                    return sub
                 })
-        })
-        .catch(err => {
-            console.log(err);
-        })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        return null;
+    });
 };
 
 export { API, formatSentAtForChatList, formatSentAtForMessage, trimLastMessageText, mobileCheck, tryNewStation, indexedDB, clearCaches, configurePushSub, getPushNotificationUserSub };

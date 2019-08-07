@@ -1,0 +1,20 @@
+@import "../../sass/variables";
+
+.btn {
+  &,
+  &:link,
+  &:visited {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 3rem;
+    color: $color-grey-light-1;
+    box-shadow: 0 1rem 2rem rgba($color-black, .2);
+  }
+
+  &:active,
+  &:focus {
+    outline: none;
+    transform: translateY(.2rem);
+    box-shadow: 0 .5rem 1rem rgba($color-black,.2);
+  }
+}

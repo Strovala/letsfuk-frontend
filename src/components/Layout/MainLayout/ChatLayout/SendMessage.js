@@ -4,7 +4,7 @@ import {API, mobileCheck} from "../../../../globals/methods";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import TextField from "@material-ui/core/TextField/TextField";
-import Aux from "../../../../hoc/Aux";
+import Aux from "../../../hoc/Aux";
 import {withStyles} from "@material-ui/core";
 
 
