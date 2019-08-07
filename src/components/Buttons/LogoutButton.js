@@ -35,8 +35,9 @@ const logoutButton = props => (
                         response: logout,
                         error: logout
                     })
+                } else {
+                    logout()
                 }
-                logout()
             });
     }}>Logout</button>
 );
