@@ -39,7 +39,7 @@ const loginButton = props => (
                         // This needs to go after webSocket change
                         // because it will load ChatList screens before its ready
                         props.changeAuthenticated(true);
-                        props.changeScreen(Screens.CHAT_LIST);
+                        props.changeScreen(Screens.MESSAGES);
                         // In order to cache
                         API.whoAmI()
                     },

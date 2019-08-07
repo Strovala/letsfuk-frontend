@@ -15,8 +15,9 @@ const ActionTypes = {
 const Screens = {
     LOGIN: "login",
     REGISTER: "register",
-    CHAT_LIST: 'chatList',
-    CHAT: 'chat'
+    MESSAGES: 'messages',
+    CHAT: 'chat',
+    SETTINGS: 'settings'
 };
 
 const Constants = {

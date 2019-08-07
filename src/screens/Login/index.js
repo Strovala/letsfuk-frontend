@@ -51,7 +51,7 @@ class LogIn extends Component {
                 // This needs to go after webSocket change
                 // because it will load ChatList screens before its ready
                 this.props.changeAuthenticated(true);
-                this.props.changeScreen(Screens.CHAT_LIST);
+                this.props.changeScreen(Screens.MESSAGES);
                 this.props.changeUser(response.data);
             },
         });
@@ -84,7 +84,7 @@ class LogIn extends Component {
                     // This needs to go after webSocket change
                     // because it will load ChatList screens before its ready
                     this.props.changeAuthenticated(true);
-                    this.props.changeScreen(Screens.CHAT_LIST);
+                    this.props.changeScreen(Screens.MESSAGES);
                     // In order to cache
                     API.whoAmI();
                     this.handleLoader(false);

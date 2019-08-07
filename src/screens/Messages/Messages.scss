@@ -1,0 +1,75 @@
+@import '../../sass/variables';
+
+.chat-preview {
+  position: relative;
+  background-color: $color-grey-light-1;
+  display: flex;
+  padding: 1rem;
+  width: 95%;
+  margin: 0 auto;
+
+  &--unread &__receiver {
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+
+  &--unread &__message-text {
+    font-weight: 400;
+  }
+
+  &:not(:last-child) {
+    border-bottom: .1rem solid $color-grey-light-4;
+  }
+
+  &__avatar {
+    flex: 0 0 5rem;
+    height: 5rem;
+    border-radius: 1rem;
+    margin: 1rem;
+    text-align: center;
+    background-image: linear-gradient(to right bottom, $color-primary-light, $color-primary-dark);
+    font-size: 4rem;
+    color: $color-grey-light-1;
+  }
+
+  &__message {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    color: $color-grey-dark-1;
+    padding-right: 7rem;
+  }
+
+  &__receiver {
+    font-size: 1.7rem;
+    font-weight: 500;
+  }
+
+  &__message-text {
+    font-size: 1.3rem;
+    font-weight: 300;
+  }
+
+  &__time {
+    font-size: 1rem;
+    position: absolute;
+    right: 1rem;
+    top: 1.7rem;
+  }
+
+  &__unread {
+    font-size: 1rem;
+    color: $color-white;
+    position: absolute;
+    right: 2rem;
+    bottom: 2.2rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: $color-secondary;
+    border-radius: .7rem;
+    display: inline-block;
+    text-align: center;
+  }
+}

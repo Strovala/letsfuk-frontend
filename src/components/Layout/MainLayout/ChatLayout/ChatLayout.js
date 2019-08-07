@@ -227,7 +227,7 @@ class ChatLayout extends Component {
                 <Grid container justify="center" alignItems="center">
                     <Grid item className={this.props.classes.back}>
                         <BackButton className={this.props.classes.backButton} clicked={() => {
-                            this.props.changeScreen(Screens.CHAT_LIST)
+                            this.props.changeScreen(Screens.MESSAGES)
                         }}/>
                     </Grid>
                     <Grid item className={this.props.classes.chatHeading}>

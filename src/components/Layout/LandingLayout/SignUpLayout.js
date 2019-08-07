@@ -51,7 +51,7 @@ class SignUp extends Component {
             response: response => {
                 this.props.changeUser(response.data);
                 this.props.changeAuthenticated(true);
-                this.props.changeScreen(Screens.CHAT_LIST);
+                this.props.changeScreen(Screens.MESSAGES);
             },
         });
     }
