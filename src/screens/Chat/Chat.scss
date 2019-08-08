@@ -1,0 +1,135 @@
+@import '../../sass/variables';
+
+.chat {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  display: flex;
+  margin: .5rem;
+  flex-direction: row;
+
+  &--self {
+    flex-direction: row-reverse;
+  }
+
+  &__avatar {
+    flex: 0 0 2rem;
+    height: 2rem;
+    border-radius: .3rem;
+    margin: .4rem;
+    text-align: center;
+    background-color: $color-primary;
+    font-size: 1.6rem;
+    color: $color-grey-light-1;
+  }
+
+  &__box {
+    max-width: 65%;
+    padding: 0.5rem 1rem;
+    border: .2rem solid rgba($color-primary, .4);
+    border-radius: 1rem;
+    color: $color-grey-dark-1;
+  }
+
+  &__text {
+    font-size: 1.3rem;
+  }
+
+  &__time {
+    text-align: right;
+  }
+
+  &--self &__box {
+    background-color: rgba($color-primary-light, .5);
+    border: none;
+  }
+
+  &--self &__sender {
+    display: none;
+  }
+
+  &--same &__sender {
+    display: none;
+  }
+
+  &--same &__avatar {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &--private &__sender {
+    display: none;
+  }
+
+  &--private &__avatar {
+    display: none;
+  }
+
+  &--private &__box {
+    margin: 0 1rem;
+  }
+
+  &--private &--self &__box {
+    margin: 0 1rem;
+  }
+
+}
+
+.send-message {
+  padding: 1rem;
+  display: flex;
+  background-color: $color-grey-light-1;
+  box-shadow: 0 -.3rem .6rem rgba(0, 0, 0, 0.1);
+
+  &__area {
+    resize: none;
+    overflow: hidden;
+    flex: 1;
+    border: .1rem solid $color-grey-light-3;
+    border-radius: 1rem;
+    font-size: 1.4rem;
+    padding: .5rem 1rem;
+    font-family: inherit;
+    color: $color-grey-dark-1;
+    background-color: $color-grey-light-2;
+    word-break: break-word;
+
+    &--rows-2 {
+      height: 4.3rem;
+    }
+
+    &--rows-3 {
+      height: 5.7rem;
+    }
+
+    &--rows-4 {
+      height: 7.1rem;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: $color-grey-light-2;
+      &::-webkit-input-placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::-webkit-input-placeholder {
+      color: $color-grey-dark-3;
+    }
+  }
+
+  &__button {
+    flex: 0 0 3rem;
+    padding: 0 1rem;
+    color: $color-primary;
+    font-size: 2rem;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

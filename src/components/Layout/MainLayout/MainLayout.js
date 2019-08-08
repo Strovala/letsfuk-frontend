@@ -1,8 +1,8 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {Screens} from "../../../globals/constants";
-import ChatLayout from "./ChatLayout/ChatLayout";
 import MessagesScreen from "../../../screens/Messages";
+import ChatScreen from "../../../screens/Chat";
 import SettingsScreen from "../../../screens/Settings";
 
 const mainLayout = (props) => {
@@ -10,7 +10,7 @@ const mainLayout = (props) => {
         case (Screens.MESSAGES):
             return <MessagesScreen />;
         case (Screens.CHAT):
-            return <ChatLayout />;
+            return <ChatScreen />;
          case (Screens.SETTINGS):
             return <SettingsScreen />;
         default:
