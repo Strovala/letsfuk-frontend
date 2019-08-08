@@ -28,7 +28,7 @@ const logoutButton = props => (
         };
         getPushNotificationUserSub(props.user)
             .then(sub => {
-                if (sub !== null) {
+                if (sub) {
                     API.unsubscribePushNotification({
                         user: props.user,
                         data: sub.toJSON(),
