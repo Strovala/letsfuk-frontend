@@ -22,13 +22,13 @@
   }
 
   &__avatar {
-    flex: 0 0 5rem;
-    height: 5rem;
+    flex: 0 0 4rem;
+    height: 4rem;
     border-radius: 1rem;
-    margin: 1rem 1rem 1rem 0;
+    margin: .5rem 1rem;
     text-align: center;
     background-image: linear-gradient(to right bottom, $color-primary-light, $color-primary-dark);
-    font-size: 4rem;
+    font-size: 3rem;
     color: $color-grey-light-1;
   }
 

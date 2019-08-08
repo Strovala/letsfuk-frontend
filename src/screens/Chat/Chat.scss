@@ -96,18 +96,6 @@
     background-color: $color-grey-light-2;
     word-break: break-word;
 
-    &--rows-2 {
-      height: 4.3rem;
-    }
-
-    &--rows-3 {
-      height: 5.7rem;
-    }
-
-    &--rows-4 {
-      height: 7.1rem;
-    }
-
     &:focus {
       outline: none;
       background-color: $color-grey-light-2;

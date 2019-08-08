@@ -269,12 +269,12 @@ class ChatLayout extends Component {
                             minRows={1}
                             maxRows={4}
                             onHeightChange={(data) => {
-                                // Default padding for layout__content is 5.7rem for this current footer
+                                // Default padding for layout__content is 5.4rem for this current footer
                                 // As footer grows as textarea grops we need to increase padding for layout__content
                                 // Default height is 29px for this textarea and that is data
-                                // Divide by 10 to turn it into rem and add (5.7-2.9)
+                                // Divide by 10 to turn it into rem and add (5.4-2.9)
                                 // Hacky but it works :/
-                                const newPadding = data/10 + 2.8;
+                                const newPadding = data/10 + (5.4-2.9);
                                 this.layoutContent.style.paddingBottom = `${newPadding}rem`;
                                 // Also it would be great if i could scroll to bottom, but it wont work :/
                                 // this.scrollToLastMessage();
