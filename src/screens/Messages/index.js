@@ -16,6 +16,10 @@ class ChatListLayout extends Component {
         loadedAll: false
     };
 
+    scrollToTop() {
+        this.pageTop.scrollIntoView();
+    }
+
     loadMoreChats() {
         const newLimit = this.state.limit + Constants.CHATS_LIMIT;
         API.getChats({
@@ -53,6 +57,7 @@ class ChatListLayout extends Component {
     }
 
     componentDidMount() {
+        this.scrollToTop();
         this._ismounted = true;
         this.getChats();
         this.props.webSocket.bind('message', (data) => {
@@ -128,6 +133,9 @@ class ChatListLayout extends Component {
         return (
             <div className="layout">
                 {popup}
+                <div style={{ float:"left", clear: "both" }}
+                     ref={(el) => { this.pageTop = el; }}>
+                </div>
                 <div className="layout__header">
                     <h3 className="layout-heading">Messages</h3>
                 </div>
