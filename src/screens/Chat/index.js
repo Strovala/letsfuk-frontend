@@ -113,6 +113,7 @@ class ChatLayout extends Component {
     componentDidMount() {
         window.addEventListener("scroll", this.handleScroll);
         this._ismounted = true;
+        this.scrollToLastMessage();
         this.getMessages();
         this.props.webSocket.bind('message', (data) => {
             if (!this._ismounted)
@@ -187,17 +188,9 @@ class ChatLayout extends Component {
     handleScroll() {
         if (this.state.loadedAll)
             return;
-        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-        const body = document.body;
-        const html = document.documentElement;
-        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-        const windowBottom = windowHeight + window.pageYOffset;
         if (window.pageYOffset === 0) {
             this.loadMoreMessages();
             this.topMessage.scrollIntoView({ behavior: "smooth" });
-        }
-        if (windowBottom >= docHeight) {
-            console.log('bottom reached');
         }
     }
 

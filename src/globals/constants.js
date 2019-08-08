@@ -21,7 +21,7 @@ const Screens = {
 };
 
 const Constants = {
-    MESSAGES_LIMIT: 10,
+    MESSAGES_LIMIT: 100,
     CHATS_LIMIT: 20,
     TRIGGER_MESSAGE_INDEXES_COUNT: 5,
     TRIGGER_CHAT_INDEXES_COUNT: 5,

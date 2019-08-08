@@ -11,10 +11,14 @@ import BottomNav from "../../components/BottomNav";
 import '../../sass/layout.scss';
 
 class ChatListLayout extends Component {
-    state = {
-        limit: Constants.CHATS_LIMIT,
-        loadedAll: false
-    };
+    constructor(props) {
+        super(props);
+        this.handleScroll = this.handleScroll.bind(this);
+        this.state = {
+            limit: Constants.CHATS_LIMIT,
+            loadedAll: false
+        };
+    }
 
     scrollToTop() {
         this.pageTop.scrollIntoView();
@@ -57,8 +61,9 @@ class ChatListLayout extends Component {
     }
 
     componentDidMount() {
-        this.scrollToTop();
+        window.addEventListener("scroll", this.handleScroll);
         this._ismounted = true;
+        this.scrollToTop();
         this.getChats();
         this.props.webSocket.bind('message', (data) => {
             if (!this._ismounted)
@@ -73,6 +78,7 @@ class ChatListLayout extends Component {
     }
 
     componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScroll);
         this._ismounted = false;
     }
 
@@ -101,6 +107,20 @@ class ChatListLayout extends Component {
         this.triggers.push(value);
     }
 
+    handleScroll() {
+        if (this.state.loadedAll)
+            return;
+        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        const body = document.body;
+        const html = document.documentElement;
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+        const windowBottom = windowHeight + window.pageYOffset;
+        if (windowBottom >= docHeight) {
+            this.loadMoreChats();
+            this.lastChat.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
     render() {
         let messages = null;
         let popup = null;
@@ -112,15 +132,14 @@ class ChatListLayout extends Component {
                         key={this.props.chats.stationChat.receiver.id}
                         chat={this.props.chats.stationChat}
                     />
-                    {this.props.chats.privateChats.map((privateChat, index) => {
-                        return (
-                            <ChatPreview
-                                key={privateChat.receiver.id}
-                                iconClassName="fas fa-user"
-                                chat={privateChat}
-                            />
-                        );
-                    })}
+                    {this.props.chats.privateChats.map((privateChat, index) => (
+                        <ChatPreview
+                            setRef={index === this.props.chats.privateChats.length-1 ? (value) => (this.lastChat = value): ()=>{}}
+                            key={privateChat.receiver.id}
+                            iconClassName="fas fa-user"
+                            chat={privateChat}
+                        />
+                    ))}
                 </Aux>
             )
         } else {

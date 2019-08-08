@@ -21,9 +21,9 @@ const chatPreview = (props) => {
     if (props.chat.receiver.isStation) {
         messageText = `${lastMessage.sender.username}: ${messageText}`;
     }
-    messageText = trimLastMessageText(messageText, 20);
+    messageText = trimLastMessageText(messageText, 40);
     return (
-        <div className={`chat-preview ${unreadClass}`} onClick={() => {
+        <div className={`chat-preview ${unreadClass}`} ref={(el) => props.setRef ? props.setRef(el): null} onClick={() => {
             props.changeActiveChat(props.chat);
             props.changeReceiver(props.chat.receiver);
             props.changeScreen(Screens.CHAT);
