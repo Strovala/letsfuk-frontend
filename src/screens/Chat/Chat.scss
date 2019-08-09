@@ -23,6 +23,12 @@
     background-color: $color-primary;
     font-size: 1.6rem;
     color: $color-grey-light-1;
+
+    &--user-img {
+      background-size: cover;
+      background-position: center;
+      font-size: 0;
+    }
   }
 
   &__box {

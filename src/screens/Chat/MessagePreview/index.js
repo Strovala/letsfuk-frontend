@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import {formatSentAtForMessage} from "../../../globals/methods";
+import Avatar from "../../../components/Avatar";
 
 const messagePreview = (props) => {
     const selfClass = props.message.sender.userId === props.user.user.userId ? "message--self": "";
@@ -11,7 +12,7 @@ const messagePreview = (props) => {
     const sameClass = !(props.receiver.isStation && currentMessageSenderId !== prevMessageSenderId) ? "message--same": "";
     return (
         <div className={`message ${selfClass} ${privateClass} ${sameClass}`} ref={(el) => props.setRef(el)}>
-            <div className="message__avatar"><i className="fas fa-user"/></div>
+            <Avatar className="message__avatar" iconClassName="fas fa-user" avatarKey={props.message.sender.avatarKey} />
             <div className="message__box">
                 <div className="message__sender" onClick={() => {
                     const receiver = props.message.sender;

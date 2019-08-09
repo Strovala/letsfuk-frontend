@@ -30,7 +30,7 @@ const Constants = {
 };
 
 const https = true ;
-const dev = false;
+const dev = true;
 const apiSecure = https ? 'https': 'http';
 const apiHost = 'euve258483.serverprofi24.net';
 const apiPort = 443;

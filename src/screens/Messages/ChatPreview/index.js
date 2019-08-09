@@ -5,6 +5,7 @@ import {
     formatSentAtForChatList,
     trimLastMessageText
 } from "../../../globals/methods";
+import Avatar from '../../../components/Avatar';
 import '../Messages.scss';
 
 const chatPreview = (props) => {
@@ -28,9 +29,7 @@ const chatPreview = (props) => {
             props.changeReceiver(props.chat.receiver);
             props.changeScreen(Screens.CHAT);
         }}>
-            <div className="chat-preview__avatar">
-                <i className={props.iconClassName}/>
-            </div>
+            <Avatar className="chat-preview__avatar" iconClassName={props.iconClassName} avatarKey={props.chat.receiver.avatarKey} />
             <div className="chat-preview__message">
                 <div className="chat-preview__receiver" >{props.chat.receiver.username}</div>
                 <div className="chat-preview__message-text">
@@ -43,6 +42,12 @@ const chatPreview = (props) => {
     )
 };
 
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         changeScreen: (value) => dispatch({type: ActionTypes.SCREEN_CHANGE, value: value}),
@@ -51,4 +56,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(chatPreview);
+export default connect(mapStateToProps, mapDispatchToProps)(chatPreview);

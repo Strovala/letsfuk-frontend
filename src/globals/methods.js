@@ -185,10 +185,56 @@ class API {
             headers: {"session-id": sessionId}
         })
     }
+
+    static uploadPhoto(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.get('/presign/upload', {
+            headers: {"session-id": sessionId}
+        })
+            .then(response => {
+                const {key, url} = response.data;
+                return this.uploadToS3({
+                    url: url,
+                    data: data.data
+                })
+                    .then(response => {
+                        return this.updateAvatar({
+                            user: data.user,
+                            key: key
+                        })
+                    })
+            })
+    }
+
+    static getPhotoUrl(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.post('/presign/get', data.data, { headers: {"session-id": sessionId} })
+    }
+
+    static updateAvatar(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.patch(`/users/${data.user.user.userId}`, { avatar_key: data.key }, {
+            headers: {"session-id": sessionId}
+        })
+    }
+
+    static uploadToS3(data) {
+        return axios.put(data.url, data.data, { headers: {"Content-Type": "image/*"} })
+    }
 }
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 

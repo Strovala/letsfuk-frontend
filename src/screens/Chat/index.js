@@ -190,7 +190,8 @@ class ChatLayout extends Component {
             return;
         if (window.pageYOffset === 0) {
             this.loadMoreMessages();
-            this.topMessage.scrollIntoView({ behavior: "smooth" });
+            if (this.topMessage)
+                this.topMessage.scrollIntoView({ behavior: "smooth" });
         }
     }
 

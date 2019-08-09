@@ -3,6 +3,7 @@ import EnableNotificationsButton
     from "../../components/Buttons/EnableNotificationsButton";
 import LogoutButton from "../../components/Buttons/LogoutButton";
 import BottomNav from "../../components/BottomNav";
+import ImageUploadPreview from "../../components/ImageUploadPreview";
 
 export default (props) => (
     <div className="layout">
@@ -16,6 +17,7 @@ export default (props) => (
                 color="primary"
             />
             <LogoutButton />
+            <ImageUploadPreview />
         </div>
         <div className="layout__footer">
             <BottomNav />
