@@ -5,6 +5,7 @@ import Button from '../Button';
 import './ImageUploadPreview.scss';
 
 import Resizer from 'react-image-file-resizer';
+import {AxiosInstance as axios} from "axios";
 
 class UploadImagePreview extends Component {
     state = {
@@ -14,19 +15,24 @@ class UploadImagePreview extends Component {
     };
 
     componentDidMount() {
-        API.getPhotoUrl({
-            user: this.props.user,
-            data: {
-                key: this.props.user.user.avatarKey
-            }
-        })
-            .then(response => {
-                this.setState({
-                    previewStyle: {
-                        backgroundImage: `url(${response.data.url})`
+        API.whoAmI({
+            response: response => {
+                API.getPhotoUrl({
+                    user: this.props.user,
+                    data: {
+                        key: response.data.user.avatarKey
                     }
                 })
-            })
+                    .then(response => {
+                        console.log(response);
+                        this.setState({
+                            previewStyle: {
+                                backgroundImage: `url(${response.data.url})`
+                            }
+                        })
+                    })
+            }
+        });
     }
 
     handleChange(event) {
@@ -43,14 +49,16 @@ class UploadImagePreview extends Component {
                     console.log(uri);
                     this.setState({
                         previewStyle: {
-                            backgroundImage: `url(${URL.createObjectURL(uri)})`
+                            backgroundImage: `url(${uri})`
                         }
                     });
+                    const buf = new Buffer(uri.replace(/^data:image\/\w+;base64,/, ""),'base64');
+
                     this.setState({
-                        file: uri
+                        file: buf
                     })
                 },
-                "blob"
+                "base64"
             );
             // const reader = new FileReader();
             // reader.onload = (event) => {

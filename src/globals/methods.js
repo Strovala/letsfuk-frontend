@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Constants, cookies} from "./constants";
+import {apiUrl, Constants, cookies} from "./constants";
 import humps from "humps";
 import {ReactIndexedDB} from "react-indexed-db";
 
@@ -21,6 +21,13 @@ class API {
         }
     }
 
+    static addToIndexedDB(store, key, data) {
+        if ('indexedDB' in window) {
+            console.log('added to indexed db images', data);
+            return indexedDB.add(store, data, key)
+        }
+    }
+
     static getFromIndexedDB(store, key, data) {
         return new Promise(function(resolve, reject) {
             if ('indexedDB' in window) {
@@ -29,12 +36,13 @@ class API {
                         if (val) {
                             console.log('from indexesdb', val);
                             data.response({data: val});
-                            return true
                         }
-                        return false
+                        return {
+                            data: val
+                        }
                     })
-                    .then(success => {
-                        resolve(success)
+                    .then(resp => {
+                        resolve(resp)
                     });
             }
         });
@@ -86,8 +94,8 @@ class API {
             })
             .catch(error => {
                 API.getFromIndexedDB('chats', 'chats', data)
-                    .then(success => {
-                        if (!success && data.error)
+                    .then(resp => {
+                        if (!resp.data && data.error)
                             data.error(error);
                     });
             });
@@ -105,8 +113,8 @@ class API {
             })
             .catch(error => {
                 API.getFromIndexedDB('messages', data.receiverId, data)
-                    .then(success => {
-                        if (!success && data.error)
+                    .then(resp => {
+                        if (!resp.data && data.error)
                             data.error(error);
                     });
             });
@@ -210,11 +218,41 @@ class API {
     }
 
     static getPhotoUrl(data) {
-        let sessionId = cookies.get('session-id');
-        if (!sessionId) {
-            sessionId = data.user.sessionId;
-        }
-        return axios.post('/presign/get', data.data, { headers: {"session-id": sessionId} })
+        return API.getFromIndexedDB('images', data.data.key, {
+            response: () => {}
+        })
+            .then(resp => {
+                if (resp.data)
+                    return resp.data;
+                let sessionId = cookies.get('session-id');
+                if (!sessionId) {
+                    sessionId = data.user.sessionId;
+                }
+                return axios.get('/images/', { responseType: 'arraybuffer', params: data.data, headers: {"session-id": sessionId} })
+                    .then(response => {
+                        const blob = new Blob([response.request.response], {
+                                type: 'image/jpeg',
+                            });
+                        const url = URL.createObjectURL(blob);
+                        const reader = new FileReader();
+                        reader.readAsDataURL(blob);
+                        reader.onloadend = function() {
+                            const base64data = reader.result;
+                            console.log(base64data);
+                            API.addToIndexedDB('images', data.data.key, {
+                                data: {
+                                    url: base64data
+                                }
+                            });
+                        };
+                        resp = {
+                            data: {
+                                url: url
+                            }
+                        };
+                        return resp
+                    })
+            });
     }
 
     static updateAvatar(data) {
@@ -383,6 +421,7 @@ const initDB = () => {
     indexedDB.openDatabase(1, (evt) => {
         evt.currentTarget.result.createObjectStore('chats', { keyPath: 'id' });
         evt.currentTarget.result.createObjectStore('messages', { keyPath: 'id' });
+        evt.currentTarget.result.createObjectStore('images');
     }).then((info) => {
         console.log('Initialized indexedDB');
     });
