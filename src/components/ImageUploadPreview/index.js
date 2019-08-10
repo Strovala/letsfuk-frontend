@@ -24,7 +24,6 @@ class UploadImagePreview extends Component {
                     }
                 })
                     .then(response => {
-                        console.log(response);
                         this.setState({
                             previewStyle: {
                                 backgroundImage: `url(${response.data.url})`
@@ -46,7 +45,6 @@ class UploadImagePreview extends Component {
                 100,
                 0,
                 uri => {
-                    console.log(uri);
                     this.setState({
                         previewStyle: {
                             backgroundImage: `url(${uri})`

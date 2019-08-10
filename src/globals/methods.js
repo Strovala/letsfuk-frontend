@@ -12,7 +12,6 @@ class API {
                     if (response && !channel.dataReceived) {
                         response.json()
                             .then(responseData => {
-                                console.log('from cache', responseData);
                                 response.data = humps.camelizeKeys(responseData);
                                 data.response(response);
                             })
@@ -23,7 +22,6 @@ class API {
 
     static addToIndexedDB(store, key, data) {
         if ('indexedDB' in window) {
-            console.log('added to indexed db images', data);
             return indexedDB.add(store, data, key)
         }
     }
@@ -34,7 +32,6 @@ class API {
                 indexedDB.getByKey(store, key)
                     .then(val => {
                         if (val) {
-                            console.log('from indexesdb', val);
                             data.response({data: val});
                         }
                         return {
@@ -238,7 +235,6 @@ class API {
                         reader.readAsDataURL(blob);
                         reader.onloadend = function() {
                             const base64data = reader.result;
-                            console.log(base64data);
                             API.addToIndexedDB('images', data.data.key, {
                                 data: {
                                     url: base64data

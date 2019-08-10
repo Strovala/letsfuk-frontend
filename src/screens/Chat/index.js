@@ -121,7 +121,6 @@ class ChatLayout extends Component {
             data = humps.camelizeKeys(data);
             // If one who sent message is receiver in this private chat
             // Station will never be sender
-            console.log(data);
             if (this.props.receiver.isStation || data.sender.userId === this.props.receiver.id) {
                 // Just update sent message to chats
                 let messages = this.props.chat.messages;
