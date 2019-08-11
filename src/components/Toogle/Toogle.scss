@@ -1,0 +1,47 @@
+@import '../../sass/variables';
+
+$width: 4rem;
+$padding: .3rem;
+$height: $width / 2 + $padding;
+
+//toggle code begins!
+.toogle-container {
+  display: flex;
+}
+
+.toogle-wrap {
+  cursor: pointer;
+  background: rgba($color-primary-light, .3);
+  padding: $padding;
+  width: $width;
+  height: $height;
+  border-radius: $height / 2;
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
+.toogle {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0fr 1fr 1fr;
+  transition: .2s;
+  //ICYMI, pseudo elements are treated as grid items
+  &::after {
+    content: '';
+    border-radius: 50%;
+    background: $color-grey-light-1;
+    grid-column: 2;
+    transition: all .2s;
+  }
+}
+input:checked {
+  + .toogle {
+    grid-template-columns: 1fr 1fr 0fr;
+    &::after {
+      background-color: $color-primary;
+    }
+  }
+}

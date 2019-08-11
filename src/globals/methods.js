@@ -1,5 +1,5 @@
 import axios from "axios";
-import {apiUrl, Constants, cookies} from "./constants";
+import {Constants, cookies} from "./constants";
 import humps from "humps";
 import {ReactIndexedDB} from "react-indexed-db";
 
@@ -499,9 +499,12 @@ const configurePushSub = (data) => {
     });
 };
 
+// This method returns a Promise
 const getPushNotificationUserSub = (user) => {
     if (!('serviceWorker' in navigator))
-        return null;
+        return new Promise(() => {
+            return null;
+        });
     return navigator.serviceWorker.getRegistrations().then(registrations => {
         if (registrations.length) {
             return navigator.serviceWorker.ready

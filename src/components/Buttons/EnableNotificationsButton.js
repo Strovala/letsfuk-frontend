@@ -11,7 +11,7 @@ const enableNotificationsButton = props => {
 
     if (!('Notification' in window))
         return null;
-    getPushNotificationUserSub()
+    getPushNotificationUserSub(props.user)
         .then(sub => {
             setDisabled(sub !== null);
         });
