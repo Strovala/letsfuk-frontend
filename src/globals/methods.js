@@ -509,6 +509,9 @@ const getPushNotificationUserSub = (user) => {
         if (registrations.length) {
             return navigator.serviceWorker.ready
                 .then(sw => {
+                    if (!sw.pushManager) {
+                        return null;
+                    }
                     return sw.pushManager.getSubscription()
                         .then(sub => {
                             if (sub) {

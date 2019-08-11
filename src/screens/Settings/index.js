@@ -46,6 +46,10 @@ class Settings extends Component {
     handleNotificationsEnable(event) {
         const isChecked = event.target.checked;
         if (isChecked) {
+            if (!('Notification' in window)) {
+                this.props.changeNotificationsEnabled(false);
+                return;
+            }
             Notification.requestPermission()
                 .then(result => {
                     if (result === 'granted') {
