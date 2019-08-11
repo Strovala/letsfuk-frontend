@@ -502,8 +502,8 @@ const configurePushSub = (data) => {
 // This method returns a Promise
 const getPushNotificationUserSub = (user) => {
     if (!('serviceWorker' in navigator))
-        return new Promise(() => {
-            return null;
+        return new Promise((resolve) => {
+            return resolve(null);
         });
     return navigator.serviceWorker.getRegistrations().then(registrations => {
         if (registrations.length) {

@@ -1,7 +1,6 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import BottomNav from "../../components/BottomNav";
 import Toogle from "../../components/Toogle";
-import LogoutButton from "../../components/Buttons/LogoutButton";
 import './Settings.scss';
 import {
     API, clearCaches,
