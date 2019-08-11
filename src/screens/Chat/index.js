@@ -233,7 +233,7 @@ class ChatLayout extends Component {
                     </div>
                     <h3 className="layout-heading">{this.props.receiver.username}</h3>
                 </div>
-                <div className="layout__content" ref={(el) => this.layoutContent = el}>
+                <div className="layout__content u-column-flex-end" ref={(el) => this.layoutContent = el}>
                     <div className="chat">
                         {this.props.chat.messages.map((message, index) => (
                             <MessagePreview
@@ -244,6 +244,9 @@ class ChatLayout extends Component {
                                 receiver={this.props.chat.receiver}
                             />
                         ))}
+                        <div style={{ float:"left", clear: "both" }}
+                             ref={(el) => { this.messagesEnd = el; }}>
+                        </div>
                     </div>
                 </div>
                 <div className="layout__footer">
@@ -282,9 +285,6 @@ class ChatLayout extends Component {
                         />
                         <button className="send-message__button" onClick={() => this.sendMessage()}><i className="fas fa-paper-plane"/></button>
                     </div>
-                </div>
-                <div style={{ float:"left", clear: "both" }}
-                     ref={(el) => { this.messagesEnd = el; }}>
                 </div>
             </div>
 
