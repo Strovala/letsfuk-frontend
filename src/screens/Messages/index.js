@@ -117,7 +117,8 @@ class ChatListLayout extends Component {
         const windowBottom = windowHeight + window.pageYOffset;
         if (windowBottom >= docHeight) {
             this.loadMoreChats();
-            this.lastChat.scrollIntoView({ behavior: "smooth" });
+            if (this.lastChat)
+                this.lastChat.scrollIntoView({ behavior: "smooth" });
         }
     }
 

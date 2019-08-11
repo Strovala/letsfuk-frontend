@@ -18,14 +18,6 @@ class Settings extends Component {
     };
 
     componentDidMount() {
-        if (!('Notification' in window)) {
-            this.props.changeNotificationsEnabled(false);
-            return;
-        }
-        getPushNotificationUserSub(this.props.user)
-            .then(sub => {
-                this.props.changeNotificationsEnabled(sub !== null);
-            });
         API.whoAmI({
             response: response => {
                 API.getPhotoUrl({
@@ -43,6 +35,10 @@ class Settings extends Component {
                     })
             }
         });
+        getPushNotificationUserSub(this.props.user)
+            .then(sub => {
+                this.props.changeNotificationsEnabled(sub !== null);
+            });
     }
 
     handleNotificationsEnable(event) {
