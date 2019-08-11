@@ -511,7 +511,7 @@ const getPushNotificationUserSub = (user) => {
                 .then(sw => {
                     return sw.pushManager.getSubscription()
                         .then(sub => {
-                            if (sub !== null) {
+                            if (sub) {
                                 const subJson = sub.toJSON();
                                 return API.checkPushNotificationSubscription({
                                     user: user,

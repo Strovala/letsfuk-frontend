@@ -36,7 +36,10 @@ class Settings extends Component {
         });
         getPushNotificationUserSub(this.props.user)
             .then(sub => {
-                this.props.changeNotificationsEnabled(sub !== null);
+                if (sub)
+                    this.props.changeNotificationsEnabled(true);
+                else
+                    this.props.changeNotificationsEnabled(false);
             });
     }
 
