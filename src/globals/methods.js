@@ -29,6 +29,8 @@ class API {
     static getFromIndexedDB(store, key, data) {
         return new Promise(function(resolve, reject) {
             if ('indexedDB' in window) {
+                if (!key)
+                    key = "";
                 indexedDB.getByKey(store, key)
                     .then(val => {
                         if (val) {
@@ -206,10 +208,7 @@ class API {
                     data: data.data
                 })
                     .then(response => {
-                        return this.updateAvatar({
-                            user: data.user,
-                            key: key
-                        })
+                        return key
                     })
             })
     }

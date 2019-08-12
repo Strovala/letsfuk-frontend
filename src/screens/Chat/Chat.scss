@@ -137,4 +137,18 @@
       outline: none;
     }
   }
+
+  &__image-button {
+    flex: 0 0 3rem;
+    padding: 0 1rem;
+    color: $color-primary;
+    font-size: 2rem;
+    text-align: center;
+    border: none;
+    background-color: $color-grey-light-1;
+
+    input {
+      display: none;
+    }
+  }
 }

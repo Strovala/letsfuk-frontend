@@ -8,6 +8,7 @@ import Textarea from 'react-textarea-autosize';
 import ImagePreview from '../../components/ImagePreview';
 import './Chat.scss';
 import '../../sass/layout.scss';
+import Resizer from "react-image-file-resizer";
 
 class ChatLayout extends Component {
     constructor(props) {
@@ -15,6 +16,8 @@ class ChatLayout extends Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.state = {
             text: "",
+            imageKey: "",
+            footerStyle: null,
             limit: Constants.MESSAGES_LIMIT,
             loadedAll: false,
             imageSource: null
@@ -196,13 +199,35 @@ class ChatLayout extends Component {
         }
     }
 
+    sendImage() {
+        const buf = new Buffer(this.state.imageSource.replace(/^data:image\/\w+;base64,/, ""),'base64');
+        API.uploadPhoto({
+            user: this.props.user,
+            data: buf
+        })
+            .then(key => {
+                this.sendMessageToApi({
+                    image_key: key
+                });
+                this.closeImagePreview();
+            })
+    }
+
     sendMessage() {
+        if (this.state.imageSource) {
+            this.sendImage();
+            return;
+        }
         let processedText = this.state.text.trim();
         if (!processedText)
             return;
         let data = {
             "text": processedText
         };
+        this.sendMessageToApi(data)
+    }
+
+    sendMessageToApi(data) {
         if (!this.props.receiver.isStation) {
             data['user_id'] = this.props.receiver.userId;
         }
@@ -232,10 +257,31 @@ class ChatLayout extends Component {
         })
     }
 
+    pickImageHandler(event) {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            const fr = new FileReader();
+            fr.onload = () => {
+                this.setState({
+                    imageSource: fr.result,
+                    footerStyle: {zIndex: 50}
+                })
+            };
+            fr.readAsDataURL(file);
+        }
+    }
+
+    closeImagePreview() {
+        this.setState({
+            imageSource: null,
+            footerStyle: null
+        })
+    }
+
     render() {
         let imagePreview = null;
         if (this.state.imageSource)
-            imagePreview = <ImagePreview onClose={() => this.setState({imageSource: null})} imageSource={this.state.imageSource}/>;
+            imagePreview = <ImagePreview onClose={() => this.closeImagePreview()} imageSource={this.state.imageSource}/>;
         return (
             <div className="layout">
                 {imagePreview}
@@ -262,7 +308,7 @@ class ChatLayout extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="layout__footer">
+                <div className="layout__footer" style={this.state.footerStyle}>
                     <div className="send-message">
                         <Textarea
                             className="send-message__area"
@@ -296,6 +342,10 @@ class ChatLayout extends Component {
                                 // this.scrollToLastMessage();
                             }}
                         />
+                        <div className="send-message__image-button">
+                            <input type="file" id="imageUpload" accept="image/*" onChange={(event) => this.pickImageHandler(event)}/>
+                            <label htmlFor="imageUpload"><i className="fas fa-image"/></label>
+                        </div>
                         <button className="send-message__button" onClick={() => this.sendMessage()}><i className="fas fa-paper-plane"/></button>
                     </div>
                 </div>

@@ -1,42 +1,68 @@
-import React from "react";
+import React, {Component, useState} from "react";
 import {connect} from "react-redux";
 import {ActionTypes, Screens} from "../../../globals/constants";
-import {formatSentAtForMessage} from "../../../globals/methods";
+import {API, formatSentAtForMessage} from "../../../globals/methods";
 import Avatar from "../../../components/Avatar";
 
-const messagePreview = (props) => {
-    const selfClass = props.message.sender.userId === props.user.user.userId ? "message--self": "";
-    const currentMessageSenderId = props.message.sender.userId;
-    const prevMessageSenderId = props.prevMessage ? props.prevMessage.sender.userId: null;
-    const privateClass = !props.receiver.isStation ? "message--private": "";
-    const sameClass = !(props.receiver.isStation && currentMessageSenderId !== prevMessageSenderId) ? "message--same": "";
-    let content = <div className="message__text">{props.message.text}</div>;
-    if (props.message.isImage) {
-        const imgUrl = "https://img.dxcdn.com/productimages/sku_94630_1.jpg";
-        content = (
-            <div className="message__img"
-                 onClick={(event) => {
-                     props.imageClick(imgUrl)
-                 }}
-                 style={{backgroundImage: `url(${imgUrl})`}}/>
-        );
+class MessagePreview extends Component {
+    state = {
+        imgUrl: null,
+    };
+
+    componentDidMount() {
+        if (this.props.message.imageKey) {
+            API.getPhotoUrl({
+                user: this.props.user,
+                data: {
+                    key: this.props.message.imageKey
+                }
+            })
+                .then(response => {
+                    this.setState({
+                        imgUrl: response.data.url
+                    })
+                });
+        }
     }
-    return (
-        <div className={`message ${selfClass} ${privateClass} ${sameClass}`} ref={(el) => props.setRef(el)}>
-            <Avatar className="message__avatar" iconClassName="fas fa-user" avatarKey={props.message.sender.avatarKey} />
-            <div className="message__box">
-                <div className="message__sender" onClick={() => {
-                    const receiver = props.message.sender;
-                    receiver.id = receiver.userId;
-                    props.changeReceiver(receiver);
-                    props.changeScreen(Screens.CHAT);
-                }}>{props.message.sender.username}</div>
-                {content}
-                <div className="message__time">{formatSentAtForMessage(props.message.sentAt)}</div>
+
+    render() {
+        const selfClass = this.props.message.sender.userId === this.props.user.user.userId ? "message--self" : "";
+        const currentMessageSenderId = this.props.message.sender.userId;
+        const prevMessageSenderId = this.props.prevMessage ? this.props.prevMessage.sender.userId : null;
+        const privateClass = !this.props.receiver.isStation ? "message--private" : "";
+        const sameClass = !(this.props.receiver.isStation && currentMessageSenderId !== prevMessageSenderId) ? "message--same" : "";
+        let content = <div
+            className="message__text">{this.props.message.text}</div>;
+        if (this.props.message.imageKey) {
+            content = (
+                <div className="message__img"
+                     onClick={(event) => {
+                         this.props.imageClick(this.state.imgUrl)
+                     }}
+                     style={{backgroundImage: `url(${this.state.imgUrl})`}}/>
+            );
+        }
+        return (
+            <div
+                className={`message ${selfClass} ${privateClass} ${sameClass}`}
+                ref={(el) => this.props.setRef(el)}>
+                <Avatar className="message__avatar" iconClassName="fas fa-user"
+                        avatarKey={this.props.message.sender.avatarKey}/>
+                <div className="message__box">
+                    <div className="message__sender" onClick={() => {
+                        const receiver = this.props.message.sender;
+                        receiver.id = receiver.userId;
+                        this.props.changeReceiver(receiver);
+                        this.props.changeScreen(Screens.CHAT);
+                    }}>{this.props.message.sender.username}</div>
+                    {content}
+                    <div
+                        className="message__time">{formatSentAtForMessage(this.props.message.sentAt)}</div>
+                </div>
             </div>
-        </div>
-    )
-};
+        )
+    }
+}
 
 const mapStateToProps = state => {
     return {
@@ -51,4 +77,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(messagePreview);
+export default connect(mapStateToProps, mapDispatchToProps)(MessagePreview);

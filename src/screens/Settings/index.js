@@ -96,6 +96,12 @@ class Settings extends Component {
                         user: this.props.user,
                         data: buf
                     })
+                        .then(key => {
+                            API.updateAvatar({
+                                user: this.props.user,
+                                key: key
+                            })
+                        })
                 },
                 "base64"
             );

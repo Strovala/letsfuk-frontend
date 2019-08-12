@@ -7,6 +7,7 @@ import {
 } from "../../../globals/methods";
 import Avatar from '../../../components/Avatar';
 import '../Messages.scss';
+import Aux from "../../../components/hoc/Aux";
 
 const chatPreview = (props) => {
     let lastMessage = props.chat.messages[props.chat.messages.length - 1];
@@ -18,11 +19,23 @@ const chatPreview = (props) => {
         );
         unreadClass = "chat-preview--unread";
     }
-    let messageText = lastMessage.text;
-    if (props.chat.receiver.isStation) {
-        messageText = `${lastMessage.sender.username}: ${messageText}`;
+    let messageText = null;
+    if (!lastMessage.imageKey) {
+        messageText = lastMessage.text;
+        if (props.chat.receiver.isStation) {
+            messageText = `${lastMessage.sender.username}: ${messageText}`;
+        }
+        messageText = trimLastMessageText(messageText, 20);
+    } else {
+        messageText = <i className="fas fa-image" />;
+        if (props.chat.receiver.isStation) {
+            messageText = (
+                <Aux>
+                    {`${lastMessage.sender.username}: `} {messageText}
+                </Aux>
+            )
+        }
     }
-    messageText = trimLastMessageText(messageText, 20);
     return (
         <div className={`chat-preview ${unreadClass}`} ref={(el) => props.setRef ? props.setRef(el): null} onClick={() => {
             props.changeActiveChat(props.chat);
