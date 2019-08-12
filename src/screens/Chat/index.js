@@ -5,6 +5,7 @@ import {ActionTypes, Constants, Screens} from "../../globals/constants";
 import {API, mobileCheck} from "../../globals/methods";
 import MessagePreview from './MessagePreview';
 import Textarea from 'react-textarea-autosize';
+import ImagePreview from '../../components/ImagePreview';
 import './Chat.scss';
 import '../../sass/layout.scss';
 
@@ -15,7 +16,8 @@ class ChatLayout extends Component {
         this.state = {
             text: "",
             limit: Constants.MESSAGES_LIMIT,
-            loadedAll: false
+            loadedAll: false,
+            imageSource: null
         }
     }
 
@@ -224,9 +226,19 @@ class ChatLayout extends Component {
         });
     }
 
+    handleImageClick(imgUrl) {
+        this.setState({
+            imageSource: imgUrl
+        })
+    }
+
     render() {
+        let imagePreview = null;
+        if (this.state.imageSource)
+            imagePreview = <ImagePreview onClose={() => this.setState({imageSource: null})} imageSource={this.state.imageSource}/>;
         return (
             <div className="layout">
+                {imagePreview}
                 <div className="layout__header">
                     <div className="layout__back" onClick={() => this.props.changeScreen(Screens.MESSAGES)}>
                         <i className="fas fa-arrow-left"/>
@@ -242,6 +254,7 @@ class ChatLayout extends Component {
                                 message={message}
                                 prevMessage={index !== 0 ? this.props.chat.messages[index-1]: null}
                                 receiver={this.props.chat.receiver}
+                                imageClick={(imgUrl) => this.handleImageClick(imgUrl)}
                             />
                         ))}
                         <div style={{ float:"left", clear: "both" }}

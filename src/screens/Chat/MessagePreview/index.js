@@ -10,6 +10,17 @@ const messagePreview = (props) => {
     const prevMessageSenderId = props.prevMessage ? props.prevMessage.sender.userId: null;
     const privateClass = !props.receiver.isStation ? "message--private": "";
     const sameClass = !(props.receiver.isStation && currentMessageSenderId !== prevMessageSenderId) ? "message--same": "";
+    let content = <div className="message__text">{props.message.text}</div>;
+    if (props.message.isImage) {
+        const imgUrl = "https://img.dxcdn.com/productimages/sku_94630_1.jpg";
+        content = (
+            <div className="message__img"
+                 onClick={(event) => {
+                     props.imageClick(imgUrl)
+                 }}
+                 style={{backgroundImage: `url(${imgUrl})`}}/>
+        );
+    }
     return (
         <div className={`message ${selfClass} ${privateClass} ${sameClass}`} ref={(el) => props.setRef(el)}>
             <Avatar className="message__avatar" iconClassName="fas fa-user" avatarKey={props.message.sender.avatarKey} />
@@ -20,7 +31,7 @@ const messagePreview = (props) => {
                     props.changeReceiver(receiver);
                     props.changeScreen(Screens.CHAT);
                 }}>{props.message.sender.username}</div>
-                <div className="message__text">{props.message.text}</div>
+                {content}
                 <div className="message__time">{formatSentAtForMessage(props.message.sentAt)}</div>
             </div>
         </div>
