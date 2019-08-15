@@ -9,6 +9,16 @@
   z-index: 30;
   background-color: rgba($color-black, 1);
 
+  &--hide &__close {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &--hide &__send {
+    opacity: 0;
+    visibility: hidden;
+  }
+
   &__img {
     position: fixed;
     top: 0;
@@ -19,6 +29,24 @@
     max-height: 100%;
     margin: auto;
     overflow: auto;
+  }
+
+
+  &__send {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    z-index: 40;
+    color: $color-grey-light-1;
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background-color: $color-primary;
+    border-radius: 100%;
   }
 
   &__close {

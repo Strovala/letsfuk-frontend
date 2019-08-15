@@ -17,10 +17,10 @@ class ChatLayout extends Component {
         this.state = {
             text: "",
             imageKey: "",
-            footerStyle: null,
             limit: Constants.MESSAGES_LIMIT,
             loadedAll: false,
-            imageSource: null
+            imageSource: null,
+            sendingPreview: null
         }
     }
 
@@ -214,10 +214,6 @@ class ChatLayout extends Component {
     }
 
     sendMessage() {
-        if (this.state.imageSource) {
-            this.sendImage();
-            return;
-        }
         let processedText = this.state.text.trim();
         if (!processedText)
             return;
@@ -264,7 +260,7 @@ class ChatLayout extends Component {
             fr.onload = () => {
                 this.setState({
                     imageSource: fr.result,
-                    footerStyle: {zIndex: 50}
+                    sendingPreview: true
                 })
             };
             fr.readAsDataURL(file);
@@ -274,14 +270,34 @@ class ChatLayout extends Component {
     closeImagePreview() {
         this.setState({
             imageSource: null,
-            footerStyle: null
-        })
+            sendingPreview: null
+        });
+        this.enableScrolling();
+        // Enable picking same image multiple times in a row
+        this.imageInput.value = "";
+    }
+
+    disableScrolling() {
+        document.body.style.overflow = "hidden";
+    }
+
+    enableScrolling() {
+        document.body.style.overflow = "auto";
     }
 
     render() {
         let imagePreview = null;
-        if (this.state.imageSource)
-            imagePreview = <ImagePreview onClose={() => this.closeImagePreview()} imageSource={this.state.imageSource}/>;
+        if (this.state.imageSource) {
+            let imagePreviewProps = {
+                onClose: () => this.closeImagePreview(),
+                imageSource: this.state.imageSource,
+            };
+            if (this.state.sendingPreview) {
+                imagePreviewProps.onSend = () => this.sendImage();
+            }
+            imagePreview = <ImagePreview {...imagePreviewProps}/>;
+            this.disableScrolling();
+        }
         return (
             <div className="layout">
                 {imagePreview}
@@ -303,12 +319,13 @@ class ChatLayout extends Component {
                                 imageClick={(imgUrl) => this.handleImageClick(imgUrl)}
                             />
                         ))}
+                        {/* For scrolling to last message */}
                         <div style={{ float:"left", clear: "both" }}
                              ref={(el) => { this.messagesEnd = el; }}>
                         </div>
                     </div>
                 </div>
-                <div className="layout__footer" style={this.state.footerStyle}>
+                <div className="layout__footer">
                     <div className="send-message">
                         <Textarea
                             className="send-message__area"
@@ -343,7 +360,7 @@ class ChatLayout extends Component {
                             }}
                         />
                         <div className="send-message__image-button">
-                            <input type="file" id="imageUpload" accept="image/*" onChange={(event) => this.pickImageHandler(event)}/>
+                            <input type="file" id="imageUpload" accept="image/*" ref={(el) => this.imageInput = el} onChange={(event) => this.pickImageHandler(event)}/>
                             <label htmlFor="imageUpload"><i className="fas fa-image"/></label>
                         </div>
                         <button className="send-message__button" onClick={() => this.sendMessage()}><i className="fas fa-paper-plane"/></button>

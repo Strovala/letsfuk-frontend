@@ -2,20 +2,31 @@ import React, {useState} from 'react';
 import './ImagePreview.scss';
 
 export default (props) => {
-    const [hideCloseClass, sethideCloseClass] = useState("image-preview__close--hide");
+    const [hideButtonsClass, sethideButtonsClass] = useState("");
+    let imagePreviewSend = null;
+    if (props.onSend)
+        imagePreviewSend = (
+            <div className="image-preview__send" onClick={(event) => {
+                props.onSend(event);
+                props.onClose();
+            }}>
+                <i className="fa fa-paper-plane"/>
+            </div>
+        );
     return (
-        <div className="image-preview" onClick={(event) => {
-            if (hideCloseClass === "") {
-                sethideCloseClass("image-preview__close--hide");
+        <div className={`image-preview ${hideButtonsClass}`} onClick={(event) => {
+            if (hideButtonsClass === "") {
+                sethideButtonsClass("image-preview--hide");
             } else {
-                sethideCloseClass("");
+                sethideButtonsClass("");
             }
         }}>
-            <div className={`image-preview__close ${hideCloseClass}`} onClick={(event) => {
+            <div className="image-preview__close" onClick={(event) => {
                 props.onClose(event)
             }}>
                 <i className="fa fa-times"/>
             </div>
+            {imagePreviewSend}
             <img alt="Preview" className="image-preview__img" src={props.imageSource}/>
         </div>
     )
