@@ -359,7 +359,7 @@ class ChatLayout extends Component {
                                 // this.scrollToLastMessage();
                             }}
                         />
-                        <div className="send-message__image-button">
+                        <div className="send-message__button">
                             <input type="file" id="imageUpload" accept="image/*" ref={(el) => this.imageInput = el} onChange={(event) => this.pickImageHandler(event)}/>
                             <label htmlFor="imageUpload"><i className="fas fa-image"/></label>
                         </div>
