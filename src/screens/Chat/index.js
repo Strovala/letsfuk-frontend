@@ -9,6 +9,7 @@ import ImagePreview from '../../components/ImagePreview';
 import './Chat.scss';
 import '../../sass/layout.scss';
 import Resizer from "react-image-file-resizer";
+import Avatar from "../../components/Avatar";
 
 class ChatLayout extends Component {
     constructor(props) {
@@ -305,7 +306,10 @@ class ChatLayout extends Component {
                     <div className="layout__back" onClick={() => this.props.changeScreen(Screens.MESSAGES)}>
                         <i className="fas fa-arrow-left"/>
                     </div>
-                    <h3 className="layout-heading">{this.props.receiver.username}</h3>
+                    <div className="chat-heading">
+                        <Avatar className="chat-heading__avatar" iconClassName="fas fa-user" avatarKey={this.props.receiver.avatarKey} />
+                        <h3 className="chat-heading__text">{this.props.receiver.username}</h3>
+                    </div>
                 </div>
                 <div className="layout__content u-column-flex-end" ref={(el) => this.layoutContent = el}>
                     <div className="chat">
