@@ -182,3 +182,23 @@ if ('function' === typeof importScripts) {
 self.addEventListener("pushsubscriptionchange", event => {
     console.log('Changed push subscription', event);
 });
+
+// A simple, no-op service worker that takes immediate control.
+
+self.addEventListener('install', (event) => {
+    // Skip over the "waiting" lifecycle state, to ensure that our
+    // new service worker is activated immediately, even if there's
+    // another tab open controlled by our older service worker code.
+
+    event.waitUntil(
+        caches.keys()
+            .then(cacheNames => {
+            cacheNames.map(cacheName => {
+                console.log(cacheName);
+                return caches.delete(cacheName)
+            })
+        })
+    );
+
+    self.skipWaiting();
+});
