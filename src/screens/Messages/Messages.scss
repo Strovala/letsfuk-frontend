@@ -79,3 +79,11 @@
     text-align: center;
   }
 }
+
+.open-chat-button {
+  position: absolute;
+  right: 1rem;
+  top: 1.4rem;
+  font-size: 1.8rem;
+  color: $color-primary;
+}

@@ -263,6 +263,14 @@ class API {
     static uploadToS3(data) {
         return axios.put(data.url, data.data, { headers: {"Content-Type": "image/*"} })
     }
+
+    static queryByUsername(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.get(`/users/?username=${data.username}`, { headers: {"session-id": sessionId} })
+    }
 }
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

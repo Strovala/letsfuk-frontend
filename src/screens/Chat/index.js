@@ -10,6 +10,8 @@ import './Chat.scss';
 import '../../sass/layout.scss';
 import Resizer from "react-image-file-resizer";
 import Avatar from "../../components/Avatar";
+import Popup from "../../components/Popup";
+import Spinner from "../../components/Spinner";
 
 class ChatLayout extends Component {
     constructor(props) {
@@ -26,7 +28,8 @@ class ChatLayout extends Component {
     }
 
     scrollToLastMessage() {
-        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+        if (this.messagesEnd)
+            this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
 
     loadMoreMessages() {
@@ -299,8 +302,40 @@ class ChatLayout extends Component {
             imagePreview = <ImagePreview {...imagePreviewProps}/>;
             this.disableScrolling();
         }
+        let chat = null;
+        let popup = null;
+        if (this.props.chat) {
+            chat = (
+                <div className="chat">
+                    {this.props.chat.messages.map((message, index) => (
+                        <MessagePreview
+                            setRef={index === 0 ? (value) => (this.topMessage = value) : () => {
+                            }}
+                            key={message.messageId}
+                            message={message}
+                            prevMessage={index !== 0 ? this.props.chat.messages[index - 1] : null}
+                            receiver={this.props.chat.receiver}
+                            imageClick={(imgUrl) => this.handleImageClick(imgUrl)}
+                        />
+                    ))}
+                    {/* For scrolling to last message */}
+                    <div style={{float: "left", clear: "both"}}
+                         ref={(el) => {
+                             this.messagesEnd = el;
+                         }}>
+                    </div>
+                </div>
+            );
+        } else {
+            popup = (
+                <Popup className="popup--active">
+                    <Spinner/>
+                </Popup>
+            );
+        }
         return (
             <div className="layout">
+                {popup}
                 {imagePreview}
                 <div className="layout__header">
                     <div className="layout__back" onClick={() => this.props.changeScreen(Screens.MESSAGES)}>
@@ -312,22 +347,7 @@ class ChatLayout extends Component {
                     </div>
                 </div>
                 <div className="layout__content u-column-flex-end" ref={(el) => this.layoutContent = el}>
-                    <div className="chat">
-                        {this.props.chat.messages.map((message, index) => (
-                            <MessagePreview
-                                setRef={index === 0 ? (value) => (this.topMessage = value): ()=>{}}
-                                key={message.messageId}
-                                message={message}
-                                prevMessage={index !== 0 ? this.props.chat.messages[index-1]: null}
-                                receiver={this.props.chat.receiver}
-                                imageClick={(imgUrl) => this.handleImageClick(imgUrl)}
-                            />
-                        ))}
-                        {/* For scrolling to last message */}
-                        <div style={{ float:"left", clear: "both" }}
-                             ref={(el) => { this.messagesEnd = el; }}>
-                        </div>
-                    </div>
+                    {chat}
                 </div>
                 <div className="layout__footer">
                     <div className="send-message">

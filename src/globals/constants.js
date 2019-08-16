@@ -18,7 +18,8 @@ const Screens = {
     REGISTER: "register",
     MESSAGES: 'messages',
     CHAT: 'chat',
-    SETTINGS: 'settings'
+    SETTINGS: 'settings',
+    NEW_MESSAGE: 'new_message'
 };
 
 const Constants = {

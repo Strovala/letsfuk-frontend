@@ -4,7 +4,7 @@ import '../Login.scss';
 
 export default (props) => (
     <Aux>
-        <span className="form__input-icon"><i className={props.iconClassName}/></span>
-        <input className="form__input" {...props.inputProps}/>
+        <span className={props.spanClassName}><i className={props.iconClassName}/></span>
+        <input className={props.className} {...props.inputProps}/>
     </Aux>
 );

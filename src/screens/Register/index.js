@@ -106,12 +106,14 @@ class Register extends Component {
         const passwordInput = (
             <div className={`form__group ${utilityClass}`}>
                 <IconPlaceholderInput
+                    spanClassName="form__input-icon"
                     iconClassName="fas fa-lock"
                     inputProps={{
                         type: "password",
                         placeholder: "Password",
                         id: "password",
                         required: true,
+                        className: "form__input",
                         value: this.state.password,
                         onChange: (event) => this.handlePassword(event)
                     }}
@@ -129,12 +131,14 @@ class Register extends Component {
                 <form className="form">
                     <div className="form__group">
                         <IconPlaceholderInput
+                            spanClassName="form__input-icon"
                             iconClassName="fas fa-user"
                             inputProps={{
                                 type: "username",
                                 placeholder: "Username",
                                 id: "username",
                                 required: true,
+                                className: "form__input",
                                 value: this.state.username,
                                 onChange: (event) => this.handleUsername(event)
                             }}
@@ -142,12 +146,14 @@ class Register extends Component {
                     </div>
                     <div className="form__group">
                         <IconPlaceholderInput
+                            spanClassName="form__input-icon"
                             iconClassName="fas fa-envelope"
                             inputProps={{
                                 type: "email",
                                 placeholder: "Email address",
                                 id: "email",
                                 required: true,
+                                className: "form__input",
                                 value: this.state.email,
                                 onChange: (event) => this.handleEmail(event)
                             }}

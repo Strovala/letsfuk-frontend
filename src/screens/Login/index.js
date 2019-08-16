@@ -124,12 +124,14 @@ class LogIn extends Component {
         const passwordInput = (
             <div className={`form__group ${utilityClass}`}>
                 <IconPlaceholderInput
+                    spanClassName="form__input-icon"
                     iconClassName="fas fa-lock"
                     inputProps={{
                         type: "password",
                         placeholder: "Password",
                         id: "password",
                         required: true,
+                        className: "form__input",
                         value: this.state.password,
                         onChange: (event) => this.handlePassword(event)
                     }}
@@ -156,12 +158,14 @@ class LogIn extends Component {
                     <form className="form">
                         <div className="form__group">
                             <IconPlaceholderInput
+                                spanClassName="form__input-icon"
                                 iconClassName="fas fa-user"
                                 inputProps={{
                                     type: "username",
                                     placeholder: "Username / email",
                                     id: "username",
                                     required: true,
+                                    className: "form__input",
                                     value: this.state.credentials,
                                     onChange: (event) => this.handleCredentials(event)
                                 }}

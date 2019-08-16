@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import humps from "humps";
-import {ActionTypes, Constants} from "../../globals/constants";
+import {ActionTypes, Constants, Screens} from "../../globals/constants";
 import {API, tryNewStation} from "../../globals/methods";
 import Popup from "../../components/Popup";
 import Spinner from "../../components/Spinner";
@@ -158,6 +158,7 @@ class ChatListLayout extends Component {
                 </div>
                 <div className="layout__header">
                     <h3 className="layout-heading">Messages</h3>
+                    <button className="open-chat-button" onClick={() => this.props.changeScreen(Screens.NEW_MESSAGE)}><i className="fas fa-edit"/></button>
                 </div>
                 <div className="layout__content">
                     {messages}
