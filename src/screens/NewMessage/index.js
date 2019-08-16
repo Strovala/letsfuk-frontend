@@ -43,15 +43,14 @@ class ChatLayout extends Component {
             users = (
                 <div className="users">
                     {this.state.users.map((user) => {
-                        // <UserPreview key={user.userId} user={user} />
-                        return <div className="users__user">
+                        return <div className="users__user" onClick={(event)=> {
+                            const receiver = user;
+                            receiver.id = receiver.userId;
+                            this.props.changeReceiver(receiver);
+                            this.props.changeScreen(Screens.CHAT);
+                        }}>
                             <Avatar className="users__user-avatar" iconClassName="fas fa-user" avatarKey={user.avatarKey} />
-                            <div className="users__user-username" onClick={(event)=> {
-                                const receiver = user;
-                                receiver.id = receiver.userId;
-                                this.props.changeReceiver(receiver);
-                                this.props.changeScreen(Screens.CHAT);
-                            }}>{user.username}</div>
+                            <div className="users__user-username">{user.username}</div>
                         </div>
                     })}
                 </div>
