@@ -341,7 +341,6 @@ class ChatLayout extends Component {
                 </div>
             );
         } else {
-            console.log(this.props.receiver);
             chatHeading = (
                 <div className="chat-heading" onClick={() => {
                     this.props.changeMembers(this.props.receiver.members);

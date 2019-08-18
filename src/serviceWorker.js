@@ -9,7 +9,6 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
-
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -52,7 +51,8 @@ export function register(config) {
     });
   } else {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
+      registerValidSW('/sw.js');
+      // navigator.serviceWorker.register('/sw.js');
     }
   }
 }
@@ -61,8 +61,10 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      console.log("registering ...");
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
+        console.log("installing ...", installingWorker);
         if (installingWorker == null) {
           return;
         }
@@ -76,7 +78,9 @@ function registerValidSW(swUrl, config) {
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
               );
-
+              // TODO: Investigate this further, I think this will reload
+              // new service worker
+              window.location.reload();
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
