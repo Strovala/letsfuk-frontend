@@ -6,13 +6,23 @@ import '../NewMessage/NewMessage.scss';
 import Avatar from "../../components/Avatar";
 
 class MembersPreview extends Component {
+
+    scrollToTop() {
+        if (this.pageTop)
+            this.pageTop.scrollIntoView();
+    }
+
+    componentDidMount() {
+        this.scrollToTop()
+    }
+
     render() {
         let users = null;
         if (this.props.members) {
             users = (
                 <div className="users">
                     {this.props.members.map((user) => {
-                        return <div className="users__user" onClick={(event)=> {
+                        return <div className="users__user" key={user.userId} onClick={(event)=> {
                             const receiver = user;
                             receiver.id = receiver.userId;
                             this.props.changeReceiver(receiver);
@@ -27,6 +37,9 @@ class MembersPreview extends Component {
         }
         return (
             <div className="layout">
+                <div style={{ float:"left", clear: "both" }}
+                     ref={(el) => { this.pageTop = el; }}>
+                </div>
                 <div className="layout__header">
                     <div className="layout__back" onClick={() => this.props.changeScreen(Screens.CHAT)}>
                         <i className="fas fa-arrow-left"/>
