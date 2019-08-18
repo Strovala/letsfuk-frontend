@@ -271,6 +271,14 @@ class API {
         }
         return axios.get(`/users/?username=${data.username}`, { headers: {"session-id": sessionId} })
     }
+
+    static getStation(data) {
+        let sessionId = cookies.get('session-id');
+        if (!sessionId) {
+            sessionId = data.user.sessionId;
+        }
+        return axios.get(`/stations/${data.stationId}`, { headers: {"session-id": sessionId} })
+    }
 }
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

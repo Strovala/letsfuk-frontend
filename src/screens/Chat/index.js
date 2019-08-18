@@ -8,7 +8,6 @@ import Textarea from 'react-textarea-autosize';
 import ImagePreview from '../../components/ImagePreview';
 import './Chat.scss';
 import '../../sass/layout.scss';
-import Resizer from "react-image-file-resizer";
 import Avatar from "../../components/Avatar";
 import Popup from "../../components/Popup";
 import Spinner from "../../components/Spinner";
@@ -333,6 +332,23 @@ class ChatLayout extends Component {
                 </Popup>
             );
         }
+        let chatHeading = null;
+        if (!this.props.receiver.isStation) {
+            chatHeading = (
+                <div className="chat-heading">
+                    <Avatar className="chat-heading__avatar" iconClassName="fas fa-user" avatarKey={this.props.receiver.avatarKey} />
+                    <h3 className="chat-heading__text">{this.props.receiver.username}</h3>
+                </div>
+            );
+        } else {
+            console.log(this.props.receiver);
+            chatHeading = (
+                <div className="chat-heading">
+                    <Avatar className="chat-heading__avatar" iconClassName="fas fa-users" avatarKey={this.props.receiver.avatarKey} />
+                    <h3 className="chat-heading__text">{`${this.props.receiver.members.length} members`}</h3>
+                </div>
+            );
+        }
         return (
             <div className="layout">
                 {popup}
@@ -341,10 +357,7 @@ class ChatLayout extends Component {
                     <div className="layout__back" onClick={() => this.props.changeScreen(Screens.MESSAGES)}>
                         <i className="fas fa-arrow-left"/>
                     </div>
-                    <div className="chat-heading">
-                        <Avatar className="chat-heading__avatar" iconClassName="fas fa-user" avatarKey={this.props.receiver.avatarKey} />
-                        <h3 className="chat-heading__text">{this.props.receiver.username}</h3>
-                    </div>
+                    {chatHeading}
                 </div>
                 <div className="layout__content u-column-flex-end" ref={(el) => this.layoutContent = el}>
                     {chat}
