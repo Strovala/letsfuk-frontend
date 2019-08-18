@@ -33,10 +33,6 @@ if ('function' === typeof importScripts) {
     "revision": "d8293affec8a4ab8c763f0e2c65b704b"
   },
   {
-    "url": "index.html",
-    "revision": "5adc4e1dd3bc2585e0dbf37a734e3918"
-  },
-  {
     "url": "utility.js",
     "revision": "657913ab2a72d50e43daf038ae1eff8f"
   }

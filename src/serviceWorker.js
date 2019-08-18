@@ -78,9 +78,6 @@ function registerValidSW(swUrl, config) {
                 'New content is available and will be used when all ' +
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
               );
-              // TODO: Investigate this further, I think this will reload
-              // new service worker
-              window.location.reload();
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
