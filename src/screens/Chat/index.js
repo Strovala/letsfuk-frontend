@@ -342,12 +342,12 @@ class ChatLayout extends Component {
             );
         } else {
             chatHeading = (
-                <div className="chat-heading" onClick={() => {
-                    this.props.changeMembers(this.props.receiver.members);
-                    this.props.changeScreen(Screens.MEMBERS_PREVIEW)
-                }}>
+                <div className="chat-heading">
                     <Avatar className="chat-heading__avatar" iconClassName="fas fa-users" avatarKey={this.props.receiver.avatarKey} />
-                    <h3 className="chat-heading__text">{`${this.props.receiver.members.length} members`}</h3>
+                    <h3 className="chat-heading__text" onClick={() => {
+                        this.props.changeMembers(this.props.receiver.members);
+                        this.props.changeScreen(Screens.MEMBERS_PREVIEW)
+                    }}>{`${this.props.receiver.members.length} members`}</h3>
                 </div>
             );
         }
