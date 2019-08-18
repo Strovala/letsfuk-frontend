@@ -22,6 +22,9 @@ class MembersPreview extends Component {
             users = (
                 <div className="users">
                     {this.props.members.map((user) => {
+                        if (user.userId === this.props.user.user.userId) {
+                            return null;
+                        }
                         return <div className="users__user" key={user.userId} onClick={(event)=> {
                             const receiver = user;
                             receiver.id = receiver.userId;
