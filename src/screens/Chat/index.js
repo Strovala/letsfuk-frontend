@@ -28,7 +28,7 @@ class ChatLayout extends Component {
 
     scrollToLastMessage() {
         if (this.messagesEnd)
-            this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+            this.messagesEnd.scrollIntoView();
     }
 
     loadMoreMessages() {
@@ -54,6 +54,7 @@ class ChatLayout extends Component {
                 this.setState({
                     limit: newLimit
                 });
+                this.enableScrolling();
             }
         });
     }
@@ -167,14 +168,6 @@ class ChatLayout extends Component {
         })
     }
 
-    scrollHandler() {
-        const isIn = this.isTriggererInViewport();
-        if (isIn) {
-            this.triggers = [];
-            this.loadMoreMessages();
-        }
-    }
-
     isTriggererInViewport(offset = 0) {
         if (this.state.loadedAll) return false;
         if (this.triggers.length === 0) return false;
@@ -196,9 +189,12 @@ class ChatLayout extends Component {
         if (this.state.loadedAll)
             return;
         if (window.pageYOffset === 0) {
+            // this.loadMoreMessages() will enable scrolling after
+            // loading more messages
             this.loadMoreMessages();
             if (this.topMessage)
                 this.topMessage.scrollIntoView({ behavior: "smooth" });
+            this.disableScrolling();
         }
     }
 
