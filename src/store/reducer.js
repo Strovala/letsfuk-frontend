@@ -10,7 +10,8 @@ const initialState = {
     chats: null,
     stationChat: null,
     activeChat: null,
-    notificationsEnabled: false
+    notificationsEnabled: false,
+    members: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -59,6 +60,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 notificationsEnabled: action.value
+            };
+        case ActionTypes.MEMBERS_CHANGE:
+            return {
+                ...state,
+                members: action.value
             };
         default:
             return state;

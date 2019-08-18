@@ -2,47 +2,16 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {ActionTypes, Screens} from "../../globals/constants";
 import '../../sass/layout.scss';
-import './NewMessage.scss';
-import {API} from "../../globals/methods";
-import IconPlaceholderInput from "../Login/IconPlaceholderInput";
+import '../NewMessage/NewMessage.scss';
 import Avatar from "../../components/Avatar";
 
-class NewMessage extends Component {
-    state = {
-        username: "",
-        users: null
-    };
-
-    handleUsers(event) {
-        const search = event.target.value;
-        this.setState({
-            username: search
-        });
-        if (search === "") {
-            this.setState({
-                users: null
-            });
-            return;
-        }
-        // Call Backend to query users by username
-        API.queryByUsername({
-            user: this.props.user,
-            username: search
-        })
-            .then(response => {
-                const users = response.data.users;
-                this.setState({
-                    users: users
-                })
-            })
-    }
-
+class MembersPreview extends Component {
     render() {
         let users = null;
-        if (this.state.users) {
+        if (this.props.members) {
             users = (
                 <div className="users">
-                    {this.state.users.map((user) => {
+                    {this.props.members.map((user) => {
                         return <div className="users__user" onClick={(event)=> {
                             const receiver = user;
                             receiver.id = receiver.userId;
@@ -59,21 +28,12 @@ class NewMessage extends Component {
         return (
             <div className="layout">
                 <div className="layout__header">
-                    <div className="users__search">
-                        <IconPlaceholderInput
-                            spanClassName="users__input-icon"
-                            iconClassName="fas fa-search"
-                            inputProps={{
-                                type: "text",
-                                placeholder: "Search",
-                                className: "users__input",
-                                onChange: (event) => this.handleUsers(event)
-                            }}
-                        />
-                        <button className="cancel-button" onClick={() => this.props.changeScreen(Screens.MESSAGES)}>Cancel</button>
+                    <div className="layout__back" onClick={() => this.props.changeScreen(Screens.CHAT)}>
+                        <i className="fas fa-arrow-left"/>
                     </div>
+                    <h3 className="layout-heading">Members</h3>
                 </div>
-                <div className="layout__content" ref={(el) => this.layoutContent = el}>
+                <div className="layout__content">
                     {users}
                 </div>
             </div>
@@ -86,6 +46,7 @@ class NewMessage extends Component {
 const mapStateToProps = state => {
     return {
         user: state.user,
+        members: state.members,
     }
 };
 
@@ -100,4 +61,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewMessage);
+export default connect(mapStateToProps, mapDispatchToProps)(MembersPreview);

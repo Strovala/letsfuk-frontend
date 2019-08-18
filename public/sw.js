@@ -193,11 +193,11 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.keys()
             .then(cacheNames => {
-            cacheNames.map(cacheName => {
-                console.log(cacheName);
-                return caches.delete(cacheName)
+                cacheNames.map(cacheName => {
+                    console.log(cacheName);
+                    return caches.delete(cacheName)
+                })
             })
-        })
     );
 
     self.skipWaiting();

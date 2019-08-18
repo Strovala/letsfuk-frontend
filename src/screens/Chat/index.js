@@ -343,7 +343,10 @@ class ChatLayout extends Component {
         } else {
             console.log(this.props.receiver);
             chatHeading = (
-                <div className="chat-heading">
+                <div className="chat-heading" onClick={() => {
+                    this.props.changeMembers(this.props.receiver.members);
+                    this.props.changeScreen(Screens.MEMBERS_PREVIEW)
+                }}>
                     <Avatar className="chat-heading__avatar" iconClassName="fas fa-users" avatarKey={this.props.receiver.avatarKey} />
                     <h3 className="chat-heading__text">{`${this.props.receiver.members.length} members`}</h3>
                 </div>
@@ -425,7 +428,8 @@ const mapDispatchToProps = dispatch => {
         changeReceiver: (value) => dispatch({type: ActionTypes.RECEIVER_CHANGE, value: value}),
         changeActiveChat: (value) => dispatch({type: ActionTypes.ACTIVE_CHAT_CHANGE, value: value}),
         setChats: (value) => dispatch({type: ActionTypes.CHATS_CHANGE, value: value}),
-        changeActiveStation: (value) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, value: value})
+        changeActiveStation: (value) => dispatch({type: ActionTypes.ACTIVE_STAION_CHANGE, value: value}),
+        changeMembers: (value) => dispatch({type: ActionTypes.MEMBERS_CHANGE, value: value})
     }
 };
 

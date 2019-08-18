@@ -5,6 +5,7 @@ import MessagesScreen from "../../../screens/Messages";
 import ChatScreen from "../../../screens/Chat";
 import SettingsScreen from "../../../screens/Settings";
 import NewMessageScreen from "../../../screens/NewMessage";
+import MembersPreviewScreen from "../../../screens/MembersPreview";
 
 const mainLayout = (props) => {
     switch (props.screen) {
@@ -16,6 +17,8 @@ const mainLayout = (props) => {
             return <SettingsScreen />;
         case (Screens.NEW_MESSAGE):
             return <NewMessageScreen />;
+        case (Screens.MEMBERS_PREVIEW):
+            return <MembersPreviewScreen />;
         default:
             return <MessagesScreen />
     }

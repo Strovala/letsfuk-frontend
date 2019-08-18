@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import {connect} from "react-redux";
 import {ActionTypes, Screens} from "../../../globals/constants";
 import {API, formatSentAtForMessage} from "../../../globals/methods";

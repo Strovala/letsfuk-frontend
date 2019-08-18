@@ -10,7 +10,8 @@ const ActionTypes = {
     ACTIVE_STAION_CHANGE: "ACTIVE_STAION_CHANGE",
     AUTHENTICATED_CHANGE: "AUTHENTICATED_CHANGE",
     JOB_CHANGE: "JOB_CHANGE",
-    NOTIFICATIONS_ENABLED_CHANGE: "NOTIFICATIONS_ENABLED_CHANGE"
+    NOTIFICATIONS_ENABLED_CHANGE: "NOTIFICATIONS_ENABLED_CHANGE",
+    MEMBERS_CHANGE: "MEMBERS_CHANGE"
 };
 
 const Screens = {
@@ -19,7 +20,8 @@ const Screens = {
     MESSAGES: 'messages',
     CHAT: 'chat',
     SETTINGS: 'settings',
-    NEW_MESSAGE: 'new_message'
+    NEW_MESSAGE: 'new_message',
+    MEMBERS_PREVIEW: 'members_preview'
 };
 
 const Constants = {
